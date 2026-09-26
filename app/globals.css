@@ -1,26 +1,29 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  /* Đảm bảo chiều cao tối thiểu và chống tràn ngang */
+  html, body {
+    @apply h-full overflow-x-hidden;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* (Tùy chọn) Chỉnh màu khi người dùng bôi đen (select) văn bản cho hợp tone ấm của web */
+  ::selection {
+    @apply bg-primary/20 text-primary;
+  }
+
+  /* (Tùy chọn) Ẩn thanh cuộn (scrollbar) để web nhìn giống app hơn, nhưng vẫn cuộn được */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-variant rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-outline;
+  }
 }
