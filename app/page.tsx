@@ -5,7 +5,9 @@ import {
   CommunitySection,
 } from "@/components/home/";
 import ProductList from "@/components/products/ProductList";
-export default function HomePage() {
+import Image from "next/image";
+
+export default function Home() {
   return (
     <div className="flex flex-col w-full bg-canvas-cream min-h-[calc(100vh-20rem)]">
       <HeroSection />
