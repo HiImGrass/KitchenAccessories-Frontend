@@ -30,6 +30,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${epilogue.variable} ${plusJakarta.variable}`}>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+      </head>
       <body className="bg-canvas-cream font-body-md text-olive-gray antialiased">
         <NextTopLoader color="#894b3a" shadow="0 0 10px #894b3a,0 0 5px #894b3a" />
         <Navbar />

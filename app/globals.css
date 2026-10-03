@@ -49,12 +49,12 @@
   --color-background: #f4fced;
   --color-on-background: #161d15;
   --color-surface-variant: #dde5d7;
-  --color-canvas-cream: #F7F3E8;
-  --color-surface-white: #FFFFFF;
-  --color-warm-sand: #DEC2AF;
-  --color-terracotta: #C37A67;
-  --color-sage: #A0A088;
-  --color-olive-gray: #747C70;
+  --color-canvas-cream: #f7f3e8;
+  --color-surface-white: #ffffff;
+  --color-warm-sand: #dec2af;
+  --color-terracotta: #c37a67;
+  --color-sage: #a0a088;
+  --color-olive-gray: #747c70;
 
   /* KHOẢNG CÁCH (SPACING) */
   --spacing-gutter: 1.5rem;
@@ -145,7 +145,8 @@
 
 @layer base {
   /* Đảm bảo chiều cao tối thiểu và chống tràn ngang */
-  html, body {
+  html,
+  body {
     @apply h-full overflow-x-hidden;
   }
 
