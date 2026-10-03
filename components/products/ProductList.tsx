@@ -176,7 +176,7 @@ export default function ProductList() {
 
           <div className="mt-space-xl flex justify-center">
             <Link
-              href="/products"
+              href="/catalog"
               className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200">
               <span>View all curated kitchen items</span>
 
