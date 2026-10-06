@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+:root {
+  /* Đồng bộ biến màu NextUI Primary theo Brand Color (#894b3a) để không bị xanh dương */
+  --nextui-primary: 13 41% 38%;
+}
+
 @theme {
   /* BẢNG MÀU SẮC (COLORS) */
   --color-surface: #f4fced;
