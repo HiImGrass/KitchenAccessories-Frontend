@@ -58,3 +58,147 @@ export async function fetchCatalogProducts({
     return { products: [], total: 0, skip: 0, limit: 12 };
   }
 }
+
+export interface DummyJSONCartProduct {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+  total: number;
+  discountPercentage: number;
+  discountedTotal: number;
+  thumbnail: string;
+}
+
+export interface DummyJSONCartResponse {
+  id: number;
+  products: DummyJSONCartProduct[];
+  total: number;
+  discountedTotal: number;
+  userId: number;
+  totalProducts: number;
+  totalQuantity: number;
+}
+
+export interface DummyJSONProductDetail {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand?: string;
+  warrantyInformation?: string;
+  shippingInformation?: string;
+  availabilityStatus?: string;
+  thumbnail: string;
+  images: string[];
+}
+
+export type CartDataSource = 'cart_api' | 'kitchen_category';
+
+/**
+ * Fetch a cart directly from DummyJSON Carts endpoint: GET /carts/{id}
+ */
+export async function fetchDummyCart(cartId: number = 1): Promise<DummyJSONCartResponse | null> {
+  try {
+    const res = await fetch(`https://dummyjson.com/carts/${cartId}`, {
+      cache: 'no-store',
+    });
+    if (!res.ok) throw new Error(`Failed to fetch cart ${cartId}: ${res.statusText}`);
+    return await res.json();
+  } catch (err) {
+    console.error("Error fetching dummy cart:", err);
+    return null;
+  }
+}
+
+/**
+ * Fetch single product detail from DummyJSON: GET /products/{id}
+ */
+export async function fetchProductDetail(id: number): Promise<DummyJSONProductDetail | null> {
+  try {
+    const res = await fetch(`https://dummyjson.com/products/${id}`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Fetch cart items from DummyJSON API, converting raw responses into CartItem format.
+ * Supports:
+ * - 'cart_api': Official DummyJSON /carts/1 endpoint
+ * - 'kitchen_category': DummyJSON /products/category/kitchen-accessories endpoint
+ */
+export async function fetchCartItemsFromDummyJSON(options?: {
+  source?: CartDataSource;
+  cartId?: number;
+  limit?: number;
+}) {
+  const source = options?.source || 'kitchen_category';
+  const cartId = options?.cartId || 1;
+  const limit = options?.limit || 3;
+
+  if (source === 'kitchen_category') {
+    try {
+      const res = await fetch(
+        `https://dummyjson.com/products/category/kitchen-accessories?limit=${limit}`,
+        { next: { revalidate: 3600 } }
+      );
+      if (!res.ok) throw new Error("Failed to fetch kitchen products from DummyJSON");
+      const data = await res.json();
+
+      return data.products.map((p: DummyJSONProductDetail) => ({
+        id: String(p.id),
+        name: p.title,
+        price: p.price,
+        quantity: 1,
+        image: p.thumbnail,
+        details: `${p.brand || 'Artisan Workshop'} • ${p.warrantyInformation || p.shippingInformation || 'Handmade'}`,
+        stockStatus: p.availabilityStatus === 'Low Stock' || p.stock < 10 ? 'low_stock' : 'in_stock',
+        stockLabel: p.availabilityStatus || 'In Stock',
+        stockNote: p.shippingInformation || 'Ready for dispatch',
+        maxQuantity: p.stock || 20,
+      }));
+    } catch (err) {
+      console.error("Error in fetchCartItemsFromDummyJSON (kitchen):", err);
+      return [];
+    }
+  }
+
+  // Default: Fetch from DummyJSON Cart API (/carts/{cartId})
+  try {
+    const cart = await fetchDummyCart(cartId);
+    if (!cart || !cart.products) return [];
+
+    // Enrich each cart product with availability and shipping meta from DummyJSON
+    const enriched = await Promise.all(
+      cart.products.map(async (p) => {
+        const detail = await fetchProductDetail(p.id);
+        const isLow = detail?.availabilityStatus === 'Low Stock' || (detail?.stock && detail.stock < 10);
+
+        return {
+          id: String(p.id),
+          name: p.title,
+          price: p.price,
+          quantity: p.quantity,
+          image: p.thumbnail,
+          details: `${detail?.category || 'Curated Item'} • ${detail?.shippingInformation || 'Direct delivery'}`,
+          stockStatus: isLow ? 'low_stock' : 'in_stock',
+          stockLabel: detail?.availabilityStatus || 'In Stock',
+          stockNote: detail?.warrantyInformation || 'Ready for dispatch',
+          maxQuantity: detail?.stock || 50,
+        };
+      })
+    );
+
+    return enriched;
+  } catch (err) {
+    console.error("Error in fetchCartItemsFromDummyJSON (cart):", err);
+    return [];
+  }
+}
