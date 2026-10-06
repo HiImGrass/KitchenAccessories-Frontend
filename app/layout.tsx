@@ -5,6 +5,8 @@ import Navbar from '@/components/navbar/Navbar';
 import Footer from '@/components/Footer';
 import { Toaster } from 'sonner';
 import NextTopLoader from 'nextjs-toploader';
+import { Providers } from '@/components/providers/Providers';
+import { fetchCartItemsFromDummyJSON } from '@/lib/dummyjson';
 
 // Khai báo font theo Design System dự án Ladle & Co.
 const epilogue = Epilogue({ 
@@ -23,11 +25,16 @@ export const metadata: Metadata = {
   description: 'Thoughtful tools for everyday cooking and culinary spaces.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const initialCartItems = await fetchCartItemsFromDummyJSON({
+    source: 'kitchen_category',
+    limit: 3,
+  });
+
   return (
     <html lang="en" className={`${epilogue.variable} ${plusJakarta.variable}`}>
       <head>
@@ -38,12 +45,14 @@ export default function RootLayout({
       </head>
       <body className="bg-canvas-cream font-body-md text-olive-gray antialiased">
         <NextTopLoader color="#894b3a" shadow="0 0 10px #894b3a,0 0 5px #894b3a" />
-        <Navbar />
-        <main className="min-h-[calc(100vh-20rem)] pt-20">
-          {children}
-        </main>
-        <Footer />
-        <Toaster />
+        <Providers initialCartItems={initialCartItems}>
+          <Navbar />
+          <main className="min-h-[calc(100vh-20rem)] pt-20">
+            {children}
+          </main>
+          <Footer />
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
