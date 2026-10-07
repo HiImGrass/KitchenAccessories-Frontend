@@ -28,7 +28,7 @@ export default function CustomNavbar() {
       <NavbarContent justify="start" className="flex items-center gap-space-lg">
         <NavbarBrand
           as={Link}
-          href="#"
+          href="/"
           className="flex items-center gap-space-sm max-w-fit">
           <img
             alt="Ladle & Co. Logo"
@@ -41,7 +41,7 @@ export default function CustomNavbar() {
           <NavbarItem isActive>
             <Link
               aria-current="page"
-              href="#"
+              href="/"
               className="transition-colors bg-secondary-container text-on-secondary-fixed font-title-md text-title-md rounded-full px-space-md py-space-xs">
               Home
             </Link>
