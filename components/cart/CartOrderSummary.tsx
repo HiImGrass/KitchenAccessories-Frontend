@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { CartSummary, PromoCode, GiftWrapOption } from '@/types/cart';
 import { Button, Input, Tooltip } from '@nextui-org/react';
 import { Tag, Info, ArrowRight, Lock, CheckCircle2, X } from 'lucide-react';
@@ -205,6 +206,8 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
       {/* Checkout CTA Button */}
       <div className="mt-6">
         <Button
+          as={Link}
+          href="/checkout"
           size="lg"
           fullWidth
           className="bg-primary hover:bg-primary-container text-white font-semibold text-base py-3.5 px-6 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 h-12"
