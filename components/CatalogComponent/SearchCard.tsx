@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Product } from '@/types/product';
-import { ProductCard } from '@/components/CardComponent/ProductCard';
+import { ProductCard } from '@/components/products/ProductCard';
 import { SvgIcon } from '@/lib/SvgIcons';
 import { categoryOptions, sortbyOptions } from './options';
 
@@ -126,7 +126,13 @@ export const SearchCard: React.FC<SearchCardProps> = ({
         ) : (
           <div className={`grid grid-cols-1 sm:grid-cols-2 ${cols === 3 ? 'xl:grid-cols-3' : 'xl:grid-cols-3 2xl:grid-cols-4'} gap-space-md`}>
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                variant="catalog"
+                onAddToCart={(p) => console.log("Add to cart:", p)}
+                onWishlist={(p) => console.log("Wishlist:", p)}
+              />
             ))}
           </div>
         )}

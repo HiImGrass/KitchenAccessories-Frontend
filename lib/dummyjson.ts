@@ -1,4 +1,5 @@
 import { Product } from "@/types/product";
+import { DUMMY_JSON_BASE_URL } from "./checkEnvironment";
 
 interface DummyJSONResponse {
   products: Product[];
@@ -23,7 +24,7 @@ export async function fetchCatalogProducts({
   limit = 12,
 }: FetchCatalogParams): Promise<DummyJSONResponse> {
   try {
-    let baseUrl = "https://dummyjson.com/products";
+    let baseUrl = `${DUMMY_JSON_BASE_URL}/products`;
 
     // 1. Phân luồng Endpoint theo Tìm kiếm hoặc Danh mục
     if (q) {
@@ -36,7 +37,7 @@ export async function fetchCatalogProducts({
     url.searchParams.set("limit", String(limit));
     url.searchParams.set("skip", String(skip));
 
-    // 2. Parse param sort (Ví dụ: "price_asc" -> sortBy=price & order=asc)
+    // 2. Parse param sort
     if (sort) {
       const [sortByField, orderDirection] = sort.split("_");
       if (sortByField && orderDirection) {
@@ -97,17 +98,20 @@ export interface DummyJSONProductDetail {
   images: string[];
 }
 
-export type CartDataSource = 'cart_api' | 'kitchen_category';
+export type CartDataSource = "cart_api" | "kitchen_category";
 
 /**
  * Fetch a cart directly from DummyJSON Carts endpoint: GET /carts/{id}
  */
-export async function fetchDummyCart(cartId: number = 1): Promise<DummyJSONCartResponse | null> {
+export async function fetchDummyCart(
+  cartId: number = 1
+): Promise<DummyJSONCartResponse | null> {
   try {
-    const res = await fetch(`https://dummyjson.com/carts/${cartId}`, {
-      cache: 'no-store',
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/carts/${cartId}`, {
+      cache: "no-store",
     });
-    if (!res.ok) throw new Error(`Failed to fetch cart ${cartId}: ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(`Failed to fetch cart ${cartId}: ${res.statusText}`);
     return await res.json();
   } catch (err) {
     console.error("Error fetching dummy cart:", err);
@@ -118,9 +122,11 @@ export async function fetchDummyCart(cartId: number = 1): Promise<DummyJSONCartR
 /**
  * Fetch single product detail from DummyJSON: GET /products/{id}
  */
-export async function fetchProductDetail(id: number): Promise<DummyJSONProductDetail | null> {
+export async function fetchProductDetail(
+  id: number
+): Promise<DummyJSONProductDetail | null> {
   try {
-    const res = await fetch(`https://dummyjson.com/products/${id}`);
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/products/${id}`);
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -130,26 +136,24 @@ export async function fetchProductDetail(id: number): Promise<DummyJSONProductDe
 
 /**
  * Fetch cart items from DummyJSON API, converting raw responses into CartItem format.
- * Supports:
- * - 'cart_api': Official DummyJSON /carts/1 endpoint
- * - 'kitchen_category': DummyJSON /products/category/kitchen-accessories endpoint
  */
 export async function fetchCartItemsFromDummyJSON(options?: {
   source?: CartDataSource;
   cartId?: number;
   limit?: number;
 }) {
-  const source = options?.source || 'kitchen_category';
+  const source = options?.source || "kitchen_category";
   const cartId = options?.cartId || 1;
   const limit = options?.limit || 3;
 
-  if (source === 'kitchen_category') {
+  if (source === "kitchen_category") {
     try {
       const res = await fetch(
-        `https://dummyjson.com/products/category/kitchen-accessories?limit=${limit}`,
+        `${DUMMY_JSON_BASE_URL}/products/category/kitchen-accessories?limit=${limit}`,
         { next: { revalidate: 3600 } }
       );
-      if (!res.ok) throw new Error("Failed to fetch kitchen products from DummyJSON");
+      if (!res.ok)
+        throw new Error("Failed to fetch kitchen products from DummyJSON");
       const data = await res.json();
 
       return data.products.map((p: DummyJSONProductDetail) => ({
@@ -158,10 +162,15 @@ export async function fetchCartItemsFromDummyJSON(options?: {
         price: p.price,
         quantity: 1,
         image: p.thumbnail,
-        details: `${p.brand || 'Artisan Workshop'} • ${p.warrantyInformation || p.shippingInformation || 'Handmade'}`,
-        stockStatus: p.availabilityStatus === 'Low Stock' || p.stock < 10 ? 'low_stock' : 'in_stock',
-        stockLabel: p.availabilityStatus || 'In Stock',
-        stockNote: p.shippingInformation || 'Ready for dispatch',
+        details: `${p.brand || "Artisan Workshop"}\n${
+          p.warrantyInformation || p.shippingInformation || "Handmade"
+        }`,
+        stockStatus:
+          p.availabilityStatus === "Low Stock" || p.stock < 10
+            ? "low_stock"
+            : "in_stock",
+        stockLabel: p.availabilityStatus || "In Stock",
+        stockNote: p.shippingInformation || "Ready for dispatch",
         maxQuantity: p.stock || 20,
       }));
     } catch (err) {
@@ -175,11 +184,12 @@ export async function fetchCartItemsFromDummyJSON(options?: {
     const cart = await fetchDummyCart(cartId);
     if (!cart || !cart.products) return [];
 
-    // Enrich each cart product with availability and shipping meta from DummyJSON
     const enriched = await Promise.all(
       cart.products.map(async (p) => {
         const detail = await fetchProductDetail(p.id);
-        const isLow = detail?.availabilityStatus === 'Low Stock' || (detail?.stock && detail.stock < 10);
+        const isLow =
+          detail?.availabilityStatus === "Low Stock" ||
+          (detail?.stock !== undefined && detail.stock < 10);
 
         return {
           id: String(p.id),
@@ -187,10 +197,12 @@ export async function fetchCartItemsFromDummyJSON(options?: {
           price: p.price,
           quantity: p.quantity,
           image: p.thumbnail,
-          details: `${detail?.category || 'Curated Item'} • ${detail?.shippingInformation || 'Direct delivery'}`,
-          stockStatus: isLow ? 'low_stock' : 'in_stock',
-          stockLabel: detail?.availabilityStatus || 'In Stock',
-          stockNote: detail?.warrantyInformation || 'Ready for dispatch',
+          details: `${detail?.category || "Curated Item"}\n${
+            detail?.shippingInformation || "Direct delivery"
+          }`,
+          stockStatus: isLow ? "low_stock" : "in_stock",
+          stockLabel: detail?.availabilityStatus || "In Stock",
+          stockNote: detail?.warrantyInformation || "Ready for dispatch",
           maxQuantity: detail?.stock || 50,
         };
       })

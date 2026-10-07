@@ -2,13 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-
-import ProductCard, { ProductCardProps } from "./ProductCard";
+import { Product } from "@/types/product";
+import { ProductCard } from "./ProductCard";
 
 type Filter = "all" | "popular" | "new" | "picks";
 
-type Product = ProductCardProps & {
-  id: number;
+type ProductWithFilter = Product & {
   filters: Exclude<Filter, "all">[];
 };
 
@@ -16,85 +15,75 @@ const FILTERS: {
   label: string;
   value: Filter;
 }[] = [
-  {
-    label: "All Items",
-    value: "all",
-  },
-  {
-    label: "Most Popular",
-    value: "popular",
-  },
-  {
-    label: "New in Stock",
-    value: "new",
-  },
-  {
-    label: "Staff Picks",
-    value: "picks",
-  },
+  { label: "All Items", value: "all" },
+  { label: "Most Popular", value: "popular" },
+  { label: "New in Stock", value: "new" },
+  { label: "Staff Picks", value: "picks" },
 ];
 
-const PRODUCTS: Product[] = [
+const PRODUCTS: ProductWithFilter[] = [
   {
     id: 1,
     title: "Ceramic Coffee Mug",
     description: "Beautiful handmade ceramic coffee mug.",
-    image: "/images/products/mug.jpg",
     price: 19.99,
-    originalPrice: 24.99,
-    discount: 20,
+    discountPercentage: 20,
     rating: 4.8,
-    reviewCount: 128,
-    categoryLabel: "Kitchen",
-    inStock: true,
+    stock: 15,
+    brand: "Artisan",
+    category: "Kitchen",
+    thumbnail: "/images/products/mug.jpg",
+    images: ["/images/products/mug.jpg"],
     filters: ["popular", "picks"],
   },
   {
     id: 2,
     title: "Olive Wood Spoon",
     description: "Hand-carved olive wood cooking spoon.",
-    image: "/images/products/mug.jpg",
     price: 24.99,
+    discountPercentage: 0,
     rating: 4.9,
-    reviewCount: 91,
-    categoryLabel: "Utensils",
-    inStock: true,
+    stock: 8,
+    brand: "Artisan",
+    category: "Utensils",
+    thumbnail: "/images/products/mug.jpg",
+    images: ["/images/products/mug.jpg"],
     filters: ["new", "picks"],
   },
   {
     id: 3,
     title: "Artisan Mixing Bowl",
     description: "Stoneware bowl designed for everyday prep.",
-    image: "/images/products/mug.jpg",
     price: 39.99,
+    discountPercentage: 10,
     rating: 4.7,
-    reviewCount: 76,
-    categoryLabel: "Baking",
-    inStock: true,
+    stock: 20,
+    brand: "Artisan",
+    category: "Baking",
+    thumbnail: "/images/products/mug.jpg",
+    images: ["/images/products/mug.jpg"],
     filters: ["new"],
   },
   {
     id: 4,
     title: "Brass Measuring Set",
     description: "Precision measuring tools with warm brass finish.",
-    image: "/images/products/mug.jpg",
     price: 29.99,
+    discountPercentage: 0,
     rating: 4.9,
-    reviewCount: 163,
-    categoryLabel: "Baking",
-    inStock: true,
+    stock: 5,
+    brand: "Artisan",
+    category: "Baking",
+    thumbnail: "/images/products/mug.jpg",
+    images: ["/images/products/mug.jpg"],
     filters: ["popular", "picks"],
   },
 ];
 
 export default function ProductList() {
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
-
   const [toastVisible, setToastVisible] = useState(false);
-
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const filteredProducts =
     activeFilter === "all"
@@ -103,7 +92,6 @@ export default function ProductList() {
 
   function handleAddToCart(product: Product) {
     console.log("Add to cart:", product);
-
     setToastVisible(true);
 
     if (toastTimer.current) {
@@ -132,7 +120,6 @@ export default function ProductList() {
               <span className="font-label-md text-label-md uppercase tracking-wider text-sage font-semibold">
                 Seasonal Selection
               </span>
-
               <h2 className="font-headline-lg text-headline-lg text-tertiary">
                 Kitchen Essentials of the Season
               </h2>
@@ -141,7 +128,6 @@ export default function ProductList() {
             <div className="flex flex-wrap items-center gap-space-xs bg-surface-white p-1.5 rounded-full shadow-sm">
               {FILTERS.map((filter) => {
                 const active = filter.value === activeFilter;
-
                 return (
                   <button
                     key={filter.value}
@@ -149,12 +135,12 @@ export default function ProductList() {
                     onClick={() => setActiveFilter(filter.value)}
                     className={[
                       "px-space-md py-1.5 rounded-full",
-                      "font-label-md text-label-md",
-                      "transition-all",
+                      "font-label-md text-label-md transition-all cursor-pointer",
                       active
                         ? "bg-terracotta text-on-primary shadow-sm"
                         : "text-olive-gray hover:text-on-surface hover:bg-secondary-container/50",
-                    ].join(" ")}>
+                    ].join(" ")}
+                  >
                     {filter.label}
                   </button>
                 );
@@ -166,10 +152,11 @@ export default function ProductList() {
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
-                {...product}
-                onAddToCart={() => handleAddToCart(product)}
-                onWishlist={() => console.log("Wishlist:", product.title)}
-                onQuickView={() => console.log("Quick view:", product.title)}
+                product={product}
+                variant="home"
+                onAddToCart={(p) => handleAddToCart(p)}
+                onWishlist={(p) => console.log("Wishlist:", p.title)}
+                onQuickView={(p) => console.log("Quick view:", p.title)}
               />
             ))}
           </div>
@@ -177,9 +164,9 @@ export default function ProductList() {
           <div className="mt-space-xl flex justify-center">
             <Link
               href="/catalog"
-              className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200">
+              className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200"
+            >
               <span>View all curated kitchen items</span>
-
               <span className="material-symbols-outlined text-lg">
                 arrow_forward
               </span>
@@ -197,30 +184,28 @@ function CartToast({ visible }: { visible: boolean }) {
   return (
     <div
       className={[
-        "fixed bottom-6 right-6 z-50",
-        "transform transition-all duration-300",
+        "fixed bottom-6 right-6 z-50 transform transition-all duration-300",
         visible ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0",
-      ].join(" ")}>
+      ].join(" ")}
+    >
       <div className="bg-surface-white border border-warm-sand/50 shadow-xl rounded-2xl p-space-md flex items-center gap-space-md">
         <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-terracotta">
           <span className="material-symbols-outlined text-xl">
             check_circle
           </span>
         </div>
-
         <div>
           <p className="font-title-md text-title-md text-tertiary">
             Added to your basket
           </p>
-
           <p className="font-label-sm text-label-sm text-olive-gray">
             Explore more items or proceed to checkout.
           </p>
         </div>
-
         <Link
           href="/cart"
-          className="bg-terracotta text-on-primary font-label-md text-label-md px-3 py-1.5 rounded-full hover:bg-primary-container">
+          className="bg-terracotta text-on-primary font-label-md text-label-md px-3 py-1.5 rounded-full hover:bg-primary-container"
+        >
           View Cart
         </Link>
       </div>
