@@ -16,6 +16,9 @@ export interface FetchCatalogParams {
   limit?: number;
 }
 
+/**
+ * Fetch danh sách sản phẩm phục vụ trang Catalog/Search
+ */
 export async function fetchCatalogProducts({
   q = "",
   category = "",
@@ -57,6 +60,45 @@ export async function fetchCatalogProducts({
   } catch (error) {
     console.error("Error in fetchCatalogProducts:", error);
     return { products: [], total: 0, skip: 0, limit: 12 };
+  }
+}
+
+/**
+ * Lấy thông tin chi tiết 1 sản phẩm theo ID
+ */
+export async function getProductById(
+  id: string | number
+): Promise<DummyJSONProductDetail | null> {
+  try {
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/products/${id}`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (error) {
+    console.error("Error in getProductById:", error);
+    return null;
+  }
+}
+
+/**
+ * Lấy danh sách sản phẩm liên quan theo category
+ */
+export async function getRelatedProducts(
+  category: string,
+  limit: number = 4
+): Promise<Product[]> {
+  try {
+    const res = await fetch(
+      `${DUMMY_JSON_BASE_URL}/products/category/${encodeURIComponent(category)}?limit=${limit}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.products || [];
+  } catch (error) {
+    console.error("Error in getRelatedProducts:", error);
+    return [];
   }
 }
 
@@ -125,13 +167,7 @@ export async function fetchDummyCart(
 export async function fetchProductDetail(
   id: number
 ): Promise<DummyJSONProductDetail | null> {
-  try {
-    const res = await fetch(`${DUMMY_JSON_BASE_URL}/products/${id}`);
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
+  return getProductById(id);
 }
 
 /**
