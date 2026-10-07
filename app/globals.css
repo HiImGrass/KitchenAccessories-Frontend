@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  /* Đồng bộ biến màu NextUI Primary theo Brand Color (#894b3a) để không bị xanh dương */
+  /* Đồng bộ biến màu NextUI Primary và Focus theo Brand Color (#894b3a) để không bị xanh dương */
   --nextui-primary: 13 41% 38%;
+  --nextui-focus: 13 41% 38%;
 }
 
 @theme {
@@ -150,9 +151,12 @@
 
 @layer base {
   /* Đảm bảo chiều cao tối thiểu và chống tràn ngang */
-  html,
+  html {
+    @apply overflow-x-hidden overscroll-y-none;
+  }
+
   body {
-    @apply h-full overflow-x-hidden;
+    @apply min-h-full;
   }
 
   /* Chỉnh màu khi người dùng bôi đen (select) văn bản cho hợp tone ấm của web */
@@ -173,6 +177,44 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-outline;
   }
+  /* Triệt tiêu viền xanh focus mặc định trên modal dialog */
+  [role="dialog"],
+  [role="dialog"]:focus,
+  [role="dialog"]:focus-visible,
+  [role="dialog"][data-focus-visible="true"] {
+    outline: none !important;
+  }
+}
+
+/* Hiệu ứng xoay tròn mượt mà cho Spinner và Loader */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 0.8s linear infinite !important;
+}
+
+@keyframes spinner-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spinner-ease-spin {
+  animation: spinner-spin 0.8s ease infinite !important;
+}
+
+.animate-spinner-linear-spin {
+  animation: spinner-spin 0.8s linear infinite !important;
 }
 
 @layer utilities {
