@@ -26,7 +26,6 @@ export default function AboutPage() {
       <SourcingTimelineSection />
       <MetricsSection />
       <CareSection />
-      <AboutCtaSection />
     </div>
   );
 }
