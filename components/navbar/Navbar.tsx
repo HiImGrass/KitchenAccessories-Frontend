@@ -72,6 +72,7 @@ export default function CustomNavbar() {
           </button>
           <button aria-label="Cart" className="relative w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-fixed transition-colors" type="button">
             <ShoppingBag className="w-5 h-5" />
+<<<<<<< Updated upstream
             <span className="absolute top-1 right-1 bg-terracotta text-on-primary font-label-sm text-label-sm w-4 h-4 rounded-full flex items-center justify-center">3</span>
           </button>
           <Link href="#" className="flex items-center pl-space-xs hover:opacity-90 transition-opacity">
@@ -79,6 +80,21 @@ export default function CustomNavbar() {
               alt="Profile" 
               className="w-8 h-8 rounded-full object-cover" 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9cXJx025d9QCc8S8TwKZcaKg8BxvsIWacfd1zf2-sGAgaElkZzA7IdeAM2bzdVWlXJhrjyuJ9P_EehEAe-QB_oi0chpUqgE385fdtNGvH6UAldzEjiMRF4B9ZU2GW7Bvu8uSQsyncCS3iA3qr8vTnD7PT15cAzlOodpuu1hmrs7WDxK0KnirImAA0rHjGu8_xiArqE6ggM0jicQ_bPdpzOWNp4OJIYPgHHkrpO9FJ7nfYYMKUgYaP" 
+=======
+            {summary.itemCount > 0 && (
+              <span className="absolute top-1 right-1 bg-terracotta text-on-primary font-label-sm text-label-sm min-w-4 h-4 px-1 rounded-full flex items-center justify-center text-[10px] font-bold leading-none shadow-xs transition-transform transform active:scale-95">
+                {summary.itemCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/profile"
+            className="flex items-center pl-space-xs hover:opacity-90 transition-opacity">
+            <img
+              alt="Profile"
+              className="w-8 h-8 rounded-full object-cover"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9cXJx025d9QCc8S8TwKZcaKg8BxvsIWacfd1zf2-sGAgaElkZzA7IdeAM2bzdVWlXJhrjyuJ9P_EehEAe-QB_oi0chpUqgE385fdtNGvH6UAldzEjiMRF4B9ZU2GW7Bvu8uSQsyncCS3iA3qr8vTnD7PT15cAzlOodpuu1hmrs7WDxK0KnirImAA0rHjGu8_xiArqE6ggM0jicQ_bPdpzOWNp4OJIYPgHHkrpO9FJ7nfYYMKUgYaP"
+>>>>>>> Stashed changes
             />
           </Link>
         </div>
