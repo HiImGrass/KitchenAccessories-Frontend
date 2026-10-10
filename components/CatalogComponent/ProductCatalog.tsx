@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useCallback, useTransition } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Product } from '@/types/product';
-import { SearchCard } from './SearchCard';
-import { SvgIcon } from '@/lib/SvgIcons';
+import React, { useState, useCallback, useTransition } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { Product } from "@/types/product";
+import { SearchCard } from "./SearchCard";
+import { SvgIcon } from "@/lib/SvgIcons";
 
 interface ProductCatalogProps {
   products: Product[];
@@ -37,7 +37,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     (newParams: Record<string, string | number | null>) => {
       const params = new URLSearchParams(searchParams.toString());
       Object.entries(newParams).forEach(([key, val]) => {
-        if (val === null || val === '') {
+        if (val === null || val === "") {
           params.delete(key);
         } else {
           params.set(key, String(val));
@@ -48,7 +48,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         router.push(`${pathname}?${params.toString()}`);
       });
     },
-    [router, pathname, searchParams]
+    [router, pathname, searchParams],
   );
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -68,7 +68,9 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           </h1>
         </div>
 
-        <form onSubmit={handleSearchSubmit} className="w-full md:w-80 relative flex items-center">
+        <form
+          onSubmit={handleSearchSubmit}
+          className="w-full md:w-80 relative flex items-center">
           <span className="absolute left-3.5 text-sage select-none">
             <SvgIcon name="search" className="w-4 h-4" />
           </span>
@@ -83,11 +85,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             <button
               type="button"
               onClick={() => {
-                setSearchInput('');
-                updateFilters({ q: '', skip: 0 });
+                setSearchInput("");
+                updateFilters({ q: "", skip: 0 });
               }}
-              className="absolute right-3 text-sage hover:text-terracotta"
-            >
+              className="absolute right-3 text-sage hover:text-terracotta">
               <SvgIcon name="cancel" className="w-4 h-4" />
             </button>
           )}

@@ -1,8 +1,8 @@
 // app/products/[id]/page.tsx
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import ProductGallery from "@/components/details/ProductGallery";
-import ProductActions from "@/components/details/ProductActions";
+import ProductGallery from "@/components/DetailsComponent/ProductGallery";
+import ProductActions from "@/components/DetailsComponent/ProductActions";
 import ProductCard from "@/components/products/ProductCard";
 import { getProductById, getRelatedProducts } from "@/lib/dummyjson";
 

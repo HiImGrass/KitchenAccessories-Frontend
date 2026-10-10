@@ -19,6 +19,8 @@ export interface FetchCatalogParams {
 /**
  * Fetch danh sách sản phẩm phục vụ trang Catalog/Search
  */
+
+
 export async function fetchCatalogProducts({
   q = "",
   category = "",
@@ -141,7 +143,13 @@ export interface DummyJSONProductDetail {
 }
 
 export type CartDataSource = "cart_api" | "kitchen_category";
-
+export type ProductDataSource = {
+  q?: string;
+  category?: string;
+  sort?: string;
+  skip?: number;
+  limit?: number;
+}
 /**
  * Fetch a cart directly from DummyJSON Carts endpoint: GET /carts/{id}
  */

@@ -37,7 +37,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* ===== THUMBNAIL & BADGES ===== */}
       <div className="relative w-full aspect-square bg-canvas-cream overflow-hidden">
         {/* Link chuyển trang bọc quanh ảnh */}
-        <Link href={`/products/${product.id}`} className="absolute inset-0 z-0 block">
+        <Link
+          href={`/products/${product.id}`}
+          className="absolute inset-0 z-0 block">
           <Image
             fill
             src={product.thumbnail || product.images?.[0] || "/placeholder.jpg"}
@@ -62,8 +64,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             e.preventDefault(); // Ngăn sự kiện lây lan
             onWishlist?.(product);
           }}
-          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-white/90 backdrop-blur-sm flex items-center justify-center text-sage hover:text-terracotta hover:bg-surface-white transition-all shadow-xs z-10 cursor-pointer"
-        >
+          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-white/90 backdrop-blur-sm flex items-center justify-center text-sage hover:text-terracotta hover:bg-surface-white transition-all shadow-xs z-10 cursor-pointer">
           <SvgIcon name="favorite" className="w-4 h-4" />
         </button>
       </div>
@@ -77,7 +78,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </span>
             <div className="flex items-center text-terracotta gap-0.5">
               <SvgIcon name="star" className="w-3.5 h-3.5" />
-              <span className="font-medium text-tertiary">{product.rating ?? 0}</span>
+              <span className="font-medium text-tertiary">
+                {product.rating ?? 0}
+              </span>
             </div>
           </div>
 
@@ -108,20 +111,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
 
           <div className="flex items-center gap-1.5">
-            {variant === "home" && onQuickView && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onQuickView(product);
-                }}
-                aria-label={`Quick view ${product.title || "product"}`}
-                className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-tertiary hover:bg-terracotta hover:text-on-primary transition-colors cursor-pointer"
-              >
-                <SvgIcon name="visibility" className="w-4 h-4" />
-              </button>
-            )}
-
             <button
               type="button"
               disabled={product.stock === 0}
@@ -129,8 +118,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 e.preventDefault();
                 onAddToCart?.(product);
               }}
-              className="bg-terracotta hover:bg-primary disabled:bg-gray-300 text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm transition-all cursor-pointer"
-            >
+              className="bg-terracotta hover:bg-primary disabled:bg-gray-300 text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm transition-all cursor-pointer">
               <SvgIcon name="shopping_bag" className="w-3.5 h-3.5" />
               <span>{product.stock === 0 ? "Out of Stock" : "Add"}</span>
             </button>

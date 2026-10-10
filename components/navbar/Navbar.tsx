@@ -48,7 +48,7 @@ export default function CustomNavbar() {
           </NavbarItem>
           <NavbarItem>
             <Link
-              href="/catalog"
+              href="/products"
               className="font-title-md text-title-md text-on-surface-variant hover:text-on-surface transition-colors px-space-md py-space-xs rounded-full">
               Shop Catalog
             </Link>

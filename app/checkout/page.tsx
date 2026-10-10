@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { CheckoutView } from '@/components/checkout/CheckoutView';
+import { CheckoutView } from '@/components/CheckoutComponent/CheckoutView';
 
 export const metadata: Metadata = {
   title: 'Checkout | Ladle & Co. Artisanal Kitchenware',

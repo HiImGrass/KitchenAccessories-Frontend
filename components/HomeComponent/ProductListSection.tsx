@@ -1,9 +1,7 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
+import ProductCard from "@/components/products/ProductCard";
 import Link from "next/link";
 import { Product } from "@/types/product";
-import { ProductCard } from "@/components/products/ProductCard";
+import { useState, useRef, useEffect } from "react";
 
 type Filter = "all" | "popular" | "new" | "picks";
 
@@ -79,11 +77,12 @@ const PRODUCTS: ProductWithFilter[] = [
     filters: ["popular", "picks"],
   },
 ];
-
-export default function ProductList() {
+export default function ProductListSection() {
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
   const [toastVisible, setToastVisible] = useState(false);
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const filteredProducts =
     activeFilter === "all"
@@ -139,8 +138,7 @@ export default function ProductList() {
                       active
                         ? "bg-terracotta text-on-primary shadow-sm"
                         : "text-olive-gray hover:text-on-surface hover:bg-secondary-container/50",
-                    ].join(" ")}
-                  >
+                    ].join(" ")}>
                     {filter.label}
                   </button>
                 );
@@ -163,9 +161,8 @@ export default function ProductList() {
 
           <div className="mt-space-xl flex justify-center">
             <Link
-              href="/catalog"
-              className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200"
-            >
+              href="/products"
+              className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200">
               <span>View all curated kitchen items</span>
               <span className="material-symbols-outlined text-lg">
                 arrow_forward
@@ -186,8 +183,7 @@ function CartToast({ visible }: { visible: boolean }) {
       className={[
         "fixed bottom-6 right-6 z-50 transform transition-all duration-300",
         visible ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0",
-      ].join(" ")}
-    >
+      ].join(" ")}>
       <div className="bg-surface-white border border-warm-sand/50 shadow-xl rounded-2xl p-space-md flex items-center gap-space-md">
         <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-terracotta">
           <span className="material-symbols-outlined text-xl">
@@ -204,8 +200,7 @@ function CartToast({ visible }: { visible: boolean }) {
         </div>
         <Link
           href="/cart"
-          className="bg-terracotta text-on-primary font-label-md text-label-md px-3 py-1.5 rounded-full hover:bg-primary-container"
-        >
+          className="bg-terracotta text-on-primary font-label-md text-label-md px-3 py-1.5 rounded-full hover:bg-primary-container">
           View Cart
         </Link>
       </div>

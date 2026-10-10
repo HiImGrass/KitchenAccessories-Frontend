@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { CartView } from '@/components/cart/CartView';
+import { CartView } from '@/components/CartComponent/CartView';
 
 export const metadata: Metadata = {
   title: 'Your Culinary Basket | Ladle & Co.',
