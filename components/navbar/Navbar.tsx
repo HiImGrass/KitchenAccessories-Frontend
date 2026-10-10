@@ -95,7 +95,7 @@ export default function CustomNavbar() {
             )}
           </Link>
           <Link
-            href="#"
+            href="/profile"
             className="flex items-center pl-space-xs hover:opacity-90 transition-opacity">
             <img
               alt="Profile"
