@@ -31,6 +31,10 @@ export interface UseCartReturn {
   setDataSource: (source: CartDataSource) => void;
   refetch: () => Promise<void>;
   setPromoInput: (code: string) => void;
+  addItem: (
+    product: { id: number | string; title: string; price: number; thumbnail?: string; image?: string },
+    quantity?: number
+  ) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   updateQuantity: (id: string, qty: number) => void;
@@ -61,7 +65,6 @@ export function CartProvider({ children, initialItems = [] }: CartProviderProps)
   const [promoInput, setPromoInput] = useState<string>('AUTUMN10');
   const [promoError, setPromoError] = useState<string | null>(null);
 
-  // Fetch cart items from DummyJSON REST API (Kitchen Category)
   const loadCartFromApi = useCallback(async (source: CartDataSource) => {
     setIsLoading(true);
     setError(null);
@@ -85,7 +88,6 @@ export function CartProvider({ children, initialItems = [] }: CartProviderProps)
     }
   }, []);
 
-  // Fetch on client only if no server-rendered initial items were supplied
   useEffect(() => {
     if (initialItems.length === 0) {
       loadCartFromApi(dataSource);
@@ -96,7 +98,45 @@ export function CartProvider({ children, initialItems = [] }: CartProviderProps)
     await loadCartFromApi(dataSource);
   }, [dataSource, loadCartFromApi]);
 
-  // Computed summary
+  // ===== BỔ SUNG HÀM ADD ITEM VÀO GIỎ HÀNG =====
+  const addItem = useCallback(
+    (
+      product: { id: number | string; title: string; price: number; thumbnail?: string; image?: string },
+      quantity = 1
+    ) => {
+      const stringId = String(product.id);
+
+      setItems((prev) => {
+        const existingIndex = prev.findIndex((item) => item.id === stringId);
+
+        if (existingIndex > -1) {
+          const updated = [...prev];
+          updated[existingIndex].quantity += quantity;
+          return updated;
+        }
+
+        return [
+          ...prev,
+          {
+            id: stringId,
+            name: product.title,
+            price: product.price,
+            quantity: quantity,
+            image: product.thumbnail || product.image || '/placeholder.jpg',
+            details: 'Kitchen Accessory',
+            stockStatus: 'in_stock',
+            stockLabel: 'In Stock',
+            stockNote: 'Ready for dispatch',
+            maxQuantity: 20,
+          },
+        ];
+      });
+
+      toast.success(`Đã thêm ${quantity} x "${product.title}" vào giỏ hàng!`);
+    },
+    []
+  );
+
   const summary = useMemo<CartSummary>(() => {
     const itemCount = items.reduce((acc, item) => acc + item.quantity, 0);
     const subtotal = items.reduce(
@@ -141,7 +181,6 @@ export function CartProvider({ children, initialItems = [] }: CartProviderProps)
     };
   }, [items, appliedPromo, giftWrap]);
 
-  // Handlers
   const increaseQuantity = useCallback((id: string) => {
     setItems((prev) =>
       prev.map((item) => {
@@ -253,6 +292,7 @@ export function CartProvider({ children, initialItems = [] }: CartProviderProps)
     setDataSource,
     refetch,
     setPromoInput,
+    addItem,
     increaseQuantity,
     decreaseQuantity,
     updateQuantity,
