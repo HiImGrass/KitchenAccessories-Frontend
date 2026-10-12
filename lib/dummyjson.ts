@@ -258,3 +258,60 @@ export async function fetchCartItemsFromDummyJSON(options?: {
     return [];
   }
 }
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+//////////////////
+
+/**
+ * Hàm gọi API đăng nhập tới DummyJSON Auth endpoint: POST /auth/login
+ */
+export async function loginUser(credentials: LoginCredentials) {
+  try {
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: credentials.username,
+        password: credentials.password,
+        expiresInMins: 30,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Đăng nhập thất bại");
+    }
+
+    return data; // Trả về thông tin user kèm token
+  } catch (err: any) {
+    console.error("Error in loginUser:", err);
+    throw new Error(err.message || "Không thể kết nối đến máy chủ xác thực.");
+  }
+}
+
+/**
+ * Hàm lấy thông tin user hiện tại bằng token: GET /auth/me
+ */
+export async function getCurrentAuthUser(token: string) {
+  try {
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/auth/me`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) throw new Error("Phiên đăng nhập đã hết hạn");
+    return await res.json();
+  } catch (err) {
+    console.error("Error in getCurrentAuthUser:", err);
+    return null;
+  }
+}
