@@ -11,10 +11,12 @@ import {
   INITIAL_PROFILE_ORDERS,
 } from '@/lib/profileData';
 
+import { useRouter } from 'next/navigation';
+
 export const ProfileView: React.FC = () => {
   const [user] = useState(INITIAL_PROFILE_USER);
   const [orders] = useState(INITIAL_PROFILE_ORDERS);
-
+  const router = useRouter();
   const handleEditProfile = () => {
     console.log('Edit profile clicked');
   };
@@ -24,7 +26,9 @@ export const ProfileView: React.FC = () => {
   };
 
   const handleSignOut = () => {
-    console.log('Sign out clicked');
+    localStorage.removeItem('accessToken');
+    console.log('Sign out clicked, Removed Tokens');
+    router.push('/login');
   };
 
   const handleViewOrderDetails = (orderId: string) => {
