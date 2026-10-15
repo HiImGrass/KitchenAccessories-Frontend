@@ -258,3 +258,52 @@ export async function fetchCartItemsFromDummyJSON(options?: {
     return [];
   }
 }
+
+// ==================== AUTHENTICATION SECTION ====================
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  image: string;
+  token: string;
+  refreshToken: string;
+}
+
+/**
+ * Đăng nhập tài khoản qua DummyJSON: POST /auth/login
+ */
+export async function loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
+  try {
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: credentials.username,
+        password: credentials.password,
+        expiresInMins: 30, // Thời gian hiệu lực token
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Tài khoản hoặc mật khẩu không chính xác");
+    }
+
+    return data;
+  } catch (err: any) {
+    console.error("Error in loginUser:", err);
+    throw new Error(err.message || "Không thể kết nối đến máy chủ xác thực.");
+  }
+}
