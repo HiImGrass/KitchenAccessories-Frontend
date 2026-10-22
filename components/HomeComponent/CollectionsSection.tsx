@@ -106,7 +106,7 @@ export default function CollectionsSection() {
           <Link
             className="group relative rounded-xl overflow-hidden bg-surface-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full"
             data-path="baking-and-tools"
-            href="/products?category=baking">
+            href="/products">
             <div className="relative w-full aspect-square overflow-hidden bg-surface-container">
               <Image
                 fill

@@ -4,14 +4,13 @@ import React from 'react';
 import { Product } from '@/types/product';
 import { ProductCard } from '@/components/products/ProductCard';
 import { SvgIcon } from '@/lib/SvgIcons';
-import { categoryOptions, sortbyOptions } from './options';
+import { sortbyOptions } from './options';
 
 interface SearchCardProps {
   products: Product[];
   total: number;
   skip: number;
   limit: number;
-  currentCategory: string;
   currentSort: string;
   isPending: boolean;
   cols: 3 | 4;
@@ -24,7 +23,6 @@ export const SearchCard: React.FC<SearchCardProps> = ({
   total,
   skip,
   limit,
-  currentCategory,
   currentSort,
   isPending,
   cols,
@@ -35,47 +33,9 @@ export const SearchCard: React.FC<SearchCardProps> = ({
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-space-lg items-start">
-      {/* ===== SIDEBAR DANH MỤC ===== */}
-      <aside className="lg:col-span-1 bg-surface-white p-space-md rounded-xl shadow-sm space-y-space-md sticky top-24">
-        <div className="flex items-center justify-between border-b pb-3 border-canvas-cream">
-          <div className="flex items-center gap-2">
-            <SvgIcon name="tune" className="w-5 h-5 text-terracotta" />
-            <h2 className="font-title-md text-title-md text-tertiary">Danh Mục</h2>
-          </div>
-          {currentCategory && (
-            <button
-              onClick={() => onFilterChange({ category: '', skip: 0 })}
-              className="text-xs text-sage hover:text-terracotta transition-colors"
-            >
-              Xóa lọc
-            </button>
-          )}
-        </div>
-
-        <ul className="space-y-1 max-h-[60vh] overflow-y-auto pr-1 scrollbar-thin">
-          {categoryOptions.map((cat) => (
-            <li key={cat.value}>
-              <button
-                onClick={() => onFilterChange({ category: cat.value, skip: 0 })}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center justify-between ${
-                  currentCategory === cat.value
-                    ? 'bg-terracotta/10 text-terracotta font-semibold'
-                    : 'text-olive-gray hover:bg-canvas-cream'
-                }`}
-              >
-                <span className="truncate">{cat.name}</span>
-                {currentCategory === cat.value && (
-                  <SvgIcon name="chevron_right" className="w-4 h-4 shrink-0" />
-                )}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </aside>
-
-      {/* ===== DANH SÁCH SẢN PHẨM & TOOLBAR ===== */}
-      <section className="lg:col-span-3 space-y-space-md">
+    <div className="space-y-space-md">
+      {/* Kitchen accessories is the only catalog category, so an unrelated category filter is intentionally omitted. */}
+      <section className="space-y-space-md">
         {/* Toolbar */}
         <div className="bg-surface-white rounded-xl p-3 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-sm text-olive-gray">
