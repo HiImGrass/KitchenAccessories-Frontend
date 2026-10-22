@@ -10,7 +10,6 @@ interface DummyJSONResponse {
 
 export interface FetchCatalogParams {
   q?: string;
-  category?: string;
   sort?: string;
   skip?: number;
   limit?: number;
@@ -23,33 +22,16 @@ export interface FetchCatalogParams {
 
 export async function fetchCatalogProducts({
   q = "",
-  category = "",
   sort = "",
   skip = 0,
   limit = 12,
 }: FetchCatalogParams): Promise<DummyJSONResponse> {
   try {
-    let baseUrl = `${DUMMY_JSON_BASE_URL}/products`;
-
-    // 1. Phân luồng Endpoint theo Tìm kiếm hoặc Danh mục
-    if (q) {
-      baseUrl += `/search?q=${encodeURIComponent(q)}`;
-    } else if (category) {
-      baseUrl += `/category/${encodeURIComponent(category)}`;
-    }
-
-    const url = new URL(baseUrl);
-    url.searchParams.set("limit", String(limit));
-    url.searchParams.set("skip", String(skip));
-
-    // 2. Parse param sort
-    if (sort) {
-      const [sortByField, orderDirection] = sort.split("_");
-      if (sortByField && orderDirection) {
-        url.searchParams.set("sortBy", sortByField);
-        url.searchParams.set("order", orderDirection);
-      }
-    }
+    // Catalog chỉ phục vụ đồ án kitchen accessories. Không dùng /products hoặc
+    // /products/search vì hai endpoint đó trả về cả những ngành hàng không liên quan.
+    const kitchenProductsUrl = `${DUMMY_JSON_BASE_URL}/products/category/kitchen-accessories`;
+    const url = new URL(kitchenProductsUrl);
+    url.searchParams.set("limit", "0");
 
     const res = await fetch(url.toString(), {
       next: { revalidate: 3600 },
@@ -58,7 +40,35 @@ export async function fetchCatalogProducts({
     if (!res.ok) throw new Error("Failed to fetch catalog products");
 
     const data: DummyJSONResponse = await res.json();
-    return data;
+    const normalizedQuery = q.trim().toLocaleLowerCase();
+    const filteredProducts = normalizedQuery
+      ? data.products.filter((product) =>
+          [product.title, product.description, product.brand]
+            .filter(Boolean)
+            .some((value) => value.toLocaleLowerCase().includes(normalizedQuery)),
+        )
+      : data.products;
+
+    const [sortField, sortDirection] = sort.split("_");
+    const sorters: Record<string, (a: Product, b: Product) => number> = {
+      price: (a, b) => a.price - b.price,
+      rating: (a, b) => a.rating - b.rating,
+      title: (a, b) => a.title.localeCompare(b.title),
+    };
+    const compare = sorters[sortField];
+    const sortedProducts = compare
+      ? [...filteredProducts].sort((a, b) =>
+          sortDirection === "desc" ? -compare(a, b) : compare(a, b),
+        )
+      : filteredProducts;
+    const safeSkip = Math.max(0, skip);
+
+    return {
+      products: sortedProducts.slice(safeSkip, safeSkip + limit),
+      total: sortedProducts.length,
+      skip: safeSkip,
+      limit,
+    };
   } catch (error) {
     console.error("Error in fetchCatalogProducts:", error);
     return { products: [], total: 0, skip: 0, limit: 12 };
@@ -302,8 +312,12 @@ export async function loginUser(credentials: LoginCredentials): Promise<AuthResp
     }
 
     return data;
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Error in loginUser:", err);
-    throw new Error(err.message || "Không thể kết nối đến máy chủ xác thực.");
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Không thể kết nối đến máy chủ xác thực.";
+    throw new Error(message);
   }
 }

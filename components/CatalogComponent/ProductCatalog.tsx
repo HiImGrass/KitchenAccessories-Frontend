@@ -12,7 +12,6 @@ interface ProductCatalogProps {
   skip: number;
   limit: number;
   currentQuery: string;
-  currentCategory: string;
   currentSort: string;
 }
 
@@ -22,7 +21,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   skip,
   limit,
   currentQuery,
-  currentCategory,
   currentSort,
 }) => {
   const router = useRouter();
@@ -100,7 +98,6 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         total={total}
         skip={skip}
         limit={limit}
-        currentCategory={currentCategory}
         currentSort={currentSort}
         isPending={isPending}
         cols={cols}

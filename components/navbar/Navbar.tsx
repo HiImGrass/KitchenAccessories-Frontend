@@ -8,11 +8,22 @@ import {
 } from "@nextui-org/react";
 import { Search, ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import logo from "@/assets/logo.png";
 import { useCart } from "@/hooks/useCart";
 
 export default function CustomNavbar() {
   const { summary } = useCart();
+  const pathname = usePathname();
+  const isCatalogRoute = pathname === "/products" || pathname.startsWith("/products/");
+  const navigationClassName = (isActive: boolean) =>
+    [
+      "font-title-md text-title-md transition-colors px-space-md py-space-xs rounded-full",
+      isActive
+        ? "bg-secondary-container text-on-secondary-fixed"
+        : "text-on-surface-variant hover:text-on-surface",
+    ].join(" ");
+
   return (
     <Navbar
       classNames={{
@@ -38,18 +49,19 @@ export default function CustomNavbar() {
         </NavbarBrand>
 
         <ul className="hidden xl:flex items-center gap-space-sm">
-          <NavbarItem isActive>
+          <NavbarItem isActive={pathname === "/"}>
             <Link
-              aria-current="page"
               href="/"
-              className="transition-colors bg-secondary-container text-on-secondary-fixed font-title-md text-title-md rounded-full px-space-md py-space-xs">
+              aria-current={pathname === "/" ? "page" : undefined}
+              className={navigationClassName(pathname === "/")}>
               Home
             </Link>
           </NavbarItem>
-          <NavbarItem>
+          <NavbarItem isActive={isCatalogRoute}>
             <Link
               href="/products"
-              className="font-title-md text-title-md text-on-surface-variant hover:text-on-surface transition-colors px-space-md py-space-xs rounded-full">
+              aria-current={isCatalogRoute ? "page" : undefined}
+              className={navigationClassName(isCatalogRoute)}>
               Shop Catalog
             </Link>
           </NavbarItem>
@@ -60,10 +72,11 @@ export default function CustomNavbar() {
               Baking & Tools
             </Link>
           </NavbarItem>
-          <NavbarItem>
+          <NavbarItem isActive={pathname === "/about"}>
             <Link
               href="/about"
-              className="font-title-md text-title-md text-on-surface-variant hover:text-on-surface transition-colors px-space-md py-space-xs rounded-full">
+              aria-current={pathname === "/about" ? "page" : undefined}
+              className={navigationClassName(pathname === "/about")}>
               About Us
             </Link>
           </NavbarItem>
