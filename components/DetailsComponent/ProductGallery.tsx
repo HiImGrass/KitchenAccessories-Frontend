@@ -1,21 +1,29 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 
 interface GalleryProps {
+  productTitle: string;
   thumbnail: string;
   images: string[];
 }
 
-export default function ProductGallery({ thumbnail, images }: GalleryProps) {
+export default function ProductGallery({
+  productTitle,
+  thumbnail,
+  images,
+}: GalleryProps) {
   const allImages = Array.from(new Set([thumbnail, ...(images || [])]));
   const [mainImg, setMainImg] = useState(allImages[0]);
 
   return (
     <div className="space-y-4">
       <div className="relative bg-white rounded-xl overflow-hidden shadow-sm aspect-[4/3] flex items-center justify-center border border-gray-100">
-        <img
+        <Image
           src={mainImg}
-          alt="Product Cover"
+          alt={`${productTitle} product image`}
+          fill
+          sizes="(min-width: 1024px) 58vw, 100vw"
           className="w-full h-full object-contain p-4 transition-all duration-300"
         />
       </div>
@@ -27,10 +35,16 @@ export default function ProductGallery({ thumbnail, images }: GalleryProps) {
               key={idx}
               type="button"
               onClick={() => setMainImg(imgUrl)}
-              className={`rounded-lg overflow-hidden bg-white aspect-square shadow-sm transition-all border-2 
+              className={`relative rounded-lg overflow-hidden bg-white aspect-square shadow-sm transition-all border-2
                 ${mainImg === imgUrl ? "border-orange-500 opacity-100 scale-105" : "border-transparent opacity-60 hover:opacity-100"}`}
             >
-              <img src={imgUrl} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+              <Image
+                src={imgUrl}
+                alt={`${productTitle} thumbnail ${idx + 1}`}
+                fill
+                sizes="(min-width: 640px) 20vw, 25vw"
+                className="object-cover"
+              />
             </button>
           ))}
         </div>

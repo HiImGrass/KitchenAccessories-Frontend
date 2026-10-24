@@ -85,11 +85,14 @@ export async function getProductById(
     const res = await fetch(`${DUMMY_JSON_BASE_URL}/products/${id}`, {
       next: { revalidate: 3600 },
     });
-    if (!res.ok) return null;
+    if (res.status === 404) return null;
+    if (!res.ok) {
+      throw new Error(`Failed to fetch product ${id}: ${res.status} ${res.statusText}`);
+    }
     return await res.json();
   } catch (error) {
     console.error("Error in getProductById:", error);
-    return null;
+    throw error;
   }
 }
 

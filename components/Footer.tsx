@@ -35,7 +35,6 @@ export default function Footer() {
             <h4 className="font-title-md text-title-md text-tertiary mb-space-md">Shop</h4>
             <ul className="flex flex-col space-y-space-sm font-body-md text-body-md text-olive-gray">
               <li><Link href="#" className="hover:text-terracotta transition-colors">Shop Catalog</Link></li>
-              <li><Link href="#" className="hover:text-terracotta transition-colors">Baking & Tools</Link></li>
               <li><Link href="#" className="hover:text-terracotta transition-colors">Curated Sets</Link></li>
               <li><Link href="#" className="hover:text-terracotta transition-colors">New Arrivals</Link></li>
             </ul>
