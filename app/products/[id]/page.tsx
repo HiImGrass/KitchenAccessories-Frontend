@@ -59,7 +59,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
         <nav className="flex items-center gap-2 text-sm text-gray-500">
           <Link href="/" className="hover:underline">Home</Link>
           <span>&gt;</span>
-          <Link href={`/category/${product.category}`} className="capitalize hover:underline">
+          <Link href="/kitchen-accessories" className="capitalize hover:underline">
             {product.category}
           </Link>
           <span>&gt;</span>
@@ -138,7 +138,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
       <section className="w-full max-w-7xl mx-auto px-4 pt-16">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {relatedProducts.map((item: any) => (
+          {relatedProducts.map((item) => (
             item.id !== product.id && (
               <ProductCard key={item.id} product={item} />
             )

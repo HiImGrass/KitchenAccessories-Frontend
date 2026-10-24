@@ -156,7 +156,7 @@
   }
 
   body {
-    @apply min-h-full;
+    @apply min-h-full max-w-full overflow-x-hidden;
   }
 
   /* Chỉnh màu khi người dùng bôi đen (select) văn bản cho hợp tone ấm của web */

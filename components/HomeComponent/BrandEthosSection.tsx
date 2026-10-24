@@ -59,7 +59,7 @@ export default function BrandEthosSection() {
                     30-Day Kitchen Trial
                   </h4>
                   <p className="font-label-sm text-label-sm text-olive-gray">
-                    Cook with our tools. If they don't inspire, return freely.
+                    Cook with our tools. If they don&apos;t inspire, return freely.
                   </p>
                 </div>
               </div>
@@ -92,8 +92,8 @@ export default function BrandEthosSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-tertiary/60 via-transparent to-transparent flex items-end p-space-lg text-surface-white">
                 <div className="bg-surface-white/90 backdrop-blur-md text-tertiary p-space-md rounded-xl max-w-sm shadow-md">
                   <p className="font-label-md text-label-md italic">
-                    "Utensils should feel alive in the hand, carrying the warmth
-                    of their tree and maker."
+                    &ldquo;Utensils should feel alive in the hand, carrying the warmth
+                    of their tree and maker.&rdquo;
                   </p>
                   <span className="font-label-sm text-label-sm text-terracotta font-semibold mt-1 block">
                     — Mateo Rossi, Master Woodturner

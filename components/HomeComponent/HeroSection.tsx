@@ -156,7 +156,7 @@ export default function HeroSection() {
                     </span>
                   </div>
                   <p className="font-label-sm text-label-sm text-olive-gray truncate">
-                    "The balance in hand is extraordinary."
+                    &ldquo;The balance in hand is extraordinary.&rdquo;
                   </p>
                   <span className="font-label-sm text-label-sm text-sage">
                     Eleanor K., Culinary Writer

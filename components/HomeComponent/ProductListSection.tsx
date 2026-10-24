@@ -13,9 +13,9 @@ interface ProductListSectionProps {
 type SortOption = "featured" | "price-asc" | "price-desc";
 
 const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: "Nổi bật", value: "featured" },
-  { label: "Giá thấp → cao", value: "price-asc" },
-  { label: "Giá cao → thấp", value: "price-desc" },
+  { label: "Featured", value: "featured" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Price: High to Low", value: "price-desc" },
 ];
 
 export default function ProductListSection({ products }: ProductListSectionProps) {
@@ -45,7 +45,7 @@ export default function ProductListSection({ products }: ProductListSectionProps
               Kitchen Essentials of the Season
             </h2>
           </div>
-          <div className="flex flex-wrap items-center gap-space-xs bg-surface-white p-1.5 rounded-full shadow-sm">
+          <div className="flex flex-wrap items-center gap-space-xs bg-surface-white p-1.5 rounded-2xl shadow-sm sm:rounded-full">
             {SORT_OPTIONS.map((option) => {
               const isActive = sortOption === option.value;
 
@@ -78,7 +78,6 @@ export default function ProductListSection({ products }: ProductListSectionProps
                 product={product}
                 variant="home"
                 onAddToCart={addItem}
-                onWishlist={(item) => console.log("Wishlist:", item.title)}
               />
             ))}
           </div>

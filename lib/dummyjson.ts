@@ -193,6 +193,39 @@ export interface AuthResponse {
   refreshToken: string;
 }
 
+export interface MockUserUpdate {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  address?: {
+    address?: string;
+  };
+  password?: string;
+}
+
+/**
+ * DummyJSON simulates PATCH updates and returns the supplied user fields. This
+ * is intentionally used only for the in-memory account-management demo.
+ */
+export async function updateMockUser(
+  id: number,
+  updates: MockUserUpdate,
+): Promise<MockUserUpdate> {
+  const res = await fetch(`${DUMMY_JSON_BASE_URL}/users/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || "Unable to update the profile.");
+  }
+
+  return data;
+}
+
 /**
  * Đăng nhập tài khoản qua DummyJSON: POST /auth/login
  */
@@ -213,7 +246,7 @@ export async function loginUser(credentials: LoginCredentials): Promise<AuthResp
     const data = await res.json();
 
     if (!res.ok) {
-      throw new Error(data.message || "Tài khoản hoặc mật khẩu không chính xác");
+      throw new Error(data.message || "The username or password is incorrect.");
     }
 
     return data;
@@ -222,7 +255,7 @@ export async function loginUser(credentials: LoginCredentials): Promise<AuthResp
     const message =
       err instanceof Error
         ? err.message
-        : "Không thể kết nối đến máy chủ xác thực.";
+        : "Unable to reach the authentication service.";
     throw new Error(message);
   }
 }

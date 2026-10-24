@@ -6,15 +6,17 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
-import { Search, ShoppingBag } from "lucide-react";
+import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import logo from "@/assets/logo.png";
 import { useCart } from "@/hooks/useCart";
 
 export default function CustomNavbar() {
   const { summary } = useCart();
   const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isCatalogRoute = pathname === "/products" || pathname.startsWith("/products/");
   const navigationClassName = (isActive: boolean) =>
     [
@@ -24,23 +26,30 @@ export default function CustomNavbar() {
         : "text-on-surface-variant hover:text-on-surface",
     ].join(" ");
 
+  const closeMenu = () => setIsMenuOpen(false);
+  const mobileLinks = [
+    { href: "/", label: "Home", active: pathname === "/" },
+    { href: "/products", label: "Shop Catalog", active: isCatalogRoute },
+    { href: "/about", label: "About Us", active: pathname === "/about" },
+  ];
+
   return (
-    <Navbar
+    <>
+      <Navbar
       classNames={{
         // Bê nguyên xi class từ thẻ <header> trong HTML của bạn
-        base: "fixed top-0 left-0 right-0 z-50 bg-canvas-cream/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]",
+        base: "fixed inset-x-0 top-0 z-50 w-full max-w-none bg-canvas-cream/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]",
         // Bê nguyên class của thẻ <div> bọc bên trong
         wrapper:
-          "h-20 max-w-7xl mx-auto px-space-md lg:px-margin flex items-center justify-between gap-space-md w-full",
+          "h-20 w-full max-w-none px-4 sm:px-6 lg:mx-auto lg:max-w-7xl lg:px-margin",
       }}
       maxWidth="full"
       position="sticky">
-      {/* CỤM BÊN TRÁI: Logo + Navigation */}
-      <NavbarContent justify="start" className="flex items-center gap-space-lg">
+      <NavbarContent justify="start" className="flex min-w-0 flex-1 items-center gap-space-lg">
         <NavbarBrand
           as={Link}
           href="/"
-          className="flex items-center gap-space-sm max-w-fit">
+          className="flex shrink-0 items-center gap-space-sm max-w-fit">
           <img
             alt="Ladle & Co. Logo"
             className="h-8 w-auto object-contain"
@@ -76,10 +85,9 @@ export default function CustomNavbar() {
         </ul>
       </NavbarContent>
 
-      {/* CỤM BÊN PHẢI: Search + Icons (Thay icon bằng Lucide) */}
       <NavbarContent
         justify="end"
-        className="flex items-center gap-space-md flex-1 max-w-md">
+        className="ml-auto flex flex-none items-center gap-space-sm sm:gap-space-md">
         <div className="relative w-full max-w-xs hidden sm:block">
           <Search className="absolute left-space-md top-1/2 -translate-y-1/2 text-sage w-5 h-5" />
           <input
@@ -100,6 +108,15 @@ export default function CustomNavbar() {
               </span>
             )}
           </Link>
+          <button
+            type="button"
+            aria-label="Open navigation menu"
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen(true)}
+            className="xl:hidden inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-secondary-container hover:text-on-secondary-fixed"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
           <Link
             href="/profile"
             className="flex items-center pl-space-xs hover:opacity-90 transition-opacity">
@@ -111,6 +128,49 @@ export default function CustomNavbar() {
           </Link>
         </div>
       </NavbarContent>
-    </Navbar>
+      </Navbar>
+
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[60] xl:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
+          <button
+            type="button"
+            aria-label="Close navigation menu"
+            onClick={closeMenu}
+            className="absolute inset-0 bg-on-surface/25 backdrop-blur-[1px]"
+          />
+          <aside className="absolute right-0 top-0 flex h-full w-[min(20rem,calc(100vw-2rem))] flex-col bg-surface-white p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-outline-variant/30 pb-5">
+              <span className="font-title-lg text-title-lg text-tertiary">Menu</span>
+              <button
+                type="button"
+                aria-label="Close navigation menu"
+                onClick={closeMenu}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant hover:bg-canvas-cream"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <nav className="mt-6 flex flex-col gap-2" aria-label="Mobile navigation">
+              {mobileLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={link.active ? "page" : undefined}
+                  onClick={closeMenu}
+                  className={[
+                    "rounded-xl px-4 py-3 font-title-md text-title-md transition-colors",
+                    link.active
+                      ? "bg-secondary-container text-on-secondary-fixed"
+                      : "text-on-surface-variant hover:bg-canvas-cream hover:text-on-surface",
+                  ].join(" ")}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </aside>
+        </div>
+      )}
+    </>
   );
 }

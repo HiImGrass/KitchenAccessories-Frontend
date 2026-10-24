@@ -11,7 +11,6 @@ export interface ProductCardProps {
   product: Product;
   variant?: "home" | "catalog";
   onAddToCart?: (product: Product) => void;
-  onWishlist?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
 }
 
@@ -19,7 +18,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   variant = "catalog",
   onAddToCart,
-  onWishlist,
   onQuickView,
 }) => {
   // Bỏ bọc kiểm tra an toàn tránh lỗi crash if product.discountPercentage bị undefined
@@ -59,17 +57,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         )}
 
-        {/* Nút Yêu thích (Tránh xa thẻ Link) */}
-        <button
-          type="button"
-          aria-label={`Add ${product.title || "product"} to wishlist`}
-          onClick={(e) => {
-            e.preventDefault(); // Ngăn sự kiện lây lan
-            onWishlist?.(product);
-          }}
-          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-white/90 backdrop-blur-sm flex items-center justify-center text-sage hover:text-terracotta hover:bg-surface-white transition-all shadow-xs z-10 cursor-pointer">
-          <SvgIcon name="favorite" className="w-4 h-4" />
-        </button>
       </div>
 
       {/* ===== CONTENT AREA ===== */}
