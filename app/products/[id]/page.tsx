@@ -1,6 +1,7 @@
 // app/products/[id]/page.tsx
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import type { Metadata } from "next";
 import ProductGallery from "@/components/DetailsComponent/ProductGallery";
 import ProductActions from "@/components/DetailsComponent/ProductActions";
 import ProductCard from "@/components/products/ProductCard";
@@ -8,6 +9,32 @@ import { getProductById, getRelatedProducts } from "@/lib/dummyjson";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProductById(id);
+
+  if (!product) {
+    return {
+      title: "Product not found | Ladle & Co.",
+      description: "The product you are looking for is unavailable.",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  return {
+    title: `${product.title} | Ladle & Co.`,
+    description: product.description,
+    openGraph: {
+      type: "website",
+      title: product.title,
+      description: product.description,
+      images: [{ url: product.thumbnail, alt: product.title }],
+    },
+  };
 }
 
 export default async function ProductInfoPage({ params }: ProductPageProps) {
@@ -47,7 +74,11 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
           
           {/* Cột trái: Gallery Ảnh */}
           <div className="lg:col-span-7">
-            <ProductGallery thumbnail={product.thumbnail} images={product.images || []} />
+            <ProductGallery
+              productTitle={product.title}
+              thumbnail={product.thumbnail}
+              images={product.images || []}
+            />
           </div>
 
           {/* Cột phải: Thông tin & Nút mua hàng */}

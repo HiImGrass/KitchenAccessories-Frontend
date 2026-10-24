@@ -65,13 +65,6 @@ export default function CustomNavbar() {
               Shop Catalog
             </Link>
           </NavbarItem>
-          <NavbarItem>
-            <Link
-              href="#"
-              className="font-title-md text-title-md text-on-surface-variant hover:text-on-surface transition-colors px-space-md py-space-xs rounded-full">
-              Baking & Tools
-            </Link>
-          </NavbarItem>
           <NavbarItem isActive={pathname === "/about"}>
             <Link
               href="/about"
