@@ -45,7 +45,7 @@ export default function FounderGuildSection() {
                 sizes="(min-width: 1024px) 42vw, 100vw"
                 alt="Eleanor Vance, Founder of Ladle & Co."
                 className="object-cover"
-                src="https://lh3.googleusercontent.com/aida/AEtjO1WLx2odZ9Ufe35kOXSW8ll_lFs0jKs5ciFyIYlPC9GrPMyzpeK21LGuAspGHoUNoYLsQhIE3lUGzlvXwH70jDBP6HHE6Zd7ANon8lEZoM5ZjqiiHWrFyHA05fsVc-GOsKFxYX03YEO0DbuVxNdatQfKq4KQu5p9K12JkNNGCZ1wQnDNDYUGLlBQ4fZPwF9vM8Yd6m7ETxt5wr0DOk5me_DQeAZUz0yOB4zqZVEufwSZwJEnAZwFr5rkEg"
+                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=1200&q=85"
               />
             </div>
             <div className="absolute -bottom-4 -right-4 bg-secondary-container px-4 py-2 rounded-lg shadow-sm hidden sm:block">
