@@ -5,6 +5,7 @@ import { CartItem } from '@/types/cart';
 import { ShippingMethodOption } from '@/types/checkout';
 import { Button } from '@nextui-org/react';
 import { Loader2 } from 'lucide-react';
+import { useCart } from '@/hooks/useCart';
 
 interface CheckoutOrderSummaryProps {
   items: CartItem[];
@@ -29,6 +30,8 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
 }) => {
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const { items: cartItems } = useCart();
+  
   return (
     <div className="bg-surface-white border border-warm-sand/60 rounded-xl p-6 sm:p-8 shadow-xs">
       {/* Title */}

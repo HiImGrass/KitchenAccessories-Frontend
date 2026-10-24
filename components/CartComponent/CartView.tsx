@@ -20,7 +20,6 @@ export const CartView: React.FC = () => {
     items,
     isLoading,
     error,
-    refetch,
     giftWrap,
     appliedPromo,
     promoInput,
@@ -56,7 +55,6 @@ export const CartView: React.FC = () => {
           <Button
             size="sm"
             className="bg-primary text-white"
-            onClick={refetch}
             startContent={<RefreshCw className="w-3.5 h-3.5" />}
           >
             Retry Fetching DummyJSON
@@ -64,7 +62,7 @@ export const CartView: React.FC = () => {
         </div>
       ) : isEmpty ? (
         /* Empty State */
-        <CartEmptyState onRefetch={refetch} />
+        <CartEmptyState/>
       ) : (
         /* Main Basket Content */
         <>

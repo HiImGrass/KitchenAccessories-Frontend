@@ -3,6 +3,7 @@
 import React from 'react';
 import { CartItem } from '@/types/cart';
 import { CartItemCard } from './CartItemCard';
+import { useCart } from '@/hooks/useCart';
 
 interface CartItemListProps {
   items: CartItem[];
@@ -17,6 +18,9 @@ export const CartItemList: React.FC<CartItemListProps> = ({
   onDecrease,
   onRemove,
 }) => {
+
+  const { items: cartItems } = useCart();
+  
   return (
     <section aria-labelledby="basket-items-heading" className="space-y-4">
       <h2

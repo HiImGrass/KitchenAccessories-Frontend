@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types/product";
 import { SvgIcon } from "@/lib/SvgIcons";
+import { useCart } from "@/hooks/useCart";
 
 export interface ProductCardProps {
   product: Product;
@@ -31,6 +32,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     discountPercent > 0
       ? (rawPrice / (1 - discountPercent / 100)).toFixed(2)
       : null;
+
+  const { items, addItem } = useCart();
 
   return (
     <article className="group relative bg-surface-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col h-full">
@@ -115,7 +118,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               type="button"
               disabled={product.stock === 0}
               onClick={(e) => {
-                e.preventDefault();
+                e.preventDefault(); // Ngăn sự kiện lây lan
+                addItem(product, 1);
                 onAddToCart?.(product);
               }}
               className="bg-terracotta hover:bg-primary disabled:bg-gray-300 text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm transition-all cursor-pointer">

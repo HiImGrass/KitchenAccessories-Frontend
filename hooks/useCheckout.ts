@@ -52,7 +52,7 @@ export interface UseCheckoutReturn {
 }
 
 export function useCheckout(): UseCheckoutReturn {
-  const { items: cartItems, summary, appliedPromo } = useCart();
+  const { items: cartItems, summary, appliedPromo, clearCart } = useCart();
 
   // Form states
   const [contact, setContact] = useState<CustomerContact>(INITIAL_CHECKOUT_FORM.contact);
@@ -223,6 +223,7 @@ export function useCheckout(): UseCheckoutReturn {
         estimatedDelivery: formattedDelivery,
       };
 
+      clearCart();
       setPlacedOrder(orderDetails);
       setIsSuccessModalOpen(true);
       toast.success('Order placed successfully! A receipt has been sent to your email.');
@@ -231,7 +232,7 @@ export function useCheckout(): UseCheckoutReturn {
     } finally {
       setIsSubmitting(false);
     }
-  }, [validateForm, finalTotal, contact.email, shippingMethod, selectedShippingOption.title]);
+  }, [validateForm, finalTotal, contact.email, shippingMethod, selectedShippingOption.title, clearCart]);
 
   const closeSuccessModal = useCallback(() => {
     setIsSuccessModalOpen(false);

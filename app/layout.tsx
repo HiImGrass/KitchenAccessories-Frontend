@@ -4,7 +4,6 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import NextTopLoader from 'nextjs-toploader';
 import { Providers } from '@/components/providers/Providers';
-import { fetchCartItemsFromDummyJSON } from '@/lib/dummyjson';
 
 import { AppLayoutWrapper } from '@/components/layout/AppLayoutWrapper';
 
@@ -30,10 +29,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const initialCartItems = await fetchCartItemsFromDummyJSON({
-    source: 'kitchen_category',
-    limit: 3,
-  });
 
   return (
     <html lang="en" className={`${epilogue.variable} ${plusJakarta.variable}`}>
@@ -45,7 +40,7 @@ export default async function RootLayout({
       </head>
       <body className="bg-canvas-cream font-body-md text-olive-gray antialiased">
         <NextTopLoader color="#894b3a" shadow="0 0 10px #894b3a,0 0 5px #894b3a" />
-        <Providers initialCartItems={initialCartItems}>
+        <Providers>
           <AppLayoutWrapper>{children}</AppLayoutWrapper>
           <Toaster />
         </Providers>
