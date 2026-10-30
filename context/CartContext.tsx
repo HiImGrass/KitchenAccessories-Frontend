@@ -120,7 +120,7 @@ export function CartProvider({
         ];
       });
 
-      toast.success(`Đã thêm ${quantity} x "${product.title}" vào giỏ hàng!`);
+      toast.success(`Added ${quantity} × "${product.title}" to your basket.`);
     },
     [],
   );

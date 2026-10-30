@@ -113,17 +113,6 @@ export const CheckoutSuccessModal: React.FC<CheckoutSuccessModalProps> = ({
         <ModalFooter className="flex items-center justify-end gap-3">
           <Button
             as={Link}
-            href="/cart"
-            variant="light"
-            size="md"
-            className="text-olive-gray font-medium text-xs hover:text-primary"
-            onClick={onClose}
-          >
-            Review Cart
-          </Button>
-
-          <Button
-            as={Link}
             href="/"
             size="md"
             className="bg-primary hover:bg-primary-container text-white font-semibold text-xs px-5 rounded-xl shadow-xs"

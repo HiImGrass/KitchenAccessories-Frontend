@@ -37,32 +37,31 @@ export const SearchCard: React.FC<SearchCardProps> = ({
       {/* Kitchen accessories is the only catalog category, so an unrelated category filter is intentionally omitted. */}
       <section className="space-y-space-md">
         {/* Toolbar */}
-        <div className="bg-surface-white rounded-xl p-3 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="bg-surface-white rounded-xl p-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="text-sm text-olive-gray">
-            Hiển thị{" "}
+            Showing{" "}
             <span className="font-semibold text-tertiary">
               {products.length}
             </span>{" "}
-            / {total} sản phẩm
+            of {total} products
             {isPending && (
               <span className="text-xs text-terracotta animate-pulse ml-2">
-                Đang tải...
+                Updating...
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
-            {/* Sắp xếp */}
-            <div className="flex items-center gap-2">
+          <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-4">
+            <div className="flex min-w-0 items-center justify-between gap-2 sm:justify-start">
               <span className="text-xs text-sage font-medium whitespace-nowrap">
-                Sắp xếp:
+                Sort by:
               </span>
               <select
                 value={currentSort}
                 onChange={(e) =>
                   onFilterChange({ sort: e.target.value, skip: 0 })
                 }
-                className="bg-canvas-cream px-3 py-1.5 rounded-full text-xs font-semibold text-tertiary focus:outline-none cursor-pointer border-none">
+                className="min-w-0 max-w-full bg-canvas-cream px-3 py-1.5 rounded-full text-xs font-semibold text-tertiary focus:outline-none cursor-pointer border-none">
                 {sortbyOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.name}
@@ -90,7 +89,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
         {/* Product Grid */}
         {products.length === 0 ? (
           <div className="bg-surface-white rounded-xl p-12 text-center text-sage">
-            <p>Không tìm thấy sản phẩm nào.</p>
+            <p>No products match your search.</p>
           </div>
         ) : (
           <div
@@ -100,8 +99,6 @@ export const SearchCard: React.FC<SearchCardProps> = ({
                 key={product.id}
                 product={product}
                 variant="catalog"
-                onAddToCart={(p) => console.log("Add to cart:", p)}
-                onWishlist={(p) => console.log("Wishlist:", p)}
               />
             ))}
           </div>

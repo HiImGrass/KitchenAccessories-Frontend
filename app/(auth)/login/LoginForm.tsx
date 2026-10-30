@@ -32,8 +32,8 @@ export function LoginForm() {
             // Đăng nhập thành công, chuyển hướng về trang chủ
             router.push("/");
             router.refresh();
-        } catch (err: any) {
-            setError(err.message || "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "Sign in failed. Please check your credentials.");
         } finally {
             setLoading(false);
         }
@@ -62,7 +62,7 @@ export function LoginForm() {
                     name="email"
                     type="text"
                     className="w-full rounded-md border border-outline-variant bg-surface-container-lowest px-space-md py-space-sm font-body text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    placeholder="emilys (hoặc chef@kitchenpantry.com)"
+                    placeholder="emilys or chef@kitchenpantry.com"
                     autoComplete="username"
                     required
                 />

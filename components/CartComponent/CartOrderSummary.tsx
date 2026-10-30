@@ -82,6 +82,11 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
               content="Free express direct shipping on orders over $100"
               placement="top"
               closeDelay={100}
+              classNames={{
+                base: "z-[70]",
+                content:
+                  "bg-on-surface px-3 py-2 text-xs font-medium text-white opacity-100 shadow-lg",
+              }}
             >
               <button
                 type="button"

@@ -25,12 +25,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             -{Math.round(product.discountPercentage)}% OFF
           </span>
         )}
-        <button
-          aria-label="Add to Wishlist"
-          className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-surface-white/90 backdrop-blur-sm flex items-center justify-center text-sage hover:text-terracotta hover:bg-surface-white transition-all shadow-xs"
-          type="button">
-          <SvgIcon name="favorite" className="w-4 h-4" />
-        </button>
       </div>
 
       <div className="p-3.5 flex-1 flex flex-col justify-between">

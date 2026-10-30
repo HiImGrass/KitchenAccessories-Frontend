@@ -1,6 +1,7 @@
 import { UserProfile, Order } from '@/types/profile';
 
 export const INITIAL_PROFILE_USER: UserProfile = {
+  id: 1,
   name: 'Eleanor Vance',
   email: 'eleanor.vance@example.com',
   avatarUrl:

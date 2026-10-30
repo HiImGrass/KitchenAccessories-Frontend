@@ -155,7 +155,6 @@ export default function ProductList() {
                 product={product}
                 variant="home"
                 onAddToCart={(p) => handleAddToCart(p)}
-                onWishlist={(p) => console.log("Wishlist:", p.title)}
                 onQuickView={(p) => console.log("Quick view:", p.title)}
               />
             ))}
