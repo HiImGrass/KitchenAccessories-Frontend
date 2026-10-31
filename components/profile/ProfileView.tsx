@@ -86,7 +86,7 @@ export const ProfileView: React.FC = () => {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
     console.log('Sign out clicked, Removed Tokens');
     router.push('/login');
   };
