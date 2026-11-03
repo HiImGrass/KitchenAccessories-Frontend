@@ -58,6 +58,8 @@ export interface UseCartReturn {
 
 const CartContext = createContext<UseCartReturn | null>(null);
 
+const CART_STORAGE_KEY = "ladle-cart-items";
+
 export interface CartProviderProps {
   children: ReactNode;
   initialItems?: CartItem[];
@@ -68,6 +70,8 @@ export function CartProvider({
   initialItems = [],
 }: CartProviderProps) {
   const [items, setItems] = useState<CartItem[]>(initialItems);
+  // Chỉ lưu vào localStorage sau khi đã đọc xong, tránh ghi đè giỏ cũ bằng mảng rỗng
+  const [hasHydrated, setHasHydrated] = useState(false);
   const [isLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [dataSource, setDataSource] =
@@ -79,6 +83,30 @@ export function CartProvider({
   );
   const [promoInput, setPromoInput] = useState<string>("AUTUMN10");
   const [promoError, setPromoError] = useState<string | null>(null);
+
+  // Khôi phục giỏ hàng sau khi F5 / mở lại trang (chỉ chạy ở client)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(CART_STORAGE_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (Array.isArray(saved)) setItems(saved as CartItem[]);
+      }
+    } catch {
+      // dữ liệu hỏng hoặc bị chặn storage -> bỏ qua, dùng giỏ rỗng
+    }
+    setHasHydrated(true);
+  }, []);
+
+  // Mỗi lần giỏ thay đổi thì lưu lại
+  useEffect(() => {
+    if (!hasHydrated) return;
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    } catch {
+      // storage đầy hoặc bị chặn -> bỏ qua
+    }
+  }, [items, hasHydrated]);
 
   // ===== BỔ SUNG HÀM ADD ITEM VÀO GIỎ HÀNG =====
   const addItem = useCallback(
@@ -98,9 +126,11 @@ export function CartProvider({
         const existingIndex = prev.findIndex((item) => item.id === stringId);
 
         if (existingIndex > -1) {
-          const updated = [...prev];
-          updated[existingIndex].quantity += quantity;
-          return updated;
+          return prev.map((item, index) =>
+            index === existingIndex
+              ? { ...item, quantity: item.quantity + quantity }
+              : item,
+          );
         }
 
         return [

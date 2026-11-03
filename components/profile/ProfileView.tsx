@@ -1,32 +1,53 @@
 'use client';
 
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { ProfileBreadcrumb } from '@/components/profile/ProfileBreadcrumb';
 import { ProfileHeader } from '@/components/profile/ProfileHeader';
 import { ProfileInfoCard } from '@/components/profile/ProfileInfoCard';
 import { ProfileActionsCard } from '@/components/profile/ProfileActionsCard';
-import { ProfileOrdersList } from '@/components/profile/ProfileOrdersList';
-import {
-  INITIAL_PROFILE_USER,
-  INITIAL_PROFILE_ORDERS,
-} from '@/lib/profileData';
+import { ProfileCartCard } from '@/components/profile/ProfileCartCard';
+import { fetchProfile, getStoredUser } from '@/lib/profileUser';
+import type { UserProfile } from '@/types/profile';
 import { updateMockUser } from '@/lib/dummyjson';
 import { toast } from 'sonner';
 
 import { useRouter } from 'next/navigation';
 
 export const ProfileView: React.FC = () => {
-  const [user, setUser] = useState(INITIAL_PROFILE_USER);
-  const [orders] = useState(INITIAL_PROFILE_ORDERS);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [activeDialog, setActiveDialog] = useState<'profile' | 'password' | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
+
+  // Lấy user mà DummyJSON đã trả về lúc đăng nhập (lưu ở localStorage "user")
+  useEffect(() => {
+    const stored = getStoredUser();
+    if (!stored) {
+      router.replace('/login');
+      return;
+    }
+
+    let cancelled = false;
+    fetchProfile(stored)
+      .then((profile) => {
+        if (!cancelled) setUser(profile);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingUser(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   const handleEditProfile = () => setActiveDialog('profile');
   const handleChangePassword = () => setActiveDialog('password');
 
   const handleProfileSave = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!user) return;
     const form = new FormData(event.currentTarget);
     const name = String(form.get('name') || '').trim();
     const [firstName, ...lastNameParts] = name.split(/\s+/);
@@ -48,7 +69,9 @@ export const ProfileView: React.FC = () => {
         phone,
         address: { address: shippingAddress },
       });
-      setUser((current) => ({ ...current, name, email, phone, shippingAddress }));
+      setUser((current) =>
+        current ? { ...current, name, email, phone, shippingAddress } : current,
+      );
       setActiveDialog(null);
       toast.success('Profile updated for this session.');
     } catch (error) {
@@ -60,6 +83,7 @@ export const ProfileView: React.FC = () => {
 
   const handlePasswordSave = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!user) return;
     const form = new FormData(event.currentTarget);
     const password = String(form.get('password') || '');
     const confirmPassword = String(form.get('confirmPassword') || '');
@@ -91,9 +115,14 @@ export const ProfileView: React.FC = () => {
     router.push('/login');
   };
 
-  const handleViewOrderDetails = (orderId: string) => {
-    console.log('View order details:', orderId);
-  };
+  if (isLoadingUser || !user) {
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <ProfileBreadcrumb />
+        <div className="h-64 animate-pulse rounded-2xl bg-surface-container-low" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -116,11 +145,9 @@ export const ProfileView: React.FC = () => {
         </div>
 
         {/* Right Column: Order History (8 cols) */}
-        <div className="lg:col-span-8">
-          <ProfileOrdersList
-            orders={orders}
-            onViewOrderDetails={handleViewOrderDetails}
-          />
+        <div className="lg:col-span-8 space-y-6">
+          {/* Giỏ hàng: lấy từ CartContext nên thêm sản phẩm ở đâu cũng cập nhật ngay */}
+          <ProfileCartCard />
         </div>
       </div>
 
