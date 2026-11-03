@@ -117,7 +117,7 @@ export default function CustomNavbar() {
               <Link
                 href="/cart"
                 aria-label={`Cart with ${summary.itemCount} items`}
-                className="relative w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-secondary-container hover:text-on-secondary-fixed transition-colors">
+                className="relative flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant transition-colors hover:bg-secondary-container hover:text-on-secondary-fixed">
                 <ShoppingBag className="w-5 h-5" />
                 {summary.itemCount > 0 && (
                   <span className="absolute top-1 right-1 bg-terracotta text-on-primary font-label-sm text-label-sm min-w-4 h-4 px-1 rounded-full flex items-center justify-center text-[10px] font-bold leading-none shadow-xs transition-transform transform active:scale-95">
@@ -127,7 +127,7 @@ export default function CustomNavbar() {
               </Link>
               <Link
                 href="/profile"
-                className="flex items-center pl-space-xs hover:opacity-90 transition-opacity">
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-low transition-colors hover:bg-secondary-container hover:opacity-90">
                 <img
                   alt="Profile"
                   className="w-8 h-8 rounded-full object-cover"
