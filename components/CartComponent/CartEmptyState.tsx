@@ -23,7 +23,7 @@ export const CartEmptyState: React.FC = () => {
         <Button
           as={Link}
           href="/products"
-          className="bg-primary hover:bg-primary-container text-white font-semibold px-6 py-2.5 rounded-xl shadow-xs"
+          className="bg-primary hover:bg-primary-container text-on-primary font-semibold px-6 py-2.5 rounded-xl shadow-xs"
           endContent={<ArrowRight className="w-4 h-4" />}
         >
           Explore Catalog

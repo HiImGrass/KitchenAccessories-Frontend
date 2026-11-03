@@ -285,7 +285,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                           : 'border-warm-sand bg-surface-white'
                       }`}
                     >
-                      {isSelected && <div className="size-2 rounded-full bg-white" />}
+                      {isSelected && <div className="size-2 rounded-full bg-on-primary" />}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">

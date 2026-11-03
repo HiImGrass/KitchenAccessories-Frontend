@@ -198,7 +198,7 @@ function ProfileField({
 
 function DialogActions({ isSaving, label }: { isSaving: boolean; label: string }) {
   return (
-    <button type="submit" disabled={isSaving} className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-container disabled:cursor-wait disabled:opacity-70">
+    <button type="submit" disabled={isSaving} className="w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-on-primary transition hover:bg-primary-container disabled:cursor-wait disabled:opacity-70">
       {isSaving ? 'Saving…' : label}
     </button>
   );

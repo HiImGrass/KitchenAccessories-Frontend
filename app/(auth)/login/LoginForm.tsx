@@ -45,7 +45,7 @@ export function LoginForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-space-lg">
       {/* Hiển thị lỗi nếu có */}
       {error && (
-        <div className="rounded-md bg-red-50 p-space-sm font-body text-sm text-red-700 border border-red-200">
+        <div className="rounded-md bg-error-container/40 p-space-sm font-body text-sm text-error border border-error/30">
           {error}
         </div>
       )}

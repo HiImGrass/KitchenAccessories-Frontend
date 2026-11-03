@@ -54,7 +54,7 @@ export const CartView: React.FC = () => {
           <p className="text-error font-medium text-sm">{error}</p>
           <Button
             size="sm"
-            className="bg-primary text-white"
+            className="bg-primary text-on-primary"
             startContent={<RefreshCw className="w-3.5 h-3.5" />}
           >
             Retry Fetching DummyJSON

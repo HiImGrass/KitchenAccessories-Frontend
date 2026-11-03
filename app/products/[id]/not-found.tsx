@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function ProductNotFound() {
   return (
     <main className="flex min-h-[calc(100vh-20rem)] w-full items-center justify-center bg-canvas-cream px-4 pt-20 pb-20">
-      <section className="max-w-md rounded-2xl bg-white p-8 text-center shadow-sm">
+      <section className="max-w-md rounded-2xl bg-surface-container-lowest p-8 text-center shadow-sm">
         <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-terracotta">
           404
         </p>
@@ -13,7 +13,7 @@ export default function ProductNotFound() {
         </p>
         <Link
           href="/products"
-          className="mt-6 inline-flex rounded-full bg-terracotta px-5 py-3 font-semibold text-white transition-colors hover:bg-tertiary"
+          className="mt-6 inline-flex rounded-full bg-terracotta px-5 py-3 font-semibold text-on-primary transition-colors hover:bg-tertiary"
         >
           Browse the catalog
         </Link>

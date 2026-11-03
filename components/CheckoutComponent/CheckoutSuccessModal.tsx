@@ -115,7 +115,7 @@ export const CheckoutSuccessModal: React.FC<CheckoutSuccessModalProps> = ({
             as={Link}
             href="/"
             size="md"
-            className="bg-primary hover:bg-primary-container text-white font-semibold text-xs px-5 rounded-xl shadow-xs"
+            className="bg-primary hover:bg-primary-container text-on-primary font-semibold text-xs px-5 rounded-xl shadow-xs"
             onClick={onClose}
           >
             Explore More Culinary Pieces

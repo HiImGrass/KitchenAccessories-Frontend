@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Epilogue, Plus_Jakarta_Sans } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import { Toaster } from 'sonner';
 import NextTopLoader from 'nextjs-toploader';
@@ -31,7 +32,7 @@ export default async function RootLayout({
 }) {
 
   return (
-    <html lang="en" className={`${epilogue.variable} ${plusJakarta.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${epilogue.variable} ${plusJakarta.variable}`}>
       <head>
         <link
           rel="stylesheet"
@@ -39,7 +40,18 @@ export default async function RootLayout({
         />
       </head>
       <body className="bg-canvas-cream font-body-md text-olive-gray antialiased">
-        <NextTopLoader color="#894b3a" shadow="0 0 10px #894b3a,0 0 5px #894b3a" />
+        <Script id="theme-initializer" strategy="beforeInteractive">
+          {`(function () {
+            try {
+              var savedTheme = localStorage.getItem('ladle-theme');
+              var theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'light';
+            } catch (_) {
+              document.documentElement.dataset.theme = 'light';
+            }
+          })();`}
+        </Script>
+        <NextTopLoader color="var(--color-primary)" shadow="0 0 10px var(--color-primary), 0 0 5px var(--color-primary)" />
         <Providers>
           <AppLayoutWrapper>{children}</AppLayoutWrapper>
           <Toaster />

@@ -51,7 +51,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
 
         {/* Discount (if promo applied) */}
         {appliedPromo && (
-          <div className="flex items-center justify-between text-[#894b3a]">
+          <div className="flex items-center justify-between text-primary">
             <div className="flex items-center gap-1.5 font-medium">
               <Tag className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>
@@ -85,7 +85,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
               classNames={{
                 base: "z-[70]",
                 content:
-                  "bg-on-surface px-3 py-2 text-xs font-medium text-white opacity-100 shadow-lg",
+                  "bg-on-surface px-3 py-2 text-xs font-medium text-inverse-on-surface opacity-100 shadow-lg",
               }}
             >
               <button
@@ -162,7 +162,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
               classNames={{
                 base: 'w-full',
                 inputWrapper:
-                  'bg-[#fbf9f4] border border-outline-variant/40 rounded-xl h-10 transition-all duration-200 hover:border-terracotta/60 focus-within:!border-primary focus-within:!ring-1 focus-within:!ring-primary/20 group-data-[focus=true]:!border-primary group-data-[focus=true]:!ring-0 !outline-none shadow-2xs',
+                  'bg-surface-container-low border border-outline-variant/40 rounded-xl h-10 transition-all duration-200 hover:border-terracotta/60 focus-within:!border-primary focus-within:!ring-1 focus-within:!ring-primary/20 group-data-[focus=true]:!border-primary group-data-[focus=true]:!ring-0 !outline-none shadow-2xs',
                 input:
                   '!outline-none focus:!outline-none !ring-0 focus:!ring-0 uppercase font-medium text-sm text-on-surface tracking-wider placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-sage',
               }}
@@ -186,8 +186,8 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
             size="md"
             className={`font-semibold tracking-wide text-xs px-4 h-10 rounded-xl transition-all ${
               isApplied
-                ? 'bg-[#e2edd8] text-[#2c6125] cursor-default'
-                : 'bg-primary text-white hover:bg-primary-container'
+                ? 'bg-success-container text-on-success-container cursor-default'
+                : 'bg-primary text-on-primary hover:bg-primary-container'
             }`}
             onClick={(e) => {
               if (isApplied) {
@@ -215,7 +215,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
           href="/checkout"
           size="lg"
           fullWidth
-          className="bg-primary hover:bg-primary-container text-white font-semibold text-base py-3.5 px-6 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 h-12"
+          className="bg-primary hover:bg-primary-container text-on-primary font-semibold text-base py-3.5 px-6 rounded-xl shadow-sm transition-all duration-200 flex items-center justify-center gap-2 h-12"
           onClick={onCheckout}
           endContent={<ArrowRight className="w-5 h-5 ml-1" />}
         >
@@ -235,7 +235,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
         {['Apple Pay', 'Visa', 'Mastercard', 'Shop Pay'].map((brand) => (
           <span
             key={brand}
-            className="bg-[#f0ece1] text-[11px] font-medium text-on-surface-variant px-2.5 py-1 rounded-md border border-outline-variant/30"
+            className="bg-surface-container text-[11px] font-medium text-on-surface-variant px-2.5 py-1 rounded-md border border-outline-variant/30"
           >
             {brand}
           </span>
