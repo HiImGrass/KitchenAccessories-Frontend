@@ -43,8 +43,8 @@ export const CartShippingBanner: React.FC<CartShippingBannerProps> = ({
         aria-label="Free shipping progress"
         classNames={{
           base: 'w-full',
-          track: 'bg-[#eadccf] h-2 rounded-full overflow-hidden',
-          indicator: 'bg-[#a76251] transition-all duration-500 rounded-full',
+          track: 'bg-surface-container-highest h-2 rounded-full overflow-hidden',
+          indicator: 'bg-primary-container transition-all duration-500 rounded-full',
         }}
       />
 

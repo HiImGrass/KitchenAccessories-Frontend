@@ -60,13 +60,13 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
             {/* Stock Status Badge & Note */}
             <div className="mt-2.5 flex flex-wrap items-center gap-2 text-xs">
               {isLowStock ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-[#fdedec] text-[#b83227] border border-[#f5c6cb]">
-                  <AlertTriangle className="w-3.5 h-3.5 text-[#b83227]" aria-hidden="true" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-error-container/40 text-error border border-error/30">
+                  <AlertTriangle className="w-3.5 h-3.5 text-error" aria-hidden="true" />
                   {item.stockLabel}
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-[#eef7e9] text-[#2e6b2e] border border-[#d2e8cb]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2e6b2e]" />
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-container text-on-success-container border border-success/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success" />
                   {item.stockLabel}
                 </span>
               )}
@@ -129,7 +129,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                 type="button"
                 aria-label={`Remove ${item.name} from basket`}
                 onClick={() => onRemove(item.id)}
-                className="group/trash relative w-8 h-8 rounded-lg flex items-center justify-center text-olive-gray/70 hover:text-[#ba1a1a] hover:bg-[#ffdad6]/30 active:scale-90 transition-all duration-200"
+                className="group/trash relative w-8 h-8 rounded-lg flex items-center justify-center text-olive-gray/70 hover:text-error hover:bg-error-container/30 active:scale-90 transition-all duration-200"
               >
                 <Trash2 className="w-4 h-4 transition-transform duration-200 group-hover/trash:scale-110" />
               </button>

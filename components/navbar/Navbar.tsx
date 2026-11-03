@@ -12,6 +12,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "@/assets/logo.png";
 import { useCart } from "@/hooks/useCart";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export default function CustomNavbar() {
   const { summary } = useCart();
@@ -91,6 +92,7 @@ export default function CustomNavbar() {
             type="text"
           />
         </div>
+        <ThemeToggle />
         {isLogined ? (
           <>
             <div className="flex items-center gap-space-sm">

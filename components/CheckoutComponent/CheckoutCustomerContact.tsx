@@ -129,7 +129,7 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
               aria-hidden="true"
               className={`size-[18px] rounded-md border flex items-center justify-center shrink-0 mt-0.5 transition-all ${
                 contact.subscribeNewsletter
-                  ? 'bg-primary border-primary text-white shadow-2xs'
+                  ? 'bg-primary border-primary text-on-primary shadow-2xs'
                   : 'border-warm-sand bg-canvas-cream/50 group-hover:border-primary/60'
               }`}
             >

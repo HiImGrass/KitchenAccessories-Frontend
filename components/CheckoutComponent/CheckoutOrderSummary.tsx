@@ -175,7 +175,7 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
         >
           {isSubmitting ? (
             <div className="flex items-center justify-center gap-2.5">
-              <Loader2 className="w-5 h-5 animate-spin text-white shrink-0" />
+              <Loader2 className="w-5 h-5 animate-spin text-on-primary shrink-0" />
               <span>Securing Transaction...</span>
             </div>
           ) : (

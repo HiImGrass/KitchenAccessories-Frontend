@@ -7,7 +7,7 @@ export const CartLogisticsCard: React.FC = () => {
   return (
     <aside
       aria-label="Direct-from-Workshop Logistics Information"
-      className="mt-4 bg-[#eef5e7]/90 rounded-2xl p-4 sm:p-5 border border-[#d6e3cd] flex items-start gap-3.5 shadow-2xs"
+      className="mt-4 bg-secondary-container/90 rounded-2xl p-4 sm:p-5 border border-outline-variant/50 flex items-start gap-3.5 shadow-2xs"
     >
       <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 text-primary mt-0.5">
         <PackageCheck className="w-5 h-5" aria-hidden="true" />

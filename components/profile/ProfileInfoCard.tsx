@@ -9,7 +9,7 @@ interface ProfileInfoCardProps {
 
 export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({ user }) => {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-black/5 space-y-4">
+    <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-4">
       <div className="flex items-center space-x-4">
         <img
           src={user.avatarUrl}
@@ -24,7 +24,7 @@ export const ProfileInfoCard: React.FC<ProfileInfoCardProps> = ({ user }) => {
         </div>
       </div>
 
-      <div className="border-t border-black/5 pt-4 space-y-2 text-sm text-olive-gray">
+      <div className="border-t border-outline-variant/30 pt-4 space-y-2 text-sm text-olive-gray">
         <div>
           <span className="font-medium text-olive-gray/70">Email:</span> {user.email}
         </div>

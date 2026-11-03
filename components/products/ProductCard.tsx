@@ -109,7 +109,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 addItem(product, 1);
                 onAddToCart?.(product);
               }}
-              className="bg-terracotta hover:bg-primary disabled:bg-gray-300 text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm transition-all cursor-pointer">
+              className="bg-terracotta hover:bg-primary disabled:bg-surface-variant text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm transition-all cursor-pointer">
               <SvgIcon name="shopping_bag" className="w-3.5 h-3.5" />
               <span>{product.stock === 0 ? "Out of Stock" : "Add"}</span>
             </button>

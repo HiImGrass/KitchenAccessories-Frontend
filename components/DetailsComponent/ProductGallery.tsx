@@ -18,7 +18,7 @@ export default function ProductGallery({
 
   return (
     <div className="space-y-4">
-      <div className="relative bg-white rounded-xl overflow-hidden shadow-sm aspect-[4/3] flex items-center justify-center border border-gray-100">
+      <div className="relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm aspect-[4/3] flex items-center justify-center border border-outline-variant/30">
         <Image
           src={mainImg}
           alt={`${productTitle} product image`}
@@ -35,8 +35,8 @@ export default function ProductGallery({
               key={idx}
               type="button"
               onClick={() => setMainImg(imgUrl)}
-              className={`relative rounded-lg overflow-hidden bg-white aspect-square shadow-sm transition-all border-2
-                ${mainImg === imgUrl ? "border-orange-500 opacity-100 scale-105" : "border-transparent opacity-60 hover:opacity-100"}`}
+              className={`relative rounded-lg overflow-hidden bg-surface-container-lowest aspect-square shadow-sm transition-all border-2
+                ${mainImg === imgUrl ? "border-primary opacity-100 scale-105" : "border-transparent opacity-60 hover:opacity-100"}`}
             >
               <Image
                 src={imgUrl}
