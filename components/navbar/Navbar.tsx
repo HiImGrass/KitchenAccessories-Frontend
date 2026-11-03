@@ -10,16 +10,34 @@ import {
 import { Search, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSyncExternalStore } from "react";
 import logo from "@/assets/logo.png";
 import { useCart } from "@/hooks/useCart";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+
+function subscribeToAuthChanges(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+
+function getLoginSnapshot() {
+  return Boolean(localStorage.getItem("user"));
+}
+
+function getServerLoginSnapshot() {
+  return false;
+}
 
 export default function CustomNavbar() {
   const { summary } = useCart();
   const pathname = usePathname();
   const isCatalogRoute =
     pathname === "/products" || pathname.startsWith("/products/");
-  const isLogined = localStorage.getItem("user") || false;
+  const isLogined = useSyncExternalStore(
+    subscribeToAuthChanges,
+    getLoginSnapshot,
+    getServerLoginSnapshot,
+  );
   const navigationClassName = (isActive: boolean) =>
     [
       "font-title-md text-title-md transition-colors px-space-md py-space-xs rounded-full",
