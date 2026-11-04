@@ -8,6 +8,8 @@ import {
   NavbarItem,
 } from "@nextui-org/react";
 import { Search, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { useSyncExternalStore, useState, useEffect } from "react";
 import { LanguageSwitcher } from "@/components/language/LanguageSwitcher";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSyncExternalStore } from "react";
@@ -20,8 +22,14 @@ function subscribeToAuthChanges(callback: () => void) {
   return () => window.removeEventListener("storage", callback);
 }
 
+// Kiểm tra đồng nhất tất cả các khóa đăng nhập có thể có
 function getLoginSnapshot() {
-  return Boolean(localStorage.getItem("user"));
+  if (typeof window === "undefined") return false;
+  return Boolean(
+    localStorage.getItem("user") ||
+    localStorage.getItem("accessToken") || 
+    localStorage.getItem("userProfile")
+  );
 }
 
 function getServerLoginSnapshot() {
@@ -32,13 +40,36 @@ export default function CustomNavbar() {
   const { summary } = useCart();
   const t = useTranslations("navigation");
   const pathname = usePathname();
+  const [userAvatar, setUserAvatar] = useState<string>("");
+
   const isCatalogRoute =
     pathname === "/products" || pathname.startsWith("/products/");
+  
   const isLogined = useSyncExternalStore(
     subscribeToAuthChanges,
     getLoginSnapshot,
     getServerLoginSnapshot,
   );
+
+  // Đọc ảnh avatar động từ "userProfile" hoặc "user" khi đăng nhập
+  useEffect(() => {
+    if (isLogined) {
+      const storedUser = localStorage.getItem("userProfile") || localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const parsed = JSON.parse(storedUser);
+          if (parsed.image) {
+            setUserAvatar(parsed.image);
+          }
+        } catch (e) {
+          console.error("Failed to parse user data", e);
+        }
+      }
+    } else {
+      setUserAvatar(""); // Xóa avatar khi đăng xuất
+    }
+  }, [isLogined]);
+
   const navigationClassName = (isActive: boolean) =>
     [
       "font-title-md text-title-md transition-colors px-space-md py-space-xs rounded-full",
@@ -50,9 +81,7 @@ export default function CustomNavbar() {
   return (
     <Navbar
       classNames={{
-        // Bê nguyên xi class từ thẻ <header> trong HTML của bạn
         base: "fixed top-0 left-0 right-0 z-50 bg-canvas-cream/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]",
-        // Bê nguyên class của thẻ <div> bọc bên trong
         wrapper:
           "h-20 max-w-7xl mx-auto px-space-md lg:px-margin flex items-center justify-between gap-space-md w-full",
       }}
@@ -99,7 +128,7 @@ export default function CustomNavbar() {
         </ul>
       </NavbarContent>
 
-      {/* CỤM BÊN PHẢI: Search + Icons (Thay icon bằng Lucide) */}
+      {/* CỤM BÊN PHẢI: Search + Icons */}
       <NavbarContent
         justify="end"
         className="flex items-center gap-space-md flex-1 max-w-md">
@@ -132,8 +161,8 @@ export default function CustomNavbar() {
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-low transition-colors hover:bg-secondary-container hover:opacity-90">
                 <img
                   alt={t("profile")}
-                  className="w-8 h-8 rounded-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9cXJx025d9QCc8S8TwKZcaKg8BxvsIWacfd1zf2-sGAgaElkZzA7IdeAM2bzdVWlXJhrjyuJ9P_EehEAe-QB_oi0chpUqgE385fdtNGvH6UAldzEjiMRF4B9ZU2GW7Bvu8uSQsyncCS3iA3qr8vTnD7PT15cAzlOodpuu1hmrs7WDxK0KnirImAA0rHjGu8_xiArqE6ggM0jicQ_bPdpzOWNp4OJIYPgHHkrpO9FJ7nfYYMKUgYaP"
+                  className="w-8 h-8 rounded-full object-cover border border-outline-variant/50"
+                  src={userAvatar || "https://dummyjson.com/icon/default/128"}
                 />
               </Link>
             </div>

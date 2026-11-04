@@ -122,10 +122,12 @@ export const ProfileView: React.FC = () => {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("ladle_cart_items");
-    console.log("Sign out clicked, Removed Tokens");
-    router.push("/login");
+    localStorage.removeItem('user');
+    localStorage.removeItem('userProfile');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('ladle-cart-items'); // Đã thêm xóa giỏ hàng ở đây
+    console.log('Sign out clicked, Removed Tokens & Cart');
+    window.location.href = '/login';
   };
 
   if (isLoadingUser || !user) {
