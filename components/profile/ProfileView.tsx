@@ -113,7 +113,8 @@ export const ProfileView: React.FC = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userProfile');
     localStorage.removeItem('accessToken');
-    console.log('Sign out clicked, Removed Tokens');
+    localStorage.removeItem('ladle-cart-items'); // Đã thêm xóa giỏ hàng ở đây
+    console.log('Sign out clicked, Removed Tokens & Cart');
     window.location.href = '/login';
   };
 
