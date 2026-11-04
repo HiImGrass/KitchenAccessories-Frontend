@@ -8,13 +8,13 @@ import {
   NavbarItem,
 } from "@nextui-org/react";
 import { Search, ShoppingBag } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { LanguageSwitcher } from "@/components/language/LanguageSwitcher";
+import { Link, usePathname } from "@/i18n/navigation";
 import { useSyncExternalStore } from "react";
 import logo from "@/assets/logo.png";
 import { useCart } from "@/hooks/useCart";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-
+import { useTranslations } from "next-intl";
 function subscribeToAuthChanges(callback: () => void) {
   window.addEventListener("storage", callback);
   return () => window.removeEventListener("storage", callback);
@@ -30,6 +30,7 @@ function getServerLoginSnapshot() {
 
 export default function CustomNavbar() {
   const { summary } = useCart();
+  const t = useTranslations("navigation");
   const pathname = usePathname();
   const isCatalogRoute =
     pathname === "/products" || pathname.startsWith("/products/");
@@ -76,7 +77,7 @@ export default function CustomNavbar() {
               href="/"
               aria-current={pathname === "/" ? "page" : undefined}
               className={navigationClassName(pathname === "/")}>
-              Home
+              {t("home")}
             </Link>
           </NavbarItem>
           <NavbarItem isActive={isCatalogRoute}>
@@ -84,7 +85,7 @@ export default function CustomNavbar() {
               href="/products"
               aria-current={isCatalogRoute ? "page" : undefined}
               className={navigationClassName(isCatalogRoute)}>
-              Shop Catalog
+              {t("shopCatalog")}
             </Link>
           </NavbarItem>
           <NavbarItem isActive={pathname === "/about"}>
@@ -92,7 +93,7 @@ export default function CustomNavbar() {
               href="/about"
               aria-current={pathname === "/about" ? "page" : undefined}
               className={navigationClassName(pathname === "/about")}>
-              About Us
+              {t("aboutUs")}
             </Link>
           </NavbarItem>
         </ul>
@@ -106,17 +107,18 @@ export default function CustomNavbar() {
           <Search className="absolute left-space-md top-1/2 -translate-y-1/2 text-sage w-5 h-5" />
           <input
             className="w-full bg-surface-white pl-10 pr-space-md py-2 rounded-full font-body-md text-body-md text-olive-gray placeholder-sage focus:outline-none focus:ring-1 focus:ring-terracotta transition-all shadow-[0_1px_4px_rgba(0,0,0,0.03)]"
-            placeholder="Search cookware, utensils..."
+            placeholder={t("searchPlaceholder")}
             type="text"
           />
         </div>
+        <LanguageSwitcher />
         <ThemeToggle />
         {isLogined ? (
           <>
             <div className="flex items-center gap-space-sm">
               <Link
                 href="/cart"
-                aria-label={`Cart with ${summary.itemCount} items`}
+                aria-label={t("cart", { count: summary.itemCount })}
                 className="relative flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant transition-colors hover:bg-secondary-container hover:text-on-secondary-fixed">
                 <ShoppingBag className="w-5 h-5" />
                 {summary.itemCount > 0 && (
@@ -129,7 +131,7 @@ export default function CustomNavbar() {
                 href="/profile"
                 className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-low transition-colors hover:bg-secondary-container hover:opacity-90">
                 <img
-                  alt="Profile"
+                  alt={t("profile")}
                   className="w-8 h-8 rounded-full object-cover"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9cXJx025d9QCc8S8TwKZcaKg8BxvsIWacfd1zf2-sGAgaElkZzA7IdeAM2bzdVWlXJhrjyuJ9P_EehEAe-QB_oi0chpUqgE385fdtNGvH6UAldzEjiMRF4B9ZU2GW7Bvu8uSQsyncCS3iA3qr8vTnD7PT15cAzlOodpuu1hmrs7WDxK0KnirImAA0rHjGu8_xiArqE6ggM0jicQ_bPdpzOWNp4OJIYPgHHkrpO9FJ7nfYYMKUgYaP"
                 />
@@ -141,7 +143,7 @@ export default function CustomNavbar() {
             href="/login"
             className="flex items-center gap-space-xs hover:opacity-90 transition-opacity">
             <Button className="bg-primary text-on-primary font-semibold px-space-md py-space-sm rounded-full hover:bg-primary-container transition-colors">
-              Sign in
+              {t("signIn")}
             </Button>
           </Link>
         )}

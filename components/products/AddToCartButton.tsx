@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 
 interface AddToCartButtonProps {
   onAddToCart: () => void;
@@ -9,6 +10,7 @@ export default function AddToCartButton({
   onAddToCart,
   disabled = false,
 }: AddToCartButtonProps) {
+  const t = useTranslations("product");
   return (
     <button
       type="button"
@@ -28,7 +30,7 @@ export default function AddToCartButton({
         transition-colors
       "
     >
-      {disabled ? "Out of stock" : "Add to cart"}
+      {disabled ? t("outOfStock") : t("addToCart")}
     </button>
   );
 }

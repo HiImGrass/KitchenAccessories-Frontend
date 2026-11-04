@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Product } from "@/types/product";
 import { ProductCard } from "@/components/products/ProductCard";
+import { useTranslations } from "next-intl";
 
 type Filter = "all" | "popular" | "new" | "picks";
 
@@ -12,13 +13,13 @@ type ProductWithFilter = Product & {
 };
 
 const FILTERS: {
-  label: string;
+  labelKey: string;
   value: Filter;
 }[] = [
-  { label: "All Items", value: "all" },
-  { label: "Most Popular", value: "popular" },
-  { label: "New in Stock", value: "new" },
-  { label: "Staff Picks", value: "picks" },
+  { labelKey: "allItems", value: "all" },
+  { labelKey: "mostPopular", value: "popular" },
+  { labelKey: "newInStock", value: "new" },
+  { labelKey: "staffPicks", value: "picks" },
 ];
 
 const PRODUCTS: ProductWithFilter[] = [
@@ -81,6 +82,7 @@ const PRODUCTS: ProductWithFilter[] = [
 ];
 
 export default function ProductList() {
+  const t = useTranslations("product");
   const [activeFilter, setActiveFilter] = useState<Filter>("all");
   const [toastVisible, setToastVisible] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -118,10 +120,10 @@ export default function ProductList() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-xl">
             <div>
               <span className="font-label-md text-label-md uppercase tracking-wider text-sage font-semibold">
-                Seasonal Selection
+                {t("seasonalSelection")}
               </span>
               <h2 className="font-headline-lg text-headline-lg text-tertiary">
-                Kitchen Essentials of the Season
+                {t("seasonalTitle")}
               </h2>
             </div>
 
@@ -141,7 +143,7 @@ export default function ProductList() {
                         : "text-olive-gray hover:text-on-surface hover:bg-secondary-container/50",
                     ].join(" ")}
                   >
-                    {filter.label}
+                    {t(filter.labelKey)}
                   </button>
                 );
               })}
@@ -165,7 +167,7 @@ export default function ProductList() {
               href="/catalog"
               className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200"
             >
-              <span>View all curated kitchen items</span>
+              <span>{t("viewAllItems")}</span>
               <span className="material-symbols-outlined text-lg">
                 arrow_forward
               </span>
@@ -180,6 +182,7 @@ export default function ProductList() {
 }
 
 function CartToast({ visible }: { visible: boolean }) {
+  const t = useTranslations("product");
   return (
     <div
       className={[
@@ -195,17 +198,17 @@ function CartToast({ visible }: { visible: boolean }) {
         </div>
         <div>
           <p className="font-title-md text-title-md text-tertiary">
-            Added to your basket
+            {t("addedToBasket")}
           </p>
           <p className="font-label-sm text-label-sm text-olive-gray">
-            Explore more items or proceed to checkout.
+            {t("addedDescription")}
           </p>
         </div>
         <Link
           href="/cart"
           className="bg-terracotta text-on-primary font-label-md text-label-md px-3 py-1.5 rounded-full hover:bg-primary-container"
         >
-          View Cart
+          {t("viewCart")}
         </Link>
       </div>
     </div>

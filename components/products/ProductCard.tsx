@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Product } from "@/types/product";
 import { SvgIcon } from "@/lib/SvgIcons";
 import { useCart } from "@/hooks/useCart";
+import { useTranslations } from "next-intl";
 
 export interface ProductCardProps {
   product: Product;
@@ -20,6 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onAddToCart,
   onQuickView,
 }) => {
+  const t = useTranslations("product");
   // Bỏ bọc kiểm tra an toàn tránh lỗi crash if product.discountPercentage bị undefined
   const rawDiscount = product?.discountPercentage ?? 0;
   const discountPercent = rawDiscount > 0 ? Math.round(rawDiscount) : 0;
@@ -31,7 +33,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       ? (rawPrice / (1 - discountPercent / 100)).toFixed(2)
       : null;
 
-  const { items, addItem } = useCart();
+  const { addItem } = useCart();
 
   return (
     <article className="group relative bg-surface-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col h-full">
@@ -44,7 +46,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <Image
             fill
             src={product.thumbnail || product.images?.[0] || "/placeholder.jpg"}
-            alt={product.title || "Product image"}
+            alt={product.title || t("imageAlt")}
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
@@ -53,7 +55,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Badge giảm giá */}
         {discountPercent > 0 && (
           <span className="absolute top-2.5 left-2.5 bg-terracotta text-on-primary font-label-sm text-label-sm px-2.5 py-0.5 rounded-full shadow-xs z-10 pointer-events-none">
-            -{discountPercent}% {variant === "catalog" && "OFF"}
+            -{discountPercent}% {variant === "catalog" && t("off")}
           </span>
         )}
 
@@ -111,7 +113,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               }}
               className="bg-terracotta hover:bg-primary disabled:bg-surface-variant text-on-primary px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm transition-all cursor-pointer">
               <SvgIcon name="shopping_bag" className="w-3.5 h-3.5" />
-              <span>{product.stock === 0 ? "Out of Stock" : "Add"}</span>
+              <span>{product.stock === 0 ? t("outOfStock") : t("add")}</span>
             </button>
           </div>
         </div>

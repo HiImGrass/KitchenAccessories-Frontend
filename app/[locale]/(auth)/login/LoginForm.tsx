@@ -3,8 +3,10 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/dummyjson";
+import { useTranslations } from "next-intl";
 
 export function LoginForm() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -34,7 +36,7 @@ export function LoginForm() {
       setError(
         err instanceof Error
           ? err.message
-          : "Sign in failed. Please check your credentials.",
+          : t("signInFailed"),
       );
     } finally {
       setLoading(false);
@@ -55,7 +57,7 @@ export function LoginForm() {
         <label
           htmlFor="email"
           className="font-body text-sm font-medium text-on-surface">
-          Email Address or Username
+          {t("emailOrUsername")}
         </label>
 
         <input
@@ -63,7 +65,7 @@ export function LoginForm() {
           name="email"
           type="text"
           className="w-full rounded-md border border-outline-variant bg-surface-container-lowest px-space-md py-space-sm font-body text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-          placeholder="emilys or chef@kitchenpantry.com"
+          placeholder={t("emailOrUsernamePlaceholder")}
           autoComplete="username"
           required
         />
@@ -75,13 +77,13 @@ export function LoginForm() {
           <label
             htmlFor="password"
             className="font-body text-sm font-medium text-on-surface">
-            Password
+            {t("password")}
           </label>
 
           <a
             href="#"
             className="font-body text-xs font-medium text-terracotta underline-offset-4 hover:underline">
-            Forgot password?
+            {t("forgotPassword")}
           </a>
         </div>
 
@@ -98,7 +100,7 @@ export function LoginForm() {
 
           <button
             type="button"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t("hidePassword") : t("showPassword")}
             aria-pressed={showPassword}
             onClick={() => setShowPassword((current) => !current)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-sage transition-colors hover:text-on-surface">
@@ -116,7 +118,7 @@ export function LoginForm() {
         />
 
         <span className="font-body text-sm text-on-surface-variant">
-          Keep me signed in on this kitchen device
+          {t("rememberMe")}
         </span>
       </label>
 
@@ -125,7 +127,7 @@ export function LoginForm() {
         type="submit"
         disabled={loading}
         className="inline-flex w-full items-center justify-center gap-space-sm rounded-lg bg-primary px-space-lg py-space-md font-body text-base font-semibold text-on-primary transition-colors hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50 cursor-pointer">
-        <span>{loading ? "Signing In..." : "Sign In to Your Account"}</span>
+        <span>{loading ? t("signingIn") : t("signInToAccount")}</span>
         {!loading && <span aria-hidden="true">→</span>}
       </button>
     </form>

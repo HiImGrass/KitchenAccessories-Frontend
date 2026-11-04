@@ -5,6 +5,7 @@ import { Product } from "@/types/product";
 import { ProductCard } from "@/components/products/ProductCard";
 import { SvgIcon } from "@/lib/SvgIcons";
 import { sortbyOptions } from "./options";
+import { useTranslations } from "next-intl";
 
 interface SearchCardProps {
   products: Product[];
@@ -29,6 +30,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
   setCols,
   onFilterChange,
 }) => {
+  const t = useTranslations("catalog");
   const currentPage = Math.floor(skip / limit) + 1;
   const totalPages = Math.ceil(total / limit);
 
@@ -39,14 +41,10 @@ export const SearchCard: React.FC<SearchCardProps> = ({
         {/* Toolbar */}
         <div className="bg-surface-white rounded-xl p-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="text-sm text-olive-gray">
-            Showing{" "}
-            <span className="font-semibold text-tertiary">
-              {products.length}
-            </span>{" "}
-            of {total} products
+            {t("showing", { count: products.length, total })}
             {isPending && (
               <span className="text-xs text-terracotta animate-pulse ml-2">
-                Updating...
+                {t("updating")}
               </span>
             )}
           </div>
@@ -54,7 +52,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
           <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:justify-end sm:gap-4">
             <div className="flex min-w-0 items-center justify-between gap-2 sm:justify-start">
               <span className="text-xs text-sage font-medium whitespace-nowrap">
-                Sort by:
+                {t("sortBy")}
               </span>
               <select
                 value={currentSort}
@@ -64,7 +62,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
                 className="min-w-0 max-w-full bg-canvas-cream px-3 py-1.5 rounded-full text-xs font-semibold text-tertiary focus:outline-none cursor-pointer border-none">
                 {sortbyOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.name}
+                    {t(`sort.${option.value || "featured"}`)}
                   </option>
                 ))}
               </select>
@@ -89,7 +87,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
         {/* Product Grid */}
         {products.length === 0 ? (
           <div className="bg-surface-white rounded-xl p-12 text-center text-sage">
-            <p>No products match your search.</p>
+            <p>{t("noResults")}</p>
           </div>
         ) : (
           <div
@@ -114,6 +112,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
                   onFilterChange({ skip: Math.max(0, skip - limit) })
                 }
                 className="w-10 h-10 rounded-full flex items-center justify-center bg-surface-white text-olive-gray disabled:opacity-40 shadow-xs hover:bg-canvas-cream transition-colors cursor-pointer disabled:cursor-not-allowed">
+                <span className="sr-only">{t("previous")}</span>
                 <SvgIcon name="arrow_back" className="w-4 h-4" />
               </button>
               <span className="px-4 py-2 bg-terracotta text-on-primary rounded-full text-sm font-semibold">
@@ -123,6 +122,7 @@ export const SearchCard: React.FC<SearchCardProps> = ({
                 disabled={currentPage >= totalPages}
                 onClick={() => onFilterChange({ skip: skip + limit })}
                 className="w-10 h-10 rounded-full flex items-center justify-center bg-surface-white text-olive-gray disabled:opacity-40 shadow-xs hover:bg-canvas-cream transition-colors cursor-pointer disabled:cursor-not-allowed">
+                <span className="sr-only">{t("next")}</span>
                 <SvgIcon name="arrow_forward" className="w-4 h-4" />
               </button>
             </div>

@@ -3,7 +3,7 @@
 import React from 'react';
 import { CartItem } from '@/types/cart';
 import { CartItemCard } from './CartItemCard';
-import { useCart } from '@/hooks/useCart';
+import { useTranslations } from 'next-intl';
 
 interface CartItemListProps {
   items: CartItem[];
@@ -18,8 +18,7 @@ export const CartItemList: React.FC<CartItemListProps> = ({
   onDecrease,
   onRemove,
 }) => {
-
-  const { items: cartItems } = useCart();
+  const t = useTranslations('cart');
   
   return (
     <section aria-labelledby="basket-items-heading" className="space-y-4">
@@ -27,7 +26,7 @@ export const CartItemList: React.FC<CartItemListProps> = ({
         id="basket-items-heading"
         className="font-epilogue text-xl sm:text-2xl font-bold text-on-surface mb-3"
       >
-        Items in Your Basket
+        {t('itemsInBasket')}
       </h2>
 
       <div className="space-y-3.5">

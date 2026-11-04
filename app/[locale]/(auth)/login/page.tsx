@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 import { LoginForm } from "./LoginForm";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+	const t = await getTranslations("auth");
 	return (
 		<main className="flex min-h-screen items-center justify-center bg-surface px-gutter-mobile py-margin-mobile md:px-gutter md:py-margin">
 			<div className="w-full max-w-md rounded-xl bg-surface-container-lowest p-space-xl shadow-sm">
@@ -18,17 +20,16 @@ export default function LoginPage() {
 						>
 							L
 						</span>
-						<span>Ladle &amp; Co.</span>
+						<span>{t("brand")}</span>
 					</Link>
 
 					<div className="mt-space-lg">
 						<h1 className="font-display text-3xl font-semibold tracking-tight text-on-surface">
-							Welcome back to the kitchen
+							{t("welcomeBack")}
 						</h1>
 
 						<p className="mt-space-sm font-body text-base leading-relaxed text-on-surface-variant">
-							Sign in to access your saved recipes, artisan orders,
-							and curated wishlist.
+							{t("loginDescription")}
 						</p>
 					</div>
 				</header>
@@ -40,7 +41,7 @@ export default function LoginPage() {
 						className="inline-flex w-full items-center justify-center gap-space-sm rounded-md border border-outline-variant bg-surface-container-lowest px-space-md py-space-sm font-body text-sm font-medium text-on-surface transition-colors hover:bg-surface-container-low"
 					>
 						<span aria-hidden="true">G</span>
-						<span>Continue with Google</span>
+						<span>{t("continueWithGoogle")}</span>
 					</button>
 
 					<button
@@ -48,7 +49,7 @@ export default function LoginPage() {
 						className="inline-flex w-full items-center justify-center gap-space-sm rounded-md border border-outline-variant bg-surface-container-lowest px-space-md py-space-sm font-body text-sm font-medium text-on-surface transition-colors hover:bg-surface-container-low"
 					>
 						<span aria-hidden="true"></span>
-						<span>Continue with Apple</span>
+						<span>{t("continueWithApple")}</span>
 					</button>
 				</div>
 
@@ -56,7 +57,7 @@ export default function LoginPage() {
 				<div className="my-space-lg flex items-center gap-space-md">
 					<span className="h-px flex-1 bg-outline-variant" />
 					<span className="font-body text-xs uppercase tracking-widest text-on-surface-variant">
-						or
+						{t("or")}
 					</span>
 					<span className="h-px flex-1 bg-outline-variant" />
 				</div>
@@ -64,29 +65,29 @@ export default function LoginPage() {
 				<LoginForm />
 
 				<p className="mt-space-lg text-center font-body text-base text-on-surface">
-					New to Ladle &amp; Co.?{" "}
+					{t("newToBrand")}{" "}
 					<Link
 						href="/sign-up"
 						className="font-medium text-terracotta underline-offset-4 hover:underline"
 					>
-						Create an account
+						{t("createAccount")}
 					</Link>
 				</p>
 
 				<footer className="mt-space-xl text-center">
 					<p className="font-body text-xs text-on-surface-variant">
-						Artisan kitchenware thoughtfully crafted for everyday rituals.
+						{t("footerDescription")}
 					</p>
 
 					<nav
-						aria-label="Legal links"
+						aria-label={t("legalLinks")}
 						className="mt-space-sm flex items-center justify-center gap-space-sm"
 					>
 						<Link
 							href="/privacy"
 							className="font-body text-xs text-on-surface-variant transition-colors hover:text-on-surface"
 						>
-							Privacy
+							{t("privacy")}
 						</Link>
 
 						<span aria-hidden="true" className="text-outline-variant">
@@ -97,7 +98,7 @@ export default function LoginPage() {
 							href="/terms"
 							className="font-body text-xs text-on-surface-variant transition-colors hover:text-on-surface"
 						>
-							Terms
+							{t("terms")}
 						</Link>
 
 						<span aria-hidden="true" className="text-outline-variant">
@@ -108,7 +109,7 @@ export default function LoginPage() {
 							href="/help"
 							className="font-body text-xs text-on-surface-variant transition-colors hover:text-on-surface"
 						>
-							Help
+							{t("help")}
 						</Link>
 					</nav>
 				</footer>
