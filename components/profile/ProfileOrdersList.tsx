@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Order } from '@/types/profile';
+import { useTranslations } from 'next-intl';
 
 interface ProfileOrdersListProps {
   orders: Order[];
@@ -12,11 +13,12 @@ export const ProfileOrdersList: React.FC<ProfileOrdersListProps> = ({
   orders,
   onViewOrderDetails,
 }) => {
+  const t = useTranslations('profile');
   return (
     <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/30 space-y-4">
-      <h2 className="text-xl font-semibold text-olive-gray">Recent Orders</h2>
+      <h2 className="text-xl font-semibold text-olive-gray">{t('recentOrders')}</h2>
       {orders.length === 0 ? (
-        <p className="text-sm text-olive-gray/70">No orders found.</p>
+        <p className="text-sm text-olive-gray/70">{t('noOrders')}</p>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
@@ -38,7 +40,7 @@ export const ProfileOrdersList: React.FC<ProfileOrdersListProps> = ({
                   </span>
                 </div>
                 <p className="text-xs text-olive-gray/70 mt-1">
-                  Placed on {order.date} • {order.itemsCount} items
+                  {t('orderPlaced', { date: order.date, count: order.itemsCount })}
                 </p>
               </div>
 
@@ -48,7 +50,7 @@ export const ProfileOrdersList: React.FC<ProfileOrdersListProps> = ({
                   onClick={() => onViewOrderDetails(order.id)}
                   className="px-3 py-1.5 rounded-lg bg-surface-container-low text-xs font-semibold text-olive-gray hover:bg-surface-container transition-colors"
                 >
-                  View Details
+                  {t('viewDetails')}
                 </button>
               </div>
             </div>

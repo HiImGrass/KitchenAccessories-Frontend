@@ -6,6 +6,7 @@ import ProductGallery from "@/components/DetailsComponent/ProductGallery";
 import ProductActions from "@/components/DetailsComponent/ProductActions";
 import ProductCard from "@/components/products/ProductCard";
 import { getProductById, getRelatedProducts } from "@/lib/dummyjson";
+import { getTranslations } from "next-intl/server";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -14,13 +15,14 @@ interface ProductPageProps {
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
+  const t = await getTranslations("product");
   const { id } = await params;
   const product = await getProductById(id);
 
   if (!product) {
     return {
-      title: "Product not found | Ladle & Co.",
-      description: "The product you are looking for is unavailable.",
+      title: t("notFoundMetadataTitle"),
+      description: t("notFoundMetadataDescription"),
       robots: { index: false, follow: false },
     };
   }
@@ -38,6 +40,7 @@ export async function generateMetadata({
 }
 
 export default async function ProductInfoPage({ params }: ProductPageProps) {
+  const t = await getTranslations("product");
   // Giải mã async params theo chuẩn Next.js 15/16
   const { id } = await params;
   const product = await getProductById(id);
@@ -57,7 +60,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
       {/* Breadcrumb Navigation */}
       <div className="w-full max-w-7xl mx-auto px-4 py-4">
         <nav className="flex items-center gap-2 text-sm text-on-surface-variant">
-          <Link href="/" className="hover:underline">Home</Link>
+          <Link href="/" className="hover:underline">{t("home")}</Link>
           <span>&gt;</span>
           <Link href="/kitchen-accessories" className="capitalize hover:underline">
             {product.category}
@@ -85,7 +88,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
           <div className="lg:col-span-5 space-y-6">
             <div className="space-y-2">
               <div className="text-sm text-primary tracking-wider uppercase font-semibold">
-                {product.brand || "Artisan Tools"}
+                {product.brand || t("artisanTools")}
               </div>
               <h1 className="text-3xl font-bold text-on-surface tracking-tight">
                 {product.title}
@@ -95,7 +98,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
                   ★ {(product.rating || 0).toFixed(1)}
                 </span>
                 <span className="text-sm text-on-surface-variant underline">
-                  ({product.stock || 0} in stock)
+                  ({product.stock || 0} {t("inStockLabel")})
                 </span>
               </div>
             </div>
@@ -107,7 +110,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
                   <>
                     <span className="text-lg text-outline line-through">${originalPrice}</span>
                     <span className="text-xs bg-primary-container text-on-primary-container px-2 py-1 rounded-full">
-                      -{Math.round(discount)}% OFF
+                      -{Math.round(discount)}% {t("off")}
                     </span>
                   </>
                 )}
@@ -123,10 +126,10 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
 
             <div className="grid grid-cols-2 gap-2 pt-4">
               <div className="bg-surface-container-lowest p-3 rounded-lg flex items-center gap-2 shadow-sm text-sm text-on-surface">
-                🛡️ {product.warrantyInformation || "1 Year Warranty"}
+                🛡️ {product.warrantyInformation || t("oneYearWarranty")}
               </div>
               <div className="bg-surface-container-lowest p-3 rounded-lg flex items-center gap-2 shadow-sm text-sm text-on-surface">
-                📦 {product.shippingInformation || "Free Shipping"}
+                📦 {product.shippingInformation || t("freeShipping")}
               </div>
             </div>
           </div>
@@ -136,7 +139,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
 
       {/* Danh sách sản phẩm liên quan */}
       <section className="w-full max-w-7xl mx-auto px-4 pt-16">
-        <h2 className="text-2xl font-bold text-on-surface mb-6">Related Products</h2>
+        <h2 className="text-2xl font-bold text-on-surface mb-6">{t("relatedProducts")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {relatedProducts.map((item) => (
             item.id !== product.id && (

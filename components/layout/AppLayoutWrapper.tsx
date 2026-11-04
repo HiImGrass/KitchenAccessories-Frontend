@@ -1,17 +1,19 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { usePathname } from 'next/navigation';
-import Navbar from '@/components/navbar/Navbar';
-import Footer from '@/components/Footer';
+import React from "react";
+import { usePathname } from "@/i18n/navigation";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/Footer";
 
 interface AppLayoutWrapperProps {
   children: React.ReactNode;
 }
 
-export const AppLayoutWrapper: React.FC<AppLayoutWrapperProps> = ({ children }) => {
+export const AppLayoutWrapper: React.FC<AppLayoutWrapperProps> = ({
+  children,
+}) => {
   const pathname = usePathname();
-  const isCheckout = pathname === '/checkout';
+  const isCheckout = pathname === "/checkout";
 
   if (isCheckout) {
     return <>{children}</>;

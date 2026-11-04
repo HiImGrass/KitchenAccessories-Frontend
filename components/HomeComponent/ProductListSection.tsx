@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import ProductCard from "@/components/products/ProductCard";
 import { useCart } from "@/hooks/useCart";
 import { Product } from "@/types/product";
@@ -12,14 +13,15 @@ interface ProductListSectionProps {
 
 type SortOption = "featured" | "price-asc" | "price-desc";
 
-const SORT_OPTIONS: { label: string; value: SortOption }[] = [
-  { label: "Featured", value: "featured" },
-  { label: "Price: Low to High", value: "price-asc" },
-  { label: "Price: High to Low", value: "price-desc" },
+const SORT_OPTIONS: { value: SortOption; labelKey: string }[] = [
+  { labelKey: "sortFeatured", value: "featured" },
+  { labelKey: "sortPriceAsc", value: "price-asc" },
+  { labelKey: "sortPriceDesc", value: "price-desc" },
 ];
 
 export default function ProductListSection({ products }: ProductListSectionProps) {
   const { addItem } = useCart();
+  const t = useTranslations("home");
   const [sortOption, setSortOption] = useState<SortOption>("featured");
   const displayedProducts = useMemo(() => {
     const sortedProducts = [...products];
@@ -39,10 +41,10 @@ export default function ProductListSection({ products }: ProductListSectionProps
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-xl">
           <div>
             <span className="font-label-md text-label-md uppercase tracking-wider text-sage font-semibold">
-              Seasonal Selection
+              {t("seasonalSelection")}
             </span>
             <h2 className="font-headline-lg text-headline-lg text-tertiary">
-              Kitchen Essentials of the Season
+              {t("seasonalTitle")}
             </h2>
           </div>
           <div className="flex flex-wrap items-center gap-space-xs bg-surface-white p-1.5 rounded-2xl shadow-sm sm:rounded-full">
@@ -63,7 +65,7 @@ export default function ProductListSection({ products }: ProductListSectionProps
                       : "text-olive-gray hover:text-on-surface hover:bg-secondary-container/50",
                   ].join(" ")}
                 >
-                  {option.label}
+                  {t(option.labelKey)}
                 </button>
               );
             })}
@@ -77,13 +79,12 @@ export default function ProductListSection({ products }: ProductListSectionProps
                 key={product.id}
                 product={product}
                 variant="home"
-                onAddToCart={addItem}
               />
             ))}
           </div>
         ) : (
           <div className="rounded-xl bg-surface-white p-10 text-center text-sage">
-            Kitchen products are unavailable right now. Please try again shortly.
+            {t("productsUnavailable")}
           </div>
         )}
 
@@ -92,7 +93,7 @@ export default function ProductListSection({ products }: ProductListSectionProps
             href="/products"
             className="inline-flex items-center gap-space-sm bg-surface-white hover:bg-secondary-container/40 text-tertiary font-title-md text-title-md px-space-xl py-3 rounded-full shadow-sm transition-all duration-200"
           >
-            <span>View all curated kitchen items</span>
+            <span>{t("viewAllItems")}</span>
             <span className="material-symbols-outlined text-lg">arrow_forward</span>
           </Link>
         </div>

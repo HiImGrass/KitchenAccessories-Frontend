@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import { useTranslations } from "next-intl";
 export default function HeroSection() {
+  const t = useTranslations("home")
   return (
     <section className="relative w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-space-md lg:px-margin pt-space-xl pb-space-2xl">
@@ -12,19 +13,17 @@ export default function HeroSection() {
               <span className="material-symbols-outlined text-sm text-terracotta">
                 eco
               </span>
-              <span>Sustainable Kitchenware · Edition 2025</span>
+              <span>{t("edition")}</span>
             </div>
             <div className="space-y-space-sm max-w-2xl">
               <h1 className="font-display-lg text-display-lg text-tertiary tracking-tight leading-none">
-                Thoughtful tools for{" "}
+                {t("headline")}{" "}
                 <span className="italic text-terracotta font-normal">
-                  everyday cooking.
+                  {t("headlineAccent")}
                 </span>
               </h1>
               <p className="font-body-lg text-body-lg text-olive-gray max-w-xl">
-                Crafted culinary essentials, artisan utensils, and timeless
-                kitchenware designed to elevate your daily rituals and nourish
-                gatherings.
+                {t("description")}
               </p>
             </div>
             {/* CTAs */}
@@ -33,7 +32,7 @@ export default function HeroSection() {
                 className="inline-flex items-center justify-center gap-space-sm bg-terracotta hover:bg-primary-container text-on-primary font-title-md text-title-md px-space-xl py-3.5 rounded-full transition-all duration-200 shadow-md hover:shadow-lg active:scale-95 group"
                 data-path="shop-catalog"
                 href="/products">
-                <span>Shop Kitchen Essentials</span>
+                <span>{t("shopEssentials")}</span>
                 <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1">
                   arrow_forward
                 </span>
@@ -45,7 +44,7 @@ export default function HeroSection() {
                 <span className="material-symbols-outlined text-lg text-sage">
                   auto_awesome
                 </span>
-                <span>Explore Curated Sets</span>
+                <span>{t("exploreSets")}</span>
               </Link>
             </div>
             {/* Value Badges */}
@@ -58,10 +57,10 @@ export default function HeroSection() {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-title-md text-title-md text-tertiary">
-                    Carbon Neutral
+                    {t("carbonNeutral")}
                   </span>
                   <span className="font-label-sm text-label-sm text-sage">
-                    Complimentary over $50
+                    {t("complimentaryOver")}
                   </span>
                 </div>
               </div>
@@ -73,10 +72,10 @@ export default function HeroSection() {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-title-md text-title-md text-tertiary">
-                    Artisan Crafted
+                    {t("artisanCrafted")}
                   </span>
                   <span className="font-label-sm text-label-sm text-sage">
-                    Hand-finished woods
+                    {t("handFinishedWoods")}
                   </span>
                 </div>
               </div>
@@ -88,10 +87,10 @@ export default function HeroSection() {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-title-md text-title-md text-tertiary">
-                    Lifetime Care
+                    {t("lifetimeCare")}
                   </span>
                   <span className="font-label-sm text-label-sm text-sage">
-                    Safe non-toxic materials
+                    {t("safeNonToxicMaterials")}
                   </span>
                 </div>
               </div>
@@ -106,25 +105,25 @@ export default function HeroSection() {
                   fill
                   sizes="(min-width: 1024px) 42vw, 100vw"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  data-alt="Warm modern kitchen still life with handcrafted terracotta ceramics, natural olive wood ladles, artisanal copper measuring cups, and crisp flax linen napkins resting on a sunlit limestone countertop. Soft ambient morning light, subtle rustic elegance with high-end editorial culinary photography."
-                  alt="Warm modern kitchen still life with terracotta ceramics and olive wood ladles"
+                  data-alt={t("heroImageDataAlt")}
+                  alt={t("heroImageAlt")}
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6s7dy4pPWYI5_a81Nlg0xNhSE4zKa3GdZmpo7CrEL5pTJsTY0oDEKoIlxFYzQFcYvckXHYYRPDFVKweJC0rsEP4Jw3g6qh7toJKOTHI0VN1c93ptgMSVqPJFbndrT3N5mAbvkelsP2lYjvnheU7FiHcbt3bTXj0eb1qLzjGrM5Mkj0SEgqbxLTVvCAAT-lidgpaZfBiYUgy__ROIml6Uq8exkjIknZJcqSL1dmZv7AIaScHS2Z0to"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-tertiary/70 via-transparent to-transparent flex flex-col justify-end p-space-lg text-surface-white">
                   <span className="font-label-sm text-label-sm uppercase tracking-wider text-warm-sand">
-                    Featured Collection
+                    {t("featuredCollection")}
                   </span>
                   <h2 className="font-headline-md text-headline-md text-surface-white font-medium">
-                    The Solstice Cookware Set
+                    {t("solsticeCookwareSet")}
                   </h2>
                   <div className="flex items-center justify-between mt-space-xs">
                     <span className="font-price-md text-price-md text-surface-white">
-                      $145.00 · 5-piece set
+                      {t("solsticePrice")}
                     </span>
                     <Link
                       className="inline-flex items-center text-warm-sand hover:text-surface-white font-label-md text-label-md gap-1"
                       href="/products">
-                      <span>View item</span>
+                      <span>{t("viewItem")}</span>
                       <span className="material-symbols-outlined text-sm">
                         arrow_forward
                       </span>
@@ -139,8 +138,8 @@ export default function HeroSection() {
                     width={48}
                     height={48}
                     className="w-full h-full object-cover"
-                    data-alt="Macro close-up of a carved olive wood spoon bowl showing organic rich grain pattern and satin hand-rubbed beeswax finish in natural daylight."
-                    alt="Close-up of a carved olive wood spoon"
+                    data-alt={t("spoonImageDataAlt")}
+                    alt={t("spoonImageAlt")}
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx8WoqOkd2mmK0ftz6cb2pLv_Nl7AhOqOJur0aHDkHLEFx_xWZU0t2ew1eUpcJL5xos8eQkTSispjmLUMUIx7lWtoQvFtJAISOGVOC6AVytffASYAXp5QLCiemVHm6wKuizEP-nvESyjva9Zsl3n5ohlaFkTSYJOiwmO424hx1O2YczERHkAzvrFXvEaDpCgBbJRx-35EvEPAsKo-QVyOJ95EBh4_OmpsRTNYyzxCftArpq1VuNeNL"
                   />
                 </div>
@@ -156,10 +155,10 @@ export default function HeroSection() {
                     </span>
                   </div>
                   <p className="font-label-sm text-label-sm text-olive-gray truncate">
-                    &ldquo;The balance in hand is extraordinary.&rdquo;
+                    &ldquo;{t("reviewQuote")}&rdquo;
                   </p>
                   <span className="font-label-sm text-label-sm text-sage">
-                    Eleanor K., Culinary Writer
+                    {t("reviewer")}
                   </span>
                 </div>
               </div>

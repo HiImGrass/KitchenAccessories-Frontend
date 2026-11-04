@@ -1,8 +1,10 @@
 "use client";
 
 import { SubmitEvent, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function SignupForm() {
+	const t = useTranslations("auth");
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [password, setPassword] = useState("");
@@ -17,18 +19,18 @@ export default function SignupForm() {
 	const hasNumber = /\d/.test(password);
 	const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-	let strengthText = "Min. 8 characters & 1 number";
+	let strengthText = t("passwordMinimum");
 	let strengthLevel = 0;
 
 	if (password.length > 0) {
 		if (hasLength && hasNumber && hasSpecial) {
-			strengthText = "Excellent security";
+			strengthText = t("excellentSecurity");
 			strengthLevel = 3;
 		} else if (hasLength && (hasNumber || hasSpecial)) {
-			strengthText = "Moderate security";
+			strengthText = t("moderateSecurity");
 			strengthLevel = 2;
 		} else {
-			strengthText = "Weak (add 8+ chars & numbers)";
+			strengthText = t("weakSecurity");
 			strengthLevel = 1;
 		}
 	}
@@ -41,14 +43,14 @@ export default function SignupForm() {
 					type="button"
 					className="inline-flex w-full items-center justify-center rounded-md bg-secondary-container px-space-md py-space-sm font-body text-sm font-medium text-on-secondary-container transition-colors hover:bg-secondary/20"
 				>
-					Continue with Google
+					{t("continueWithGoogle")}
 				</button>
 
 				<button
 					type="button"
 					className="inline-flex w-full items-center justify-center rounded-md bg-secondary-container px-space-md py-space-sm font-body text-sm font-medium text-on-secondary-container transition-colors hover:bg-secondary/20"
 				>
-					Continue with Apple
+					{t("continueWithApple")}
 				</button>
 			</div>
 
@@ -56,7 +58,7 @@ export default function SignupForm() {
 			<div className="flex items-center gap-space-md">
 				<span className="h-px flex-1 bg-outline-variant" />
 				<span className="font-body text-xs uppercase tracking-widest text-on-surface-variant">
-					or sign up with email
+					{t("orSignUpWithEmail")}
 				</span>
 				<span className="h-px flex-1 bg-outline-variant" />
 			</div>
@@ -68,7 +70,7 @@ export default function SignupForm() {
 						className="font-body text-sm font-medium text-on-surface"
 						htmlFor="first-name"
 					>
-						First Name
+						{t("firstName")}
 					</label>
 
 					<input
@@ -87,7 +89,7 @@ export default function SignupForm() {
 						className="font-body text-sm font-medium text-on-surface"
 						htmlFor="last-name"
 					>
-						Last Name
+						{t("lastName")}
 					</label>
 
 					<input
@@ -108,7 +110,7 @@ export default function SignupForm() {
 					className="font-body text-sm font-medium text-on-surface"
 					htmlFor="email"
 				>
-					Email Address
+					{t("email")}
 				</label>
 
 				<input
@@ -129,7 +131,7 @@ export default function SignupForm() {
 						className="font-body text-sm font-medium text-on-surface"
 						htmlFor="password"
 					>
-						Password
+						{t("password")}
 					</label>
 
 					<div className="relative">
@@ -151,8 +153,8 @@ export default function SignupForm() {
 							type="button"
 							aria-label={
 								showPassword
-									? "Hide password"
-									: "Show password"
+									? t("hidePassword")
+									: t("showPassword")
 							}
 							aria-pressed={showPassword}
 							onClick={() =>
@@ -160,7 +162,7 @@ export default function SignupForm() {
 							}
 							className="absolute right-3 top-1/2 -translate-y-1/2 font-body text-xs font-medium text-sage transition-colors hover:text-on-surface"
 						>
-							{showPassword ? "Hide" : "Show"}
+							{showPassword ? t("hide") : t("show")}
 						</button>
 					</div>
 				</div>
@@ -170,7 +172,7 @@ export default function SignupForm() {
 						className="font-body text-sm font-medium text-on-surface"
 						htmlFor="confirm-password"
 					>
-						Confirm Password
+						{t("confirmPassword")}
 					</label>
 
 					<div className="relative">
@@ -190,8 +192,8 @@ export default function SignupForm() {
 							type="button"
 							aria-label={
 								showConfirmPassword
-									? "Hide confirmation password"
-									: "Show confirmation password"
+									? t("hideConfirmationPassword")
+									: t("showConfirmationPassword")
 							}
 							aria-pressed={showConfirmPassword}
 							onClick={() =>
@@ -201,7 +203,7 @@ export default function SignupForm() {
 							}
 							className="absolute right-3 top-1/2 -translate-y-1/2 font-body text-xs font-medium text-sage transition-colors hover:text-on-surface"
 						>
-							{showConfirmPassword ? "Hide" : "Show"}
+							{showConfirmPassword ? t("hide") : t("show")}
 						</button>
 					</div>
 				</div>
@@ -211,7 +213,7 @@ export default function SignupForm() {
 			<div className="rounded-md border border-outline-variant bg-surface-container-low p-space-md">
 				<div className="flex items-center justify-between">
 					<span className="font-body text-xs font-medium text-on-surface">
-						Password Requirements
+						{t("passwordRequirements")}
 					</span>
 
 					<span className="font-body text-xs text-on-surface-variant">
@@ -242,8 +244,7 @@ export default function SignupForm() {
 					/>
 
 					<span className="font-body text-sm text-on-surface-variant">
-						Receive our seasonal recipe journal, provenance
-						guides, and kitchen care invitations.
+						{t("newsletterConsent")}
 					</span>
 				</label>
 
@@ -256,19 +257,19 @@ export default function SignupForm() {
 					/>
 
 					<span className="font-body text-sm text-on-surface-variant">
-						I agree to the{" "}
+						{t("agreeTo")}{" "}
 						<a
 							href="#"
 							className="font-medium text-terracotta underline-offset-4 hover:underline"
 						>
-							Terms of Service
+							{t("terms")}
 						</a>{" "}
-						and{" "}
+						{t("and")}{" "}
 						<a
 							href="#"
 							className="font-medium text-terracotta underline-offset-4 hover:underline"
 						>
-							Privacy Policy
+							{t("privacy")}
 						</a>
 						.
 					</span>
@@ -280,7 +281,7 @@ export default function SignupForm() {
 				className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-space-lg py-space-md font-body text-base font-semibold text-on-primary transition-colors hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-primary/40"
 				type="submit"
 			>
-				Create Your Account
+				{t("createYourAccount")}
 			</button>
 		</form>
 	);

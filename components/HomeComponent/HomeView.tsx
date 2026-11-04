@@ -1,5 +1,3 @@
-"use client";
-
 import { Product } from "@/types/product";
 import HeroSection from "./HeroSection";
 import CollectionsSection from "./CollectionsSection";

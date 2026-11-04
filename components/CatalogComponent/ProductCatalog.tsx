@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Product } from "@/types/product";
 import { SearchCard } from "./SearchCard";
 import { SvgIcon } from "@/lib/SvgIcons";
+import { useTranslations } from "next-intl";
 
 interface ProductCatalogProps {
   products: Product[];
@@ -23,6 +24,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   currentQuery,
   currentSort,
 }) => {
+  const t = useTranslations("catalog");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -59,10 +61,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       <header className="mb-space-lg flex flex-col md:flex-row md:items-end justify-between gap-space-md">
         <div>
           <span className="inline-block text-label-sm font-label-sm uppercase tracking-widest text-terracotta bg-primary-fixed/40 px-3 py-1 rounded-full mb-2">
-            Curated Catalog
+            {t("label")}
           </span>
           <h1 className="font-display-lg text-display-lg text-tertiary tracking-tight">
-            Product Catalog
+            {t("title")}
           </h1>
         </div>
 
@@ -76,7 +78,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search products..."
+            placeholder={t("searchPlaceholder")}
             className="w-full bg-surface-white pl-10 pr-9 py-2.5 rounded-full font-body-md text-body-md text-on-surface placeholder-sage focus:outline-none focus:ring-1 focus:ring-terracotta shadow-sm"
           />
           {searchInput && (
@@ -87,6 +89,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 updateFilters({ q: "", skip: 0 });
               }}
               className="absolute right-3 text-sage hover:text-terracotta">
+              <span className="sr-only">{t("clearSearch")}</span>
               <SvgIcon name="cancel" className="w-4 h-4" />
             </button>
           )}

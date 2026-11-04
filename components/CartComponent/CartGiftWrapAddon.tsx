@@ -4,6 +4,7 @@ import React from 'react';
 import { GiftWrapOption } from '@/types/cart';
 import { Checkbox } from '@nextui-org/react';
 import { Gift } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface CartGiftWrapAddonProps {
   option: GiftWrapOption;
@@ -14,9 +15,10 @@ export const CartGiftWrapAddon: React.FC<CartGiftWrapAddonProps> = ({
   option,
   onToggle,
 }) => {
+  const t = useTranslations('cart');
   return (
     <section
-      aria-label="Gift Wrapping Option"
+      aria-label={t('giftWrappingOption')}
       className="mt-4 bg-surface-white rounded-2xl p-4 sm:p-5 border border-outline-variant/30 shadow-xs transition-colors hover:border-outline-variant"
     >
       <div className="flex items-start gap-3">

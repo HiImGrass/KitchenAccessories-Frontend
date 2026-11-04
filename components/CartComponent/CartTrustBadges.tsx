@@ -2,32 +2,35 @@
 
 import React from 'react';
 import { ShieldCheck, Leaf, Scale } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface TrustBadgeItem {
   icon: React.ReactNode;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
 }
 
 const BADGES: TrustBadgeItem[] = [
   {
     icon: <ShieldCheck className="w-5 h-5 text-secondary" />,
-    title: '30-Day Guarantee',
-    description: 'Kitchen tested return policy',
+    titleKey: 'guarantee',
+    descriptionKey: 'guaranteeDescription',
   },
   {
     icon: <Leaf className="w-5 h-5 text-secondary" />,
-    title: '100% Plastic-Free',
-    description: 'Linen & recycled kraft pack',
+    titleKey: 'plasticFree',
+    descriptionKey: 'plasticFreeDescription',
   },
   {
     icon: <Scale className="w-5 h-5 text-secondary" />,
-    title: 'Carbon-Neutral',
-    description: 'Offset direct from artisan',
+    titleKey: 'carbonNeutral',
+    descriptionKey: 'carbonNeutralDescription',
   },
 ];
 
 export const CartTrustBadges: React.FC = () => {
+  const t = useTranslations('cart');
+
   return (
     <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
       {BADGES.map((badge, index) => (
@@ -40,10 +43,10 @@ export const CartTrustBadges: React.FC = () => {
           </div>
           <div className="min-w-0">
             <h4 className="font-semibold text-xs sm:text-sm text-on-surface truncate">
-              {badge.title}
+              {t(badge.titleKey)}
             </h4>
             <p className="text-[11px] sm:text-xs text-olive-gray truncate">
-              {badge.description}
+              {t(badge.descriptionKey)}
             </p>
           </div>
         </div>

@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import SignupForm from "./SignupForm";
 
-export default function SignupPage() {
+export default async function SignupPage() {
+	const t = await getTranslations("auth");
 	return (
 		<main className="flex min-h-screen items-center justify-center bg-surface px-gutter-mobile py-margin-mobile md:px-gutter md:py-margin">
 			<div className="w-full max-w-md rounded-xl bg-surface-container-lowest p-space-xl shadow-sm">
@@ -14,19 +16,18 @@ export default function SignupPage() {
 						<span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary font-display text-base font-bold text-on-primary">
 							L
 						</span>
-						<span>Ladle &amp; Co.</span>
+						<span>{t("brand")}</span>
 					</Link>
 				</div>
 
 				{/* Heading */}
 				<div className="mt-space-lg text-center">
 					<h1 className="font-display text-3xl font-semibold tracking-tight text-on-surface">
-						Join the Culinary Table
+						{t("joinCulinaryTable")}
 					</h1>
 
 					<p className="mt-space-sm font-body text-base leading-relaxed text-on-surface-variant">
-						Create an account to track orders, save curated pairings,
-						and receive artisan workshop notes.
+						{t("signupDescription")}
 					</p>
 				</div>
 
@@ -37,12 +38,12 @@ export default function SignupPage() {
 				{/* Switch to Login */}
 				<div className="mt-space-lg text-center">
 					<p className="font-body text-base text-on-surface">
-						Already part of our community?{" "}
+						{t("alreadyCommunity")}{" "}
 						<Link
 							href="/login"
 							className="font-medium text-terracotta underline-offset-4 hover:underline"
 						>
-							Sign in here
+							{t("signInHere")}
 						</Link>
 					</p>
 				</div>
