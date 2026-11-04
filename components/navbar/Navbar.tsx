@@ -8,8 +8,7 @@ import {
   NavbarItem,
 } from "@nextui-org/react";
 import { Search, ShoppingBag } from "lucide-react";
-import Link from "next/link";
-import { useSyncExternalStore, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { LanguageSwitcher } from "@/components/language/LanguageSwitcher";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useSyncExternalStore } from "react";
