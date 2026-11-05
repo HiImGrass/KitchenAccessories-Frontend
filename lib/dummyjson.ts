@@ -1,0 +1,261 @@
+import { Product } from "@/types/product";
+import { DUMMY_JSON_BASE_URL } from "./checkEnvironment";
+
+interface DummyJSONResponse {
+  products: Product[];
+  total: number;
+  skip: number;
+  limit: number;
+}
+
+export interface FetchCatalogParams {
+  q?: string;
+  sort?: string;
+  skip?: number;
+  limit?: number;
+}
+
+/**
+ * Fetch danh sách sản phẩm phục vụ trang Catalog/Search
+ */
+
+
+export async function fetchCatalogProducts({
+  q = "",
+  sort = "",
+  skip = 0,
+  limit = 12,
+}: FetchCatalogParams): Promise<DummyJSONResponse> {
+  try {
+    // Catalog chỉ phục vụ đồ án kitchen accessories. Không dùng /products hoặc
+    // /products/search vì hai endpoint đó trả về cả những ngành hàng không liên quan.
+    const kitchenProductsUrl = `${DUMMY_JSON_BASE_URL}/products/category/kitchen-accessories`;
+    const url = new URL(kitchenProductsUrl);
+    url.searchParams.set("limit", "0");
+
+    const res = await fetch(url.toString(), {
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch catalog products");
+
+    const data: DummyJSONResponse = await res.json();
+    const normalizedQuery = q.trim().toLocaleLowerCase();
+    const filteredProducts = normalizedQuery
+      ? data.products.filter((product) =>
+          [product.title, product.description, product.brand]
+            .filter(Boolean)
+            .some((value) => value.toLocaleLowerCase().includes(normalizedQuery)),
+        )
+      : data.products;
+
+    const [sortField, sortDirection] = sort.split("_");
+    const sorters: Record<string, (a: Product, b: Product) => number> = {
+      price: (a, b) => a.price - b.price,
+      rating: (a, b) => a.rating - b.rating,
+      title: (a, b) => a.title.localeCompare(b.title),
+    };
+    const compare = sorters[sortField];
+    const sortedProducts = compare
+      ? [...filteredProducts].sort((a, b) =>
+          sortDirection === "desc" ? -compare(a, b) : compare(a, b),
+        )
+      : filteredProducts;
+    const safeSkip = Math.max(0, skip);
+
+    return {
+      products: sortedProducts.slice(safeSkip, safeSkip + limit),
+      total: sortedProducts.length,
+      skip: safeSkip,
+      limit,
+    };
+  } catch (error) {
+    console.error("Error in fetchCatalogProducts:", error);
+    return { products: [], total: 0, skip: 0, limit: 12 };
+  }
+}
+
+/**
+ * Lấy thông tin chi tiết 1 sản phẩm theo ID
+ */
+export async function getProductById(
+  id: string | number
+): Promise<DummyJSONProductDetail | null> {
+  try {
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/products/${id}`, {
+      next: { revalidate: 3600 },
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) {
+      throw new Error(`Failed to fetch product ${id}: ${res.status} ${res.statusText}`);
+    }
+    return await res.json();
+  } catch (error) {
+    console.error("Error in getProductById:", error);
+    throw error;
+  }
+}
+
+/**
+ * Lấy danh sách sản phẩm liên quan theo category
+ */
+export async function getRelatedProducts(
+  category: string,
+  limit: number = 4
+): Promise<Product[]> {
+  try {
+    const res = await fetch(
+      `${DUMMY_JSON_BASE_URL}/products/category/${encodeURIComponent(category)}?limit=${limit}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.products || [];
+  } catch (error) {
+    console.error("Error in getRelatedProducts:", error);
+    return [];
+  }
+}
+
+export interface DummyJSONCartProduct {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+  total: number;
+  discountPercentage: number;
+  discountedTotal: number;
+  thumbnail: string;
+}
+
+export interface DummyJSONCartResponse {
+  id: number;
+  products: DummyJSONCartProduct[];
+  total: number;
+  discountedTotal: number;
+  userId: number;
+  totalProducts: number;
+  totalQuantity: number;
+}
+
+export interface DummyJSONProductDetail {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand?: string;
+  warrantyInformation?: string;
+  shippingInformation?: string;
+  availabilityStatus?: string;
+  thumbnail: string;
+  images: string[];
+}
+
+export type CartDataSource = "cart_api" | "kitchen_category";
+export type ProductDataSource = {
+  q?: string;
+  category?: string;
+  sort?: string;
+  skip?: number;
+  limit?: number;
+}
+
+
+/**
+ * Fetch single product detail from DummyJSON: GET /products/{id}
+ */
+export async function fetchProductDetail(
+  id: number
+): Promise<DummyJSONProductDetail | null> {
+  return getProductById(id);
+}
+
+// ==================== AUTHENTICATION SECTION ====================
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  image: string;
+  token: string;
+  refreshToken: string;
+}
+
+export interface MockUserUpdate {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  address?: {
+    address?: string;
+  };
+  password?: string;
+}
+
+/**
+ * DummyJSON simulates PATCH updates and returns the supplied user fields. This
+ * is intentionally used only for the in-memory account-management demo.
+ */
+export async function updateMockUser(
+  id: number,
+  updates: MockUserUpdate,
+): Promise<MockUserUpdate> {
+  const res = await fetch(`${DUMMY_JSON_BASE_URL}/users/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.message || "Unable to update the profile.");
+  }
+
+  return data;
+}
+
+/**
+ * Đăng nhập tài khoản qua DummyJSON: POST /auth/login
+ */
+export async function loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
+  try {
+    const res = await fetch(`${DUMMY_JSON_BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: credentials.username,
+        password: credentials.password,
+        expiresInMins: 30, // Thời gian hiệu lực token
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "The username or password is incorrect.");
+    }
+
+    return data;
+  } catch (err: unknown) {
+    console.error("Error in loginUser:", err);
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Unable to reach the authentication service.";
+    throw new Error(message);
+  }
+}

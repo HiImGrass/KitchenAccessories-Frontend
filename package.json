@@ -3,15 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@nextui-org/react": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
     "next": "16.3.5",
+    "next-auth": "^4.24.15",
+    "next-intl": "^4.14.9",
+    "nextjs-toploader": "latest",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "sonner": "latest"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

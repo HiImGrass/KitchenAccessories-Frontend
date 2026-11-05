@@ -1,0 +1,153 @@
+// app/products/[id]/page.tsx
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import type { Metadata } from "next";
+import ProductGallery from "@/components/DetailsComponent/ProductGallery";
+import ProductActions from "@/components/DetailsComponent/ProductActions";
+import ProductCard from "@/components/products/ProductCard";
+import { getProductById, getRelatedProducts } from "@/lib/dummyjson";
+import { getTranslations } from "next-intl/server";
+
+interface ProductPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
+  const t = await getTranslations("product");
+  const { id } = await params;
+  const product = await getProductById(id);
+
+  if (!product) {
+    return {
+      title: t("notFoundMetadataTitle"),
+      description: t("notFoundMetadataDescription"),
+      robots: { index: false, follow: false },
+    };
+  }
+
+  return {
+    title: `${product.title} | Ladle & Co.`,
+    description: product.description,
+    openGraph: {
+      type: "website",
+      title: product.title,
+      description: product.description,
+      images: [{ url: product.thumbnail, alt: product.title }],
+    },
+  };
+}
+
+export default async function ProductInfoPage({ params }: ProductPageProps) {
+  const t = await getTranslations("product");
+  // Giải mã async params theo chuẩn Next.js 15/16
+  const { id } = await params;
+  const product = await getProductById(id);
+
+  if (!product) {
+    notFound();
+  }
+
+  const relatedProducts = await getRelatedProducts(product.category);
+  const discount = product.discountPercentage || 0;
+  const originalPrice = discount > 0 
+    ? (product.price / (1 - discount / 100)).toFixed(2) 
+    : product.price.toFixed(2);
+
+  return (
+    <main className="w-full pt-20 bg-canvas-cream min-h-[calc(100vh-20rem)] pb-20">
+      {/* Breadcrumb Navigation */}
+      <div className="w-full max-w-7xl mx-auto px-4 py-4">
+        <nav className="flex items-center gap-2 text-sm text-on-surface-variant">
+          <Link href="/" className="hover:underline">{t("home")}</Link>
+          <span>&gt;</span>
+          <Link href="/kitchen-accessories" className="capitalize hover:underline">
+            {product.category}
+          </Link>
+          <span>&gt;</span>
+          <span className="text-on-surface font-medium truncate max-w-[200px]">
+            {product.title}
+          </span>
+        </nav>
+      </div>
+
+      <section className="w-full max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Cột trái: Gallery Ảnh */}
+          <div className="lg:col-span-7">
+            <ProductGallery
+              productTitle={product.title}
+              thumbnail={product.thumbnail}
+              images={product.images || []}
+            />
+          </div>
+
+          {/* Cột phải: Thông tin & Nút mua hàng */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="space-y-2">
+              <div className="text-sm text-primary tracking-wider uppercase font-semibold">
+                {product.brand || t("artisanTools")}
+              </div>
+              <h1 className="text-3xl font-bold text-on-surface tracking-tight">
+                {product.title}
+              </h1>
+              <div className="flex items-center gap-2 pt-1">
+                <span className="text-primary font-medium">
+                  ★ {(product.rating || 0).toFixed(1)}
+                </span>
+                <span className="text-sm text-on-surface-variant underline">
+                  ({product.stock || 0} {t("inStockLabel")})
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-surface-container-lowest p-4 rounded-xl space-y-2 shadow-sm">
+              <div className="flex items-baseline gap-3">
+                <span className="text-2xl text-primary font-bold">${product.price}</span>
+                {discount > 0 && (
+                  <>
+                    <span className="text-lg text-outline line-through">${originalPrice}</span>
+                    <span className="text-xs bg-primary-container text-on-primary-container px-2 py-1 rounded-full">
+                      -{Math.round(discount)}% {t("off")}
+                    </span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <p className="text-base text-on-surface-variant leading-relaxed">
+              {product.description}
+            </p>
+
+            {/* Component tương tác thêm giỏ hàng */}
+            <ProductActions product={product} />
+
+            <div className="grid grid-cols-2 gap-2 pt-4">
+              <div className="bg-surface-container-lowest p-3 rounded-lg flex items-center gap-2 shadow-sm text-sm text-on-surface">
+                🛡️ {product.warrantyInformation || t("oneYearWarranty")}
+              </div>
+              <div className="bg-surface-container-lowest p-3 rounded-lg flex items-center gap-2 shadow-sm text-sm text-on-surface">
+                📦 {product.shippingInformation || t("freeShipping")}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Danh sách sản phẩm liên quan */}
+      <section className="w-full max-w-7xl mx-auto px-4 pt-16">
+        <h2 className="text-2xl font-bold text-on-surface mb-6">{t("relatedProducts")}</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {relatedProducts.map((item) => (
+            item.id !== product.id && (
+              <ProductCard key={item.id} product={item} />
+            )
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
