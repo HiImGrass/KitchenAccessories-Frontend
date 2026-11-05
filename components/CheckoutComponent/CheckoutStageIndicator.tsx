@@ -2,8 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export const CheckoutStageIndicator: React.FC = () => {
+  const t = useTranslations('checkout');
   return (
     <section className="border-b border-warm-sand/30 bg-surface-white py-5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,7 +30,7 @@ export const CheckoutStageIndicator: React.FC = () => {
                 </span>
               </div>
               <span className="text-xs font-medium text-olive-gray group-hover:text-primary transition-colors">
-                Cart
+                {t('cart')}
               </span>
             </Link>
 
@@ -43,7 +45,7 @@ export const CheckoutStageIndicator: React.FC = () => {
                 </span>
               </div>
               <span className="text-xs font-semibold text-primary">
-                Information &amp; Delivery
+                {t('informationDelivery')}
               </span>
             </div>
 
@@ -57,7 +59,7 @@ export const CheckoutStageIndicator: React.FC = () => {
                   03
                 </span>
               </div>
-              <span className="text-xs font-medium text-olive-gray">Payment</span>
+              <span className="text-xs font-medium text-olive-gray">{t('payment')}</span>
             </div>
 
             {/* Step 4: Confirmation */}
@@ -70,7 +72,7 @@ export const CheckoutStageIndicator: React.FC = () => {
                   04
                 </span>
               </div>
-              <span className="text-xs font-medium text-olive-gray">Confirmation</span>
+              <span className="text-xs font-medium text-olive-gray">{t('confirmation')}</span>
             </div>
           </div>
 

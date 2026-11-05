@@ -4,6 +4,7 @@ import React from 'react';
 import { CardPaymentInfo, PaymentType, CheckoutErrors } from '@/types/checkout';
 import { Tooltip } from '@nextui-org/react';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface CheckoutPaymentMethodProps {
   card: CardPaymentInfo;
@@ -20,6 +21,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
   onCardFieldChange,
   onPaymentTypeChange,
 }) => {
+  const t = useTranslations('checkout');
   return (
     <section className="bg-surface-white border border-warm-sand/60 rounded-xl p-6 sm:p-8 shadow-xs">
       {/* Header */}
@@ -30,16 +32,16 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
           </span>
           <div>
             <h3 className="font-headline-sm text-lg font-bold text-on-surface">
-              Payment Method
+              {t('paymentMethod')}
             </h3>
             <p className="text-xs text-olive-gray">
-              All transactions are encrypted with bank-grade security protocols.
+              {t('paymentSecurityDescription')}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-olive-gray">
           <span className="material-symbols-outlined text-secondary text-[16px]">lock</span>
-          <span>Encrypted</span>
+          <span>{t('encrypted')}</span>
         </div>
       </div>
 
@@ -49,7 +51,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
           type="button"
           onClick={() => {
             onPaymentTypeChange('apple_pay');
-            toast.info('Apple Pay session initialized for instant checkout.');
+            toast.info(t('applePayInitialized'));
           }}
           className={`h-11 flex items-center justify-center gap-2 px-4 rounded-lg border font-semibold text-xs transition-colors cursor-pointer ${
             paymentType === 'apple_pay'
@@ -58,14 +60,14 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
           }`}
         >
           <span className="text-sm font-bold tracking-tight"> Pay</span>
-          <span className="text-[10px] text-olive-gray">Instant</span>
+          <span className="text-[10px] text-olive-gray">{t('instant')}</span>
         </button>
 
         <button
           type="button"
           onClick={() => {
             onPaymentTypeChange('paypal');
-            toast.info('PayPal Express checkout gateway ready.');
+            toast.info(t('paypalReady'));
           }}
           className={`h-11 flex items-center justify-center gap-2 px-4 rounded-lg border font-semibold text-xs transition-colors cursor-pointer ${
             paymentType === 'paypal'
@@ -74,7 +76,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
           }`}
         >
           <span className="text-sm font-bold text-[#003087] italic">PayPal</span>
-          <span className="text-[10px] text-olive-gray">Direct</span>
+          <span className="text-[10px] text-olive-gray">{t('direct')}</span>
         </button>
       </div>
 
@@ -82,7 +84,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
       <div className="relative flex py-2 items-center mb-6">
         <div className="flex-grow border-t border-warm-sand/40" />
         <span className="flex-shrink mx-4 text-xs uppercase tracking-widest text-olive-gray font-semibold">
-          Or Pay with Card
+          {t('orPayWithCard')}
         </span>
         <div className="flex-grow border-t border-warm-sand/40" />
       </div>
@@ -96,7 +98,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
               htmlFor="checkout-card-holder"
               className="text-xs font-semibold text-on-surface"
             >
-              Name on Card <span className="text-terracotta">*</span>
+              {t('nameOnCard')} <span className="text-terracotta">*</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -127,7 +129,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
               htmlFor="checkout-card-number"
               className="text-xs font-semibold text-on-surface"
             >
-              Card Number <span className="text-terracotta">*</span>
+              {t('cardNumber')} <span className="text-terracotta">*</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -168,7 +170,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                 htmlFor="checkout-card-expiry"
                 className="text-xs font-semibold text-on-surface"
               >
-                Expiration Date <span className="text-terracotta">*</span>
+                {t('expirationDate')} <span className="text-terracotta">*</span>
               </label>
             </div>
             <div className="relative w-full">
@@ -199,7 +201,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                 htmlFor="checkout-card-cvc"
                 className="text-xs font-semibold text-on-surface"
               >
-                Security Code (CVC) <span className="text-terracotta">*</span>
+                {t('securityCode')} <span className="text-terracotta">*</span>
               </label>
               <Tooltip
                 content={
@@ -211,9 +213,9 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                       </div>
                       <div>
                         <h4 className="font-semibold text-xs text-on-surface leading-tight">
-                          Card Verification Code
+                          {t('cardVerificationCode')}
                         </h4>
-                        <p className="text-[10px] text-olive-gray">Locating your 3 or 4-digit code</p>
+                        <p className="text-[10px] text-olive-gray">{t('locatingCode')}</p>
                       </div>
                     </div>
 
@@ -222,10 +224,10 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                       <div className="flex items-center justify-between mb-1.5 text-[10px]">
                         <span className="font-semibold text-on-surface flex items-center gap-1.5">
                           <span className="size-1.5 rounded-full bg-primary inline-block" />
-                          Visa &bull; Mastercard
+                          {t('visaMastercard')}
                         </span>
                         <span className="text-[9px] font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded-full border border-primary/20">
-                          3 digits
+                          {t('threeDigits')}
                         </span>
                       </div>
 
@@ -244,7 +246,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                         </div>
                       </div>
                       <p className="text-[9.5px] text-olive-gray mt-1.5 leading-tight">
-                        Located on the white signature strip on the <strong>back</strong> of your card.
+                        {t.rich('codeOnBack', { strong: (chunks) => <strong>{chunks}</strong> })}
                       </p>
                     </div>
 
@@ -253,14 +255,14 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                       <div className="flex items-center justify-between mb-1 text-[10px]">
                         <span className="font-semibold text-on-surface flex items-center gap-1.5">
                           <span className="size-1.5 rounded-full bg-secondary inline-block" />
-                          American Express
+                          {t('americanExpress')}
                         </span>
                         <span className="text-[9px] font-bold text-secondary bg-secondary/10 px-1.5 py-0.5 rounded-full border border-secondary/20">
-                          4 digits
+                          {t('fourDigits')}
                         </span>
                       </div>
                       <p className="text-[9.5px] text-olive-gray leading-tight">
-                        Printed on the <strong>front</strong> of the card, directly above the card number.
+                        {t.rich('codeOnFront', { strong: (chunks) => <strong>{chunks}</strong> })}
                       </p>
                     </div>
                   </div>
@@ -280,7 +282,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                   type="button"
                   className="inline-flex items-center gap-1 text-[11px] font-medium text-olive-gray hover:text-primary transition-colors cursor-pointer group"
                 >
-                  <span className="group-hover:underline underline-offset-2">What is this?</span>
+                  <span className="group-hover:underline underline-offset-2">{t('whatIsThis')}</span>
                   <span className="material-symbols-outlined text-[13px] text-sage group-hover:text-primary transition-colors">
                     help
                   </span>
@@ -297,7 +299,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
                   onPaymentTypeChange('card');
                   onCardFieldChange('cardCvc', e.target.value);
                 }}
-                placeholder="3 or 4 digits"
+                placeholder={t('cvcPlaceholder')}
                 className={`w-full h-11 bg-canvas-cream/50 border ${
                   errors.cardCvc
                     ? 'border-error focus:border-error'
@@ -348,7 +350,7 @@ export const CheckoutPaymentMethod: React.FC<CheckoutPaymentMethodProps> = ({
               )}
             </div>
             <span className="text-xs text-olive-gray leading-relaxed">
-              Billing address is the same as shipping destination
+              {t('billingSameAsShipping')}
             </span>
           </label>
         </div>

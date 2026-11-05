@@ -5,7 +5,7 @@ import { CartItem } from '@/types/cart';
 import { ShippingMethodOption } from '@/types/checkout';
 import { Button } from '@nextui-org/react';
 import { Loader2 } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
+import { useTranslations } from 'next-intl';
 
 interface CheckoutOrderSummaryProps {
   items: CartItem[];
@@ -29,18 +29,17 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
   onPlaceOrder,
 }) => {
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const t = useTranslations('checkout');
 
-  const { items: cartItems } = useCart();
-  
   return (
     <div className="bg-surface-white border border-warm-sand/60 rounded-xl p-6 sm:p-8 shadow-xs">
       {/* Title */}
       <div className="flex items-center justify-between border-b border-warm-sand/40 pb-4 mb-4">
         <h3 className="font-headline-sm text-lg font-bold text-on-surface">
-          Order Summary
+          {t('summary')}
         </h3>
         <span className="text-[11px] font-bold text-olive-gray bg-canvas-cream border border-warm-sand/50 px-2.5 py-0.5 rounded-full">
-          {totalItemCount} {totalItemCount === 1 ? 'Item' : 'Items'}
+          {totalItemCount} {totalItemCount === 1 ? t('item') : t('items')}
         </span>
       </div>
 
@@ -63,10 +62,10 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
                 {item.name}
               </h4>
               <p className="text-[11px] text-olive-gray mt-0.5 truncate">
-                {item.details || 'Artisanal Culinary Essential'}
+                {item.details || t('culinaryEssential')}
               </p>
               <span className="inline-block mt-1 text-[10px] px-2 py-0.5 rounded bg-surface-container-high text-on-secondary-container font-semibold">
-                {item.stockLabel || 'Artisan Batch'}
+                {item.stockLabel || t('artisanBatch')}
               </span>
             </div>
             <div className="text-right flex-shrink-0 font-price-md text-sm font-bold text-on-surface">
@@ -82,7 +81,7 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
           htmlFor="checkout-promo-code"
           className="block text-xs font-semibold text-olive-gray mb-1.5"
         >
-          Artisan Guild Promo / Gift Voucher
+          {t('promoVoucher')}
         </label>
         <div className="flex gap-2 items-center">
           <div className="relative flex-grow">
@@ -106,26 +105,26 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
             type="button"
             className="h-11 px-4 bg-secondary-container/60 border border-warm-sand rounded-lg text-xs font-bold text-on-secondary-fixed cursor-default shrink-0"
           >
-            Applied
+            {t('applied')}
           </button>
         </div>
         <div className="flex items-center gap-1.5 mt-2 text-[11px] text-secondary font-medium">
           <span className="material-symbols-outlined text-[14px]">local_offer</span>
-          <span>&apos;ARTISAN10&apos; applied: 10% discount across crafted kitchenware</span>
+          <span>{t('promoApplied')}</span>
         </div>
       </div>
 
       {/* Cost Calculation Table */}
       <div className="space-y-2.5 pt-4 border-t border-warm-sand/40 text-xs">
         <div className="flex justify-between text-olive-gray">
-          <span>Subtotal</span>
+          <span>{t('subtotal')}</span>
           <span className="font-semibold text-on-surface">${subtotal.toFixed(2)}</span>
         </div>
 
         {discountAmount > 0 && (
           <div className="flex justify-between text-secondary">
             <span className="flex items-center gap-1">
-              Discount (ARTISAN10)
+              {t('discount')}
               <span className="material-symbols-outlined text-[14px]">check</span>
             </span>
             <span className="font-semibold">-${discountAmount.toFixed(2)}</span>
@@ -135,12 +134,12 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
         <div className="flex justify-between text-olive-gray">
           <span>{shippingOption.title}</span>
           <span className="font-semibold text-secondary">
-            {shippingOption.price === 0 ? 'Free Standard' : `$${shippingOption.price.toFixed(2)}`}
+            {shippingOption.price === 0 ? t('freeStandard') : `$${shippingOption.price.toFixed(2)}`}
           </span>
         </div>
 
         <div className="flex justify-between text-olive-gray">
-          <span>Estimated Sales Tax</span>
+          <span>{t('estimatedSalesTax')}</span>
           <span className="font-semibold text-on-surface">${taxAmount.toFixed(2)}</span>
         </div>
 
@@ -148,10 +147,10 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
         <div className="pt-4 border-t border-warm-sand/60 flex items-baseline justify-between">
           <div>
             <span className="font-headline-sm text-base font-bold text-on-surface">
-              Final Total
+              {t('finalTotal')}
             </span>
             <span className="block text-[11px] text-olive-gray">
-              Including all regional duties and taxes
+              {t('dutiesIncluded')}
             </span>
           </div>
           <div className="text-right">
@@ -159,7 +158,7 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
               ${finalTotal.toFixed(2)}
             </span>
             <span className="block text-[10px] text-olive-gray font-mono uppercase">
-              USD Currency
+              {t('usdCurrency')}
             </span>
           </div>
         </div>
@@ -176,7 +175,7 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
           {isSubmitting ? (
             <div className="flex items-center justify-center gap-2.5">
               <Loader2 className="w-5 h-5 animate-spin text-on-primary shrink-0" />
-              <span>Securing Transaction...</span>
+              <span>{t('securingTransaction')}</span>
             </div>
           ) : (
             <>
@@ -184,15 +183,15 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
                 shopping_bag
               </span>
               <span className="tracking-wide">
-                Place Order • ${finalTotal.toFixed(2)}
+                {t('placeOrderWithTotal', { total: finalTotal.toFixed(2) })}
               </span>
             </>
           )}
         </Button>
         <p className="text-center text-[11px] text-olive-gray mt-2.5">
-          By clicking &quot;Place Order&quot;, you agree to Ladle &amp; Co.&apos;s{' '}
+          {t('placeOrderAgreement')}{' '}
           <a href="#" className="underline hover:text-primary">
-            Terms of Guild Service
+            {t('termsOfGuildService')}
           </a>
           .
         </p>
@@ -205,9 +204,9 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
             <span className="material-symbols-outlined text-[18px]">verified</span>
           </div>
           <div>
-            <h5 className="text-[11px] font-bold text-on-surface">30-Day Guarantee</h5>
+            <h5 className="text-[11px] font-bold text-on-surface">{t('guarantee')}</h5>
             <p className="text-[10px] text-olive-gray leading-tight mt-0.5">
-              Complimentary return labels for untouched ceramics.
+              {t('guaranteeDescription')}
             </p>
           </div>
         </div>
@@ -216,9 +215,9 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
             <span className="material-symbols-outlined text-[18px]">lock</span>
           </div>
           <div>
-            <h5 className="text-[11px] font-bold text-on-surface">256-Bit SSL</h5>
+            <h5 className="text-[11px] font-bold text-on-surface">{t('sslBadge')}</h5>
             <p className="text-[10px] text-olive-gray leading-tight mt-0.5">
-              End-to-end payment gateway encryption.
+              {t('sslDescription')}
             </p>
           </div>
         </div>

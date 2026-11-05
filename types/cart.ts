@@ -7,9 +7,12 @@ export interface CartItem {
   quantity: number;
   image: string;
   details: string; // e.g. "Finish: Natural Raw Wax • Artisan: Studio Neri, Umbria"
+  detailsKey?: string;
   stockStatus: StockStatus;
   stockLabel: string; // e.g. "In Stock", "Low Stock: Only 3 left in workshop"
+  stockLabelKey?: string;
   stockNote: string; // e.g. "Ready for dispatch", "Reserved for 15 mins"
+  stockNoteKey?: string;
   maxQuantity?: number;
 }
 
@@ -17,13 +20,16 @@ export interface PromoCode {
   code: string;
   discountPercentage: number;
   description: string;
+  descriptionKey?: string;
 }
 
 export interface GiftWrapOption {
   enabled: boolean;
   price: number;
   title: string;
+  titleKey?: string;
   description: string;
+  descriptionKey?: string;
 }
 
 export interface CartSummary {

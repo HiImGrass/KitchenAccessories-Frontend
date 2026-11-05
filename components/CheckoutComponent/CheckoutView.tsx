@@ -11,8 +11,10 @@ import { CheckoutOrderSummary } from './CheckoutOrderSummary';
 import { CheckoutArtisanPledge } from './CheckoutArtisanPledge';
 import { CheckoutFooter } from './CheckoutFooter';
 import { CheckoutSuccessModal } from './CheckoutSuccessModal';
+import { useTranslations } from 'next-intl';
 
 export const CheckoutView: React.FC = () => {
+  const t = useTranslations('checkout');
   const {
     contact,
     shipping,
@@ -56,13 +58,13 @@ export const CheckoutView: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-terracotta tracking-wider uppercase mb-1">
                   <span className="material-symbols-outlined text-[16px]">verified_user</span>
-                  Guaranteed Secure Checkout
+                  {t('secureCheckout')}
                 </div>
                 <h2 className="font-headline-lg text-2xl sm:text-3xl font-bold text-on-surface tracking-tight">
-                  Express Fulfillment Details
+                  {t('title')}
                 </h2>
                 <p className="text-sm text-olive-gray mt-1">
-                  Please provide your destination and delivery preferences for handcrafted distribution.
+                  {t('description')}
                 </p>
               </div>
 

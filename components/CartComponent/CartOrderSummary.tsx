@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { CartSummary, PromoCode, GiftWrapOption } from '@/types/cart';
 import { Button, Input, Tooltip } from '@nextui-org/react';
 import { Tag, Info, ArrowRight, Lock, CheckCircle2, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface CartOrderSummaryProps {
   summary: CartSummary;
@@ -29,12 +30,13 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
   onRemovePromo,
   onCheckout,
 }) => {
+  const t = useTranslations('cart');
   const isApplied = Boolean(appliedPromo);
 
   return (
     <div className="bg-surface-white rounded-2xl p-6 border border-outline-variant/30 shadow-xs">
       <h2 className="font-epilogue text-xl font-bold text-on-surface mb-5">
-        Order Summary
+        {t('orderSummary')}
       </h2>
 
       {/* Price breakdown */}
@@ -42,7 +44,10 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
         {/* Subtotal */}
         <div className="flex items-center justify-between text-olive-gray">
           <span>
-            Items Subtotal ({summary.itemCount} {summary.itemCount === 1 ? 'item' : 'items'})
+            {t('itemsSubtotal', {
+              count: summary.itemCount,
+              itemLabel: summary.itemCount === 1 ? t('item') : t('items'),
+            })}
           </span>
           <span className="font-semibold text-on-surface">
             ${summary.subtotal.toFixed(2)}
@@ -55,7 +60,9 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
             <div className="flex items-center gap-1.5 font-medium">
               <Tag className="w-4 h-4 shrink-0" aria-hidden="true" />
               <span>
-                Seasonal Artisan Discount ({appliedPromo.discountPercentage}%)
+                {t('seasonalDiscount', {
+                  percentage: appliedPromo.discountPercentage,
+                })}
               </span>
             </div>
             <span className="font-semibold">
@@ -67,7 +74,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
         {/* Gift Wrapping cost (if chosen) */}
         {giftWrap.enabled && (
           <div className="flex items-center justify-between text-olive-gray">
-            <span>Artisan Gift Wrapping</span>
+            <span>{t('giftWrapping')}</span>
             <span className="font-semibold text-on-surface">
               +${giftWrap.price.toFixed(2)}
             </span>
@@ -77,9 +84,9 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
         {/* Shipping */}
         <div className="flex items-center justify-between text-olive-gray">
           <div className="flex items-center gap-1.5">
-            <span>Estimated Express Shipping</span>
+            <span>{t('expressShipping')}</span>
             <Tooltip
-              content="Free express direct shipping on orders over $100"
+              content={t('shippingDetails')}
               placement="top"
               closeDelay={100}
               classNames={{
@@ -91,20 +98,20 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
               <button
                 type="button"
                 className="text-sage hover:text-olive-gray cursor-help"
-                aria-label="Shipping details info"
+                aria-label={t('shippingDetails')}
               >
                 <Info className="w-3.5 h-3.5" />
               </button>
             </Tooltip>
           </div>
           <span className="font-bold text-xs uppercase tracking-wider text-on-surface">
-            {summary.isFreeShipping ? 'FREE' : `$${summary.shippingFee.toFixed(2)}`}
+            {summary.isFreeShipping ? t('free') : `$${summary.shippingFee.toFixed(2)}`}
           </span>
         </div>
 
         {/* Estimated Tax */}
         <div className="flex items-center justify-between text-olive-gray">
-          <span>Estimated Tax</span>
+          <span>{t('estimatedTax')}</span>
           <span className="font-semibold text-on-surface">
             ${summary.taxAmount.toFixed(2)}
           </span>
@@ -118,10 +125,10 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
       <div className="flex items-baseline justify-between gap-2">
         <div>
           <span className="font-bold text-lg text-on-surface block">
-            Order Total
+            {t('orderTotal')}
           </span>
           <span className="text-xs text-olive-gray block mt-0.5">
-            Taxes and artisan handling included
+            {t('taxesIncluded')}
           </span>
         </div>
         <span className="font-bold text-2xl sm:text-3xl text-primary shrink-0 tracking-tight">
@@ -135,7 +142,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
           htmlFor="promo-code-input"
           className="block text-[11px] font-semibold text-olive-gray uppercase tracking-wider mb-2"
         >
-          Artisan Voucher / Promo Code
+          {t('voucherLabel')}
         </label>
 
         <form
@@ -152,11 +159,11 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
               id="promo-code-input"
               value={promoInput}
               onValueChange={onPromoInputChange}
-              placeholder="Enter voucher code"
+              placeholder={t('promoCode')}
               size="md"
               variant="bordered"
               color="primary"
-              aria-label="Artisan Voucher or Promo Code"
+              aria-label={t('voucherLabel')}
               isInvalid={Boolean(promoError)}
               errorMessage={promoError}
               classNames={{
@@ -171,7 +178,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
                   <button
                     type="button"
                     onClick={onRemovePromo}
-                    aria-label="Remove applied promo code"
+                    aria-label={t('removePromo')}
                     className="text-sage hover:text-error transition-colors p-0.5"
                   >
                     <X className="w-4 h-4" />
@@ -195,7 +202,7 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
               }
             }}
           >
-            {isApplied ? 'APPLIED' : 'APPLY'}
+            {isApplied ? t('applied') : t('applyPromo')}
           </Button>
         </form>
 
@@ -203,7 +210,11 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
         {appliedPromo && (
           <div className="mt-2.5 flex items-center gap-1.5 text-xs text-olive-gray">
             <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
-            <span>{appliedPromo.description}</span>
+            <span>
+              {appliedPromo.descriptionKey
+                ? t(appliedPromo.descriptionKey)
+                : appliedPromo.description}
+            </span>
           </div>
         )}
       </div>
@@ -219,19 +230,19 @@ export const CartOrderSummary: React.FC<CartOrderSummaryProps> = ({
           onClick={onCheckout}
           endContent={<ArrowRight className="w-5 h-5 ml-1" />}
         >
-          Proceed to Checkout
+          {t('checkout')}
         </Button>
 
         {/* Security badge */}
         <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-olive-gray">
           <Lock className="w-3.5 h-3.5 text-olive-gray shrink-0" aria-hidden="true" />
-          <span>Bank-grade 256–bit encrypted checkout</span>
+          <span>{t('secureCheckout')}</span>
         </div>
       </div>
 
       {/* Accepted payment methods */}
       <div className="mt-6 pt-5 border-t border-outline-variant/20 flex flex-wrap items-center gap-2 text-xs">
-        <span className="text-olive-gray font-medium mr-1">Accepted:</span>
+        <span className="text-olive-gray font-medium mr-1">{t('accepted')}</span>
         {['Apple Pay', 'Visa', 'Mastercard', 'Shop Pay'].map((brand) => (
           <span
             key={brand}

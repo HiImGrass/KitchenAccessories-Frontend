@@ -5,6 +5,7 @@ import { CartItem } from '@/types/cart';
 import Image from 'next/image';
 import { Button } from '@nextui-org/react';
 import { Minus, Plus, Trash2, AlertTriangle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface CartItemCardProps {
   item: CartItem;
@@ -19,6 +20,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
   onDecrease,
   onRemove,
 }) => {
+  const t = useTranslations('cart');
   const subtotal = (item.price * item.quantity).toFixed(2);
   const isLowStock = item.stockStatus === 'low_stock';
 
@@ -54,7 +56,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
 
             {/* Artisan & Material Meta */}
             <p className="mt-1 text-xs sm:text-sm text-olive-gray">
-              {item.details}
+              {item.detailsKey ? t(item.detailsKey) : item.details}
             </p>
 
             {/* Stock Status Badge & Note */}
@@ -62,17 +64,17 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
               {isLowStock ? (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-error-container/40 text-error border border-error/30">
                   <AlertTriangle className="w-3.5 h-3.5 text-error" aria-hidden="true" />
-                  {item.stockLabel}
+                  {item.stockLabelKey ? t(item.stockLabelKey) : item.stockLabel}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-container text-on-success-container border border-success/30">
                   <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                  {item.stockLabel}
+                  {item.stockLabelKey ? t(item.stockLabelKey) : item.stockLabel}
                 </span>
               )}
               {item.stockNote && (
                 <span className="text-olive-gray">
-                  · {item.stockNote}
+                  · {item.stockNoteKey ? t(item.stockNoteKey) : item.stockNote}
                 </span>
               )}
             </div>
@@ -86,7 +88,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                 isIconOnly
                 size="sm"
                 variant="light"
-                aria-label={`Decrease quantity of ${item.name}`}
+                aria-label={t('decreaseQuantity', { name: item.name })}
                 className="w-8 h-8 min-w-8 text-on-surface hover:bg-canvas-cream disabled:opacity-30 rounded-none"
                 disabled={item.quantity <= 1}
                 onClick={() => onDecrease(item.id)}
@@ -105,7 +107,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
                 isIconOnly
                 size="sm"
                 variant="light"
-                aria-label={`Increase quantity of ${item.name}`}
+                aria-label={t('increaseQuantity', { name: item.name })}
                 className="w-8 h-8 min-w-8 text-on-surface hover:bg-canvas-cream disabled:opacity-30 rounded-none"
                 disabled={item.maxQuantity ? item.quantity >= item.maxQuantity : false}
                 onClick={() => onIncrease(item.id)}
@@ -118,7 +120,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <span className="block text-[11px] font-medium text-olive-gray uppercase tracking-wider">
-                  Subtotal
+                  {t('subtotal')}
                 </span>
                 <span className="block font-bold text-base text-on-surface">
                   ${subtotal}
@@ -127,7 +129,7 @@ export const CartItemCard: React.FC<CartItemCardProps> = ({
 
               <button
                 type="button"
-                aria-label={`Remove ${item.name} from basket`}
+                aria-label={t('removeFromBasket', { name: item.name })}
                 onClick={() => onRemove(item.id)}
                 className="group/trash relative w-8 h-8 rounded-lg flex items-center justify-center text-olive-gray/70 hover:text-error hover:bg-error-container/30 active:scale-90 transition-all duration-200"
               >
