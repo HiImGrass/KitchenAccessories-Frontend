@@ -2,10 +2,14 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { LoginForm } from "./LoginForm";
+import { PageIntlProvider } from "@/components/providers/PageIntlProvider";
+import { getScopedMessages } from "@/lib/intlMessages";
 
 export default async function LoginPage() {
 	const t = await getTranslations("auth");
+	const messages = await getScopedMessages("auth");
 	return (
+		<PageIntlProvider messages={messages}>
 		<main className="flex min-h-screen items-center justify-center bg-surface px-gutter-mobile py-margin-mobile md:px-gutter md:py-margin">
 			<div className="w-full max-w-md rounded-xl bg-surface-container-lowest p-space-xl shadow-sm">
 				{/* Brand */}
@@ -115,5 +119,6 @@ export default async function LoginPage() {
 				</footer>
 			</div>
 		</main>
+		</PageIntlProvider>
 	);
 }

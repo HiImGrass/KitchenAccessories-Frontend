@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import AboutView from "@/components/AboutComponent/AboutView";
+import { PageIntlProvider } from "@/components/providers/PageIntlProvider";
+import { getScopedMessages } from "@/lib/intlMessages";
 
 export const metadata: Metadata = {
   title: "About Us | Ladle & Co.",
@@ -7,10 +9,13 @@ export const metadata: Metadata = {
     "Discover the story, materials, artisan guilds, and mindful sourcing philosophy behind Ladle & Co.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const messages = await getScopedMessages("about");
   return (
-    <div className="flex flex-col w-full bg-canvas-cream">
-      <AboutView />
-    </div>
+    <PageIntlProvider messages={messages}>
+      <div className="flex flex-col w-full bg-canvas-cream">
+        <AboutView />
+      </div>
+    </PageIntlProvider>
   );
 }

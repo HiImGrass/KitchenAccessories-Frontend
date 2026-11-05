@@ -4,10 +4,11 @@ import { Providers } from "@/components/providers/Providers";
 import { AppLayoutWrapper } from "@/components/layout/AppLayoutWrapper";
 import { Toaster } from "sonner";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { getScopedMessages } from "@/lib/intlMessages";
 
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
@@ -49,11 +50,11 @@ export default async function RootLayout({ children, params }: Props) {
 
   setRequestLocale(locale);
 
-  const messages = await getMessages();
+  const messages = await getScopedMessages();
 
   return (
     <html
-      lang="en"
+      lang={locale}
       suppressHydrationWarning
       className={`${epilogue.variable} ${plusJakarta.variable}`}>
       <head>
