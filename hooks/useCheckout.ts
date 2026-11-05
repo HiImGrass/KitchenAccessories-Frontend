@@ -1,5 +1,8 @@
 'use client';
 
+export { useCart, CartProvider } from '@/context/CartContext';
+export type { UseCartReturn } from '@/context/CartContext';
+
 import { useState, useMemo, useCallback } from 'react';
 import {
   CustomerContact,
@@ -120,14 +123,12 @@ export function useCheckout(): UseCheckoutReturn {
     if (cartItems.length > 0) {
       return summary.discountAmount;
     }
-    // Default mockup: 10% discount ($12.80)
     return Math.round(subtotal * 0.1 * 100) / 100;
   }, [cartItems.length, summary.discountAmount, subtotal]);
 
   const shippingCost = selectedShippingOption.price;
 
   const taxAmount = useMemo(() => {
-    // Standard estimated tax around 6.5% - 8%
     const rate = 0.0664;
     return Math.round(subtotal * rate * 100) / 100;
   }, [subtotal]);
@@ -200,7 +201,6 @@ export function useCheckout(): UseCheckoutReturn {
     setIsSubmitting(true);
 
     try {
-      // Simulate secure processing latency
       await new Promise((resolve) => setTimeout(resolve, 1400));
 
       const randomNum = Math.floor(10000 + Math.random() * 90000);
@@ -223,6 +223,27 @@ export function useCheckout(): UseCheckoutReturn {
         estimatedDelivery: formattedDelivery,
       };
 
+      // Lưu đơn hàng vào localStorage kèm đầy đủ thông tin ảnh sản phẩm
+      const existingOrdersRaw = localStorage.getItem('ladle-user-orders');
+      const existingOrders = existingOrdersRaw ? JSON.parse(existingOrdersRaw) : [];
+
+      const newOrderForHistory = {
+        id: generatedOrderId,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        status: 'Processing' as const,
+        total: finalTotal,
+        itemsCount: orderItems.reduce((sum, i) => sum + i.quantity, 0),
+        items: orderItems.map((item: any) => ({
+          id: String(item.id),
+          name: item.title || item.name || 'Sản phẩm',
+          quantity: item.quantity,
+          price: item.price,
+          image: item.image || item.thumbnail || item.img || '', // Lấy chính xác đường dẫn ảnh sản phẩm
+        })),
+      };
+
+      localStorage.setItem('ladle-user-orders', JSON.stringify([newOrderForHistory, ...existingOrders]));
+
       clearCart();
       setPlacedOrder(orderDetails);
       setIsSuccessModalOpen(true);
@@ -232,7 +253,7 @@ export function useCheckout(): UseCheckoutReturn {
     } finally {
       setIsSubmitting(false);
     }
-  }, [validateForm, finalTotal, contact.email, shippingMethod, selectedShippingOption.title, clearCart]);
+  }, [validateForm, finalTotal, contact.email, shippingMethod, selectedShippingOption.title, clearCart, orderItems]);
 
   const closeSuccessModal = useCallback(() => {
     setIsSuccessModalOpen(false);

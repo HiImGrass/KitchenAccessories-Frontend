@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import React, { FormEvent, useEffect, useState } from "react";
-import { ProfileBreadcrumb } from "@/components/profile/ProfileBreadcrumb";
-import { ProfileHeader } from "@/components/profile/ProfileHeader";
-import { ProfileInfoCard } from "@/components/profile/ProfileInfoCard";
-import { ProfileActionsCard } from "@/components/profile/ProfileActionsCard";
-import { ProfileCartCard } from "@/components/profile/ProfileCartCard";
-import { fetchProfile, getStoredUser } from "@/lib/profileUser";
-import type { UserProfile } from "@/types/profile";
-import { updateMockUser } from "@/lib/dummyjson";
-import { toast } from "sonner";
+import React, { FormEvent, useEffect, useState } from 'react';
+import { ProfileBreadcrumb } from '@/components/profile/ProfileBreadcrumb';
+import { ProfileHeader } from '@/components/profile/ProfileHeader';
+import { ProfileInfoCard } from '@/components/profile/ProfileInfoCard';
+import { ProfileActionsCard } from '@/components/profile/ProfileActionsCard';
+import { ProfileOrdersList } from '@/components/profile/ProfileOrdersList';
+import { fetchProfile, getStoredUser } from '@/lib/profileUser';
+import type { UserProfile } from '@/types/profile';
+import { updateMockUser } from '@/lib/dummyjson';
+import { toast } from 'sonner';
 
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export const ProfileView: React.FC = () => {
-  const t = useTranslations("profile");
+  const t = useTranslations('profile');
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [activeDialog, setActiveDialog] = useState<
-    "profile" | "password" | null
+    'profile' | 'password' | null
   >(null);
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
@@ -28,7 +28,7 @@ export const ProfileView: React.FC = () => {
   useEffect(() => {
     const stored = getStoredUser();
     if (!stored) {
-      router.replace("/login");
+      router.replace('/login');
       return;
     }
 
@@ -46,21 +46,21 @@ export const ProfileView: React.FC = () => {
     };
   }, [router]);
 
-  const handleEditProfile = () => setActiveDialog("profile");
-  const handleChangePassword = () => setActiveDialog("password");
+  const handleEditProfile = () => setActiveDialog('profile');
+  const handleChangePassword = () => setActiveDialog('password');
 
   const handleProfileSave = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!user) return;
     const form = new FormData(event.currentTarget);
-    const name = String(form.get("name") || "").trim();
+    const name = String(form.get('name') || '').trim();
     const [firstName, ...lastNameParts] = name.split(/\s+/);
-    const email = String(form.get("email") || "").trim();
-    const phone = String(form.get("phone") || "").trim();
-    const shippingAddress = String(form.get("shippingAddress") || "").trim();
+    const email = String(form.get('email') || '').trim();
+    const phone = String(form.get('phone') || '').trim();
+    const shippingAddress = String(form.get('shippingAddress') || '').trim();
 
     if (!firstName || !email || !phone || !shippingAddress) {
-      toast.error(t("completeProfileFields"));
+      toast.error(t('completeProfileFields'));
       return;
     }
 
@@ -68,7 +68,7 @@ export const ProfileView: React.FC = () => {
     try {
       await updateMockUser(user.id, {
         firstName,
-        lastName: lastNameParts.join(" "),
+        lastName: lastNameParts.join(' '),
         email,
         phone,
         address: { address: shippingAddress },
@@ -77,12 +77,12 @@ export const ProfileView: React.FC = () => {
         current ? { ...current, name, email, phone, shippingAddress } : current,
       );
       setActiveDialog(null);
-      toast.success(t("profileUpdated"));
+      toast.success(t('profileUpdated'));
     } catch (error) {
       toast.error(
         error instanceof Error
           ? error.message
-          : t("profileUpdateFailed"),
+          : t('profileUpdateFailed'),
       );
     } finally {
       setIsSaving(false);
@@ -93,15 +93,15 @@ export const ProfileView: React.FC = () => {
     event.preventDefault();
     if (!user) return;
     const form = new FormData(event.currentTarget);
-    const password = String(form.get("password") || "");
-    const confirmPassword = String(form.get("confirmPassword") || "");
+    const password = String(form.get('password') || '');
+    const confirmPassword = String(form.get('confirmPassword') || '');
 
     if (password.length < 8) {
-      toast.error(t("passwordMinimum"));
+      toast.error(t('passwordMinimum'));
       return;
     }
     if (password !== confirmPassword) {
-      toast.error(t("passwordMismatch"));
+      toast.error(t('passwordMismatch'));
       return;
     }
 
@@ -109,12 +109,12 @@ export const ProfileView: React.FC = () => {
     try {
       await updateMockUser(user.id, { password });
       setActiveDialog(null);
-      toast.success(t("passwordUpdated"));
+      toast.success(t('passwordUpdated'));
     } catch (error) {
       toast.error(
         error instanceof Error
           ? error.message
-          : t("passwordUpdateFailed"),
+          : t('passwordUpdateFailed'),
       );
     } finally {
       setIsSaving(false);
@@ -125,7 +125,8 @@ export const ProfileView: React.FC = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('userProfile');
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('ladle-cart-items'); // Đã thêm xóa giỏ hàng ở đây
+    localStorage.removeItem('ladle-cart-items'); // Dọn sạch giỏ hàng khi đăng xuất
+    localStorage.removeItem('ladle-user-orders');
     console.log('Sign out clicked, Removed Tokens & Cart');
     window.location.href = '/login';
   };
@@ -161,64 +162,64 @@ export const ProfileView: React.FC = () => {
 
         {/* Right Column: Order History (8 cols) */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Giỏ hàng: lấy từ CartContext nên thêm sản phẩm ở đâu cũng cập nhật ngay */}
-          <ProfileCartCard />
+          {/* Thay thế ProfileCartCard bằng danh sách đơn hàng đã thanh toán */}
+          <ProfileOrdersList />
         </div>
       </div>
 
-      {activeDialog === "profile" && (
+      {activeDialog === 'profile' && (
         <ProfileDialog
-          title={t("editProfile")}
+          title={t('editProfile')}
           onClose={() => setActiveDialog(null)}>
           <form className="space-y-4" onSubmit={handleProfileSave}>
             <ProfileField
-              label={t("fullName")}
+              label={t('fullName')}
               name="name"
               defaultValue={user.name}
             />
             <ProfileField
-              label={t("emailAddress")}
+              label={t('emailAddress')}
               name="email"
               type="email"
               defaultValue={user.email}
             />
             <ProfileField
-              label={t("phoneNumber")}
+              label={t('phoneNumber')}
               name="phone"
               type="tel"
               defaultValue={user.phone}
             />
             <ProfileField
-              label={t("shippingAddressField")}
+              label={t('shippingAddressField')}
               name="shippingAddress"
               defaultValue={user.shippingAddress}
             />
-            <DialogActions isSaving={isSaving} label={t("saveProfile")} savingLabel={t("saving")} />
+            <DialogActions isSaving={isSaving} label={t('saveProfile')} savingLabel={t('saving')} />
           </form>
         </ProfileDialog>
       )}
 
-      {activeDialog === "password" && (
+      {activeDialog === 'password' && (
         <ProfileDialog
-          title={t("changePassword")}
+          title={t('changePassword')}
           onClose={() => setActiveDialog(null)}>
           <form className="space-y-4" onSubmit={handlePasswordSave}>
             <p className="text-sm text-olive-gray">
-              {t("passwordDialogDescription")}
+              {t('passwordDialogDescription')}
             </p>
             <ProfileField
-              label={t("newPassword")}
+              label={t('newPassword')}
               name="password"
               type="password"
               autoComplete="new-password"
             />
             <ProfileField
-              label={t("confirmNewPassword")}
+              label={t('confirmNewPassword')}
               name="confirmPassword"
               type="password"
               autoComplete="new-password"
             />
-            <DialogActions isSaving={isSaving} label={t("updatePassword")} savingLabel={t("saving")} />
+            <DialogActions isSaving={isSaving} label={t('updatePassword')} savingLabel={t('saving')} />
           </form>
         </ProfileDialog>
       )}
@@ -235,7 +236,7 @@ function ProfileDialog({
   children: React.ReactNode;
   onClose: () => void;
 }) {
-  const t = useTranslations("profile");
+  const t = useTranslations('profile');
 
   return (
     <div
@@ -254,7 +255,7 @@ function ProfileDialog({
             type="button"
             onClick={onClose}
             className="rounded-full p-2 text-olive-gray hover:bg-canvas-cream"
-            aria-label={t("closeDialog")}>
+            aria-label={t('closeDialog')}>
             ×
           </button>
         </div>
@@ -267,7 +268,7 @@ function ProfileDialog({
 function ProfileField({
   label,
   name,
-  type = "text",
+  type = 'text',
   defaultValue,
   autoComplete,
 }: {
