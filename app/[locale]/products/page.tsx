@@ -1,5 +1,7 @@
 import { fetchCatalogProducts } from '@/lib/dummyjson';
 import { ProductCatalog } from '@/components/CatalogComponent/ProductCatalog';
+import { PageIntlProvider } from '@/components/providers/PageIntlProvider';
+import { getScopedMessages } from '@/lib/intlMessages';
 
 interface PageProps {
   searchParams: Promise<{
@@ -11,6 +13,7 @@ interface PageProps {
 }
 
 export default async function CatalogPage({ searchParams }: PageProps) {
+  const messages = await getScopedMessages(['catalog', 'product']);
   const resolvedParams = await searchParams;
 
   const q = resolvedParams.q || '';
@@ -21,15 +24,17 @@ export default async function CatalogPage({ searchParams }: PageProps) {
   const data = await fetchCatalogProducts({ q, sort, skip, limit });
 
   return (
-    <main className="w-full pt-20 bg-canvas-cream min-h-[calc(100vh-20rem)]">
-      <ProductCatalog
-        products={data.products}
-        total={data.total}
-        skip={data.skip}
-        limit={data.limit}
-        currentQuery={q}
-        currentSort={sort}
-      />
-    </main>
+    <PageIntlProvider messages={messages}>
+      <main className="w-full pt-20 bg-canvas-cream min-h-[calc(100vh-20rem)]">
+        <ProductCatalog
+          products={data.products}
+          total={data.total}
+          skip={data.skip}
+          limit={data.limit}
+          currentQuery={q}
+          currentSort={sort}
+        />
+      </main>
+    </PageIntlProvider>
   );
 }

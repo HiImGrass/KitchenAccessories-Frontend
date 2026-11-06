@@ -3,6 +3,7 @@
 import React from 'react';
 import { CustomerContact, CheckoutErrors } from '@/types/checkout';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 interface CheckoutCustomerContactProps {
   contact: CustomerContact;
@@ -15,6 +16,7 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
   errors,
   onFieldChange,
 }) => {
+  const t = useTranslations('checkout');
   const isEmailValid =
     contact.email.length > 3 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email);
 
@@ -27,17 +29,17 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
             1
           </span>
           <h3 className="font-headline-sm text-lg font-bold text-on-surface">
-            Customer Contact
+            {t('customerContact')}
           </h3>
         </div>
         <div className="text-xs text-olive-gray">
-          Have an account?{' '}
+          {t('haveAccount')}{' '}
           <button
             type="button"
             onClick={() => toast.info('Artisan Member Portal login is coming soon!')}
             className="font-semibold text-primary hover:underline ml-1 cursor-pointer"
           >
-            Sign In
+            {t('signIn')}
           </button>
         </div>
       </div>
@@ -50,7 +52,7 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
               htmlFor="checkout-email"
               className="text-xs font-semibold text-on-surface"
             >
-              Email Address <span className="text-terracotta">*</span>
+              {t('email')} <span className="text-terracotta">*</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -81,8 +83,7 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
             <p className="text-[11px] text-error mt-1.5 font-medium">{errors.email}</p>
           ) : (
             <p className="text-[11px] text-olive-gray mt-1.5">
-              Order confirmation, tracking telemetry, and digital craftsmanship receipts will be
-              sent here.
+              {t('emailDescription')}
             </p>
           )}
         </div>
@@ -94,7 +95,7 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
               htmlFor="checkout-phone"
               className="text-xs font-semibold text-on-surface"
             >
-              Phone Number (for Courier updates) <span className="text-terracotta">*</span>
+              {t('phone')} <span className="text-terracotta">*</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -150,8 +151,7 @@ export const CheckoutCustomerContact: React.FC<CheckoutCustomerContactProps> = (
               )}
             </div>
             <span className="text-xs text-olive-gray leading-relaxed">
-              Keep me updated on exclusive seasonal kiln releases, masterclasses, and care
-              instructions from our Tuscany &amp; Kyoto workshop partners.
+              {t('newsletter')}
             </span>
           </label>
         </div>

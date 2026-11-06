@@ -4,6 +4,7 @@ import React from 'react';
 import { ShippingAddress, ShippingMethodId, CheckoutErrors } from '@/types/checkout';
 import { US_STATES, SHIPPING_METHODS } from '@/lib/checkoutData';
 import { ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface CheckoutShippingAddressProps {
   shipping: ShippingAddress;
@@ -20,6 +21,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
   onShippingFieldChange,
   onShippingMethodChange,
 }) => {
+  const t = useTranslations('checkout');
   return (
     <section className="bg-surface-white border border-warm-sand/60 rounded-xl p-6 sm:p-8 shadow-xs">
       {/* Header */}
@@ -29,7 +31,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
             2
           </span>
           <h3 className="font-headline-sm text-lg font-bold text-on-surface">
-            Shipping Address &amp; Delivery
+            {t('shippingAddressDelivery')}
           </h3>
         </div>
       </div>
@@ -43,7 +45,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                 htmlFor="checkout-first-name"
                 className="text-xs font-semibold text-on-surface"
               >
-                First Name <span className="text-terracotta">*</span>
+                {t('firstName')} <span className="text-terracotta">*</span>
               </label>
             </div>
             <div className="relative w-full">
@@ -70,7 +72,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                 htmlFor="checkout-last-name"
                 className="text-xs font-semibold text-on-surface"
               >
-                Last Name <span className="text-terracotta">*</span>
+                {t('lastName')} <span className="text-terracotta">*</span>
               </label>
             </div>
             <div className="relative w-full">
@@ -99,7 +101,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
               htmlFor="checkout-address"
               className="text-xs font-semibold text-on-surface"
             >
-              Street Address <span className="text-terracotta">*</span>
+              {t('streetAddress')} <span className="text-terracotta">*</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -108,7 +110,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
               type="text"
               value={shipping.address}
               onChange={(e) => onShippingFieldChange('address', e.target.value)}
-              placeholder="Street address, P.O. box, company name, c/o"
+              placeholder={t('addressPlaceholder')}
               className={`w-full h-11 bg-canvas-cream/50 border ${
                 errors.address
                   ? 'border-error focus:border-error'
@@ -128,8 +130,8 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
               htmlFor="checkout-apt"
               className="text-xs font-semibold text-on-surface"
             >
-              Apartment, Suite, Unit, Studio{' '}
-              <span className="text-olive-gray font-normal">(Optional)</span>
+              {t('apartmentLabel')}{' '}
+              <span className="text-olive-gray font-normal">({t('optional')})</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -138,7 +140,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
               type="text"
               value={shipping.apartment}
               onChange={(e) => onShippingFieldChange('apartment', e.target.value)}
-              placeholder="Apt, Suite, Building floor, etc."
+              placeholder={t('apartmentPlaceholder')}
               className="w-full h-11 bg-canvas-cream/50 border border-warm-sand/80 focus:border-primary rounded-lg px-3.5 text-sm text-on-surface focus:outline-none focus:ring-0 transition-colors"
             />
           </div>
@@ -152,7 +154,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                 htmlFor="checkout-city"
                 className="text-xs font-semibold text-on-surface"
               >
-                City <span className="text-terracotta">*</span>
+                {t('city')} <span className="text-terracotta">*</span>
               </label>
             </div>
             <div className="relative w-full">
@@ -179,7 +181,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                 htmlFor="checkout-state"
                 className="text-xs font-semibold text-on-surface"
               >
-                State / Province <span className="text-terracotta">*</span>
+                {t('stateProvince')} <span className="text-terracotta">*</span>
               </label>
             </div>
             <div className="relative w-full">
@@ -205,7 +207,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                 htmlFor="checkout-postal-code"
                 className="text-xs font-semibold text-on-surface"
               >
-                Postal Code <span className="text-terracotta">*</span>
+                {t('postalCode')} <span className="text-terracotta">*</span>
               </label>
             </div>
             <div className="relative w-full">
@@ -234,8 +236,8 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
               htmlFor="checkout-instructions"
               className="text-xs font-semibold text-on-surface"
             >
-              Delivery Instructions / Gate Code{' '}
-              <span className="text-olive-gray font-normal">(Optional)</span>
+              {t('deliveryInstructions')}{' '}
+              <span className="text-olive-gray font-normal">({t('optional')})</span>
             </label>
           </div>
           <div className="relative w-full">
@@ -244,7 +246,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
               rows={2}
               value={shipping.instructions}
               onChange={(e) => onShippingFieldChange('instructions', e.target.value)}
-              placeholder="Gate code #7290. Please place inside the covered front porch."
+              placeholder={t('deliveryNotesPlaceholder')}
               className="w-full min-h-[80px] bg-canvas-cream/50 border border-warm-sand/80 focus:border-primary rounded-lg px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:ring-0 transition-colors resize-y"
             />
           </div>
@@ -253,7 +255,7 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
         {/* Shipping Method Selection */}
         <div className="pt-4 border-t border-warm-sand/40">
           <span className="block text-xs font-bold uppercase tracking-wider text-olive-gray mb-3">
-            Select Shipping Method
+            {t('selectShippingMethod')}
           </span>
           <div className="space-y-3">
             {SHIPPING_METHODS.map((method) => {
@@ -289,7 +291,9 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-on-surface">{method.title}</span>
+                        <span className="text-sm font-bold text-on-surface">
+                          {t(`shipping.${method.id}.title`)}
+                        </span>
                         <span
                           className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide ${
                             method.id === 'standard'
@@ -297,14 +301,16 @@ export const CheckoutShippingAddress: React.FC<CheckoutShippingAddressProps> = (
                               : 'bg-warm-sand/40 text-tertiary'
                           }`}
                         >
-                          {method.badge}
+                          {t(`shipping.${method.id}.badge`)}
                         </span>
                       </div>
-                      <p className="text-xs text-olive-gray mt-0.5">{method.description}</p>
+                      <p className="text-xs text-olive-gray mt-0.5">
+                        {t(`shipping.${method.id}.description`)}
+                      </p>
                     </div>
                   </div>
                   <span className="font-price-md text-sm font-bold text-on-surface">
-                    {method.price === 0 ? 'FREE' : `$${method.price.toFixed(2)}`}
+                    {method.price === 0 ? t('free') : `$${method.price.toFixed(2)}`}
                   </span>
                 </label>
               );

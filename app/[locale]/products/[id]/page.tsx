@@ -1,12 +1,14 @@
 // app/products/[id]/page.tsx
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import ProductGallery from "@/components/DetailsComponent/ProductGallery";
 import ProductActions from "@/components/DetailsComponent/ProductActions";
 import ProductCard from "@/components/products/ProductCard";
 import { getProductById, getRelatedProducts } from "@/lib/dummyjson";
 import { getTranslations } from "next-intl/server";
+import { PageIntlProvider } from "@/components/providers/PageIntlProvider";
+import { getScopedMessages } from "@/lib/intlMessages";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -41,6 +43,7 @@ export async function generateMetadata({
 
 export default async function ProductInfoPage({ params }: ProductPageProps) {
   const t = await getTranslations("product");
+  const messages = await getScopedMessages("product");
   // Giải mã async params theo chuẩn Next.js 15/16
   const { id } = await params;
   const product = await getProductById(id);
@@ -56,7 +59,8 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
     : product.price.toFixed(2);
 
   return (
-    <main className="w-full pt-20 bg-canvas-cream min-h-[calc(100vh-20rem)] pb-20">
+    <PageIntlProvider messages={messages}>
+      <main className="w-full pt-20 bg-canvas-cream min-h-[calc(100vh-20rem)] pb-20">
       {/* Breadcrumb Navigation */}
       <div className="w-full max-w-7xl mx-auto px-4 py-4">
         <nav className="flex items-center gap-2 text-sm text-on-surface-variant">
@@ -148,6 +152,7 @@ export default async function ProductInfoPage({ params }: ProductPageProps) {
           ))}
         </div>
       </section>
-    </main>
+      </main>
+    </PageIntlProvider>
   );
 }

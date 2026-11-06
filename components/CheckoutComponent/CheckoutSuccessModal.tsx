@@ -11,6 +11,7 @@ import {
 } from '@nextui-org/react';
 import { PlacedOrderDetails } from '@/types/checkout';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 interface CheckoutSuccessModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const CheckoutSuccessModal: React.FC<CheckoutSuccessModalProps> = ({
   onClose,
   orderDetails,
 }) => {
+  const t = useTranslations('checkout');
   if (!orderDetails) return null;
 
   return (
@@ -51,45 +53,45 @@ export const CheckoutSuccessModal: React.FC<CheckoutSuccessModalProps> = ({
             </span>
           </div>
           <h2 className="font-headline-sm text-2xl font-bold text-on-surface">
-            Order Confirmed &amp; In Crafting
+            {t('orderConfirmed')}
           </h2>
           <p className="text-xs text-olive-gray mt-1">
-            Thank you for supporting traditional guild craftsmanship.
+            {t('orderConfirmedDescription')}
           </p>
         </ModalHeader>
 
         <ModalBody>
           <div className="bg-canvas-cream/60 border border-warm-sand/60 rounded-xl p-4.5 space-y-3">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-olive-gray">Order Reference Number:</span>
+              <span className="text-olive-gray">{t('orderReference')}</span>
               <span className="font-mono font-bold text-primary tracking-wider">
                 {orderDetails.orderId}
               </span>
             </div>
 
             <div className="flex items-center justify-between text-xs">
-              <span className="text-olive-gray">Recipient Email:</span>
+              <span className="text-olive-gray">{t('recipientEmail')}</span>
               <span className="font-medium text-on-surface truncate max-w-[200px]">
                 {orderDetails.customerEmail}
               </span>
             </div>
 
             <div className="flex items-center justify-between text-xs">
-              <span className="text-olive-gray">Shipping Method:</span>
+              <span className="text-olive-gray">{t('shippingMethod')}</span>
               <span className="font-medium text-on-surface">
                 {orderDetails.shippingMethodName}
               </span>
             </div>
 
             <div className="flex items-center justify-between text-xs">
-              <span className="text-olive-gray">Estimated Artisan Delivery:</span>
+              <span className="text-olive-gray">{t('estimatedDelivery')}</span>
               <span className="font-bold text-secondary">
                 {orderDetails.estimatedDelivery}
               </span>
             </div>
 
             <div className="pt-2 border-t border-warm-sand/40 flex items-center justify-between">
-              <span className="text-xs font-bold text-on-surface">Total Paid:</span>
+              <span className="text-xs font-bold text-on-surface">{t('totalPaid')}</span>
               <span className="font-price-lg text-lg font-bold text-terracotta">
                 ${orderDetails.total.toFixed(2)}
               </span>
@@ -101,11 +103,11 @@ export const CheckoutSuccessModal: React.FC<CheckoutSuccessModalProps> = ({
               mark_email_read
             </span>
             <p className="text-[11px] text-olive-gray leading-relaxed">
-              We have dispatched your digital receipt and workshop tracking link to{' '}
+              {t('receiptMessage')}{' '}
               <strong className="text-on-surface font-semibold">
                 {orderDetails.customerEmail}
               </strong>
-              . You will receive real-time notifications once your heirloom pieces are hand-packed.
+              {t('receiptMessageEnd')}
             </p>
           </div>
         </ModalBody>
@@ -118,7 +120,7 @@ export const CheckoutSuccessModal: React.FC<CheckoutSuccessModalProps> = ({
             className="bg-primary hover:bg-primary-container text-on-primary font-semibold text-xs px-5 rounded-xl shadow-xs"
             onClick={onClose}
           >
-            Explore More Culinary Pieces
+            {t('exploreMorePieces')}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -14,8 +14,10 @@ import { CartEmptyState } from './CartEmptyState';
 import { CartSkeleton } from './CartSkeleton';
 import { Button } from '@nextui-org/react';
 import { RefreshCw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export const CartView: React.FC = () => {
+  const t = useTranslations('cart');
   const {
     items,
     isLoading,
@@ -57,7 +59,7 @@ export const CartView: React.FC = () => {
             className="bg-primary text-on-primary"
             startContent={<RefreshCw className="w-3.5 h-3.5" />}
           >
-            Retry Fetching DummyJSON
+            {t('retry')}
           </Button>
         </div>
       ) : isEmpty ? (

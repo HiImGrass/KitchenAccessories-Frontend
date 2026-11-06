@@ -2,8 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export const CheckoutHeader: React.FC = () => {
+  const t = useTranslations('checkout');
   return (
     <header className="border-b border-warm-sand/40 bg-surface-white/80 backdrop-blur-md sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -13,7 +15,7 @@ export const CheckoutHeader: React.FC = () => {
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-olive-gray hover:text-primary transition-colors py-2 pr-3 border-r border-warm-sand/40"
           >
             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            <span>Return to Cart</span>
+            <span>{t('returnToCart')}</span>
           </Link>
           <Link href="/" className="flex items-center gap-3 group">
             <div className="size-6 text-primary group-hover:scale-105 transition-transform">
@@ -35,7 +37,7 @@ export const CheckoutHeader: React.FC = () => {
                 Ladle &amp; Co.
               </h1>
               <p className="text-[11px] font-medium text-olive-gray tracking-wide">
-                Artisan Guild Standard
+                {t('artisanGuildStandard')}
               </p>
             </div>
           </Link>
@@ -43,15 +45,15 @@ export const CheckoutHeader: React.FC = () => {
         <div className="flex items-center gap-6">
           <div className="hidden sm:flex items-center gap-2 text-xs text-olive-gray font-medium bg-canvas-cream border border-warm-sand/50 px-3 py-1.5 rounded-full">
             <span className="material-symbols-outlined text-terracotta text-[18px]">lock</span>
-            <span>256-Bit SSL Encrypted</span>
+            <span>{t('sslEncrypted')}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-olive-gray">Need help?</span>
+            <span className="text-xs text-olive-gray">{t('needHelp')}</span>
             <Link
               href="/about"
               className="text-xs font-semibold text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary"
             >
-              Support
+              {t('support')}
             </Link>
           </div>
         </div>

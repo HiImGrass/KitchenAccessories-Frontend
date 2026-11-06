@@ -16,6 +16,8 @@ export const CartGiftWrapAddon: React.FC<CartGiftWrapAddonProps> = ({
   onToggle,
 }) => {
   const t = useTranslations('cart');
+  const title = option.titleKey ? t(option.titleKey) : option.title;
+  const description = option.descriptionKey ? t(option.descriptionKey) : option.description;
   return (
     <section
       aria-label={t('giftWrappingOption')}
@@ -26,7 +28,7 @@ export const CartGiftWrapAddon: React.FC<CartGiftWrapAddonProps> = ({
           isSelected={option.enabled}
           onValueChange={onToggle}
           color="primary"
-          aria-label={option.title}
+          aria-label={title}
           classNames={{
             base: 'p-0 m-0 mt-0.5',
             wrapper: 'rounded-md border-outline-variant/60 after:bg-primary',
@@ -38,7 +40,7 @@ export const CartGiftWrapAddon: React.FC<CartGiftWrapAddonProps> = ({
             <div className="flex items-center gap-2">
               <Gift className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
               <h3 className="font-semibold text-sm sm:text-base text-on-surface">
-                {option.title}
+                {title}
               </h3>
             </div>
             <span className="font-bold text-sm sm:text-base text-on-surface shrink-0">
@@ -47,7 +49,7 @@ export const CartGiftWrapAddon: React.FC<CartGiftWrapAddonProps> = ({
           </div>
 
           <p className="mt-1 text-xs sm:text-sm text-olive-gray leading-relaxed">
-            {option.description}
+            {description}
           </p>
         </div>
       </div>

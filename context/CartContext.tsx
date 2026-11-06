@@ -19,6 +19,7 @@ import {
 } from "@/lib/cartData";
 import { CartDataSource } from "@/lib/dummyjson";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export interface UseCartReturn {
   // State
@@ -69,6 +70,7 @@ export function CartProvider({
   children,
   initialItems = [],
 }: CartProviderProps) {
+  const t = useTranslations("cart");
   const [items, setItems] = useState<CartItem[]>(initialItems);
   // Chỉ lưu vào localStorage sau khi đã đọc xong, tránh ghi đè giỏ cũ bằng mảng rỗng
   const [hasHydrated, setHasHydrated] = useState(false);
@@ -90,7 +92,22 @@ export function CartProvider({
       const raw = localStorage.getItem(CART_STORAGE_KEY);
       if (raw) {
         const saved = JSON.parse(raw);
-        if (Array.isArray(saved)) setItems(saved as CartItem[]);
+        if (Array.isArray(saved)) {
+          setItems(
+            (saved as CartItem[]).map((item) => ({
+              ...item,
+              detailsKey:
+                item.detailsKey ||
+                (item.details === "Kitchen Accessory" ? "kitchenAccessory" : undefined),
+              stockLabelKey:
+                item.stockLabelKey ||
+                (item.stockLabel === "In Stock" ? "inStock" : undefined),
+              stockNoteKey:
+                item.stockNoteKey ||
+                (item.stockNote === "Ready for dispatch" ? "readyForDispatch" : undefined),
+            })),
+          );
+        }
       }
     } catch {
       // dữ liệu hỏng hoặc bị chặn storage -> bỏ qua, dùng giỏ rỗng
@@ -142,17 +159,20 @@ export function CartProvider({
             quantity: quantity,
             image: product.thumbnail || product.image || "/placeholder.jpg",
             details: "Kitchen Accessory",
+            detailsKey: "kitchenAccessory",
             stockStatus: "in_stock",
             stockLabel: "In Stock",
+            stockLabelKey: "inStock",
             stockNote: "Ready for dispatch",
+            stockNoteKey: "readyForDispatch",
             maxQuantity: 20,
           },
         ];
       });
 
-      toast.success(`Added ${quantity} × "${product.title}" to your basket.`);
+      toast.success(t("itemAdded", { quantity, name: product.title }));
     },
-    [],
+    [t],
   );
 
   const summary = useMemo<CartSummary>(() => {
@@ -210,7 +230,7 @@ export function CartProvider({
         if (item.id === id) {
           const max = item.maxQuantity ?? 99;
           if (item.quantity >= max) {
-            toast.warning(`Maximum stock (${max}) reached for this item.`);
+            toast.warning(t("maximumStock", { max }));
             return item;
           }
           return { ...item, quantity: item.quantity + 1 };
@@ -218,7 +238,7 @@ export function CartProvider({
         return item;
       }),
     );
-  }, []);
+  }, [t]);
 
   const decreaseQuantity = useCallback((id: string) => {
     setItems((prev) =>
@@ -252,11 +272,11 @@ export function CartProvider({
     setItems((prev) => {
       const target = prev.find((item) => item.id === id);
       if (target) {
-        toast.info(`Removed "${target.name}" from your basket.`);
+        toast.info(t("itemRemoved", { name: target.name }));
       }
       return prev.filter((item) => item.id !== id);
     });
-  }, []);
+  }, [t]);
 
   const clearCart = useCallback(() => {
     setItems([]);
@@ -266,19 +286,19 @@ export function CartProvider({
     setGiftWrap((prev) => {
       const nextState = !prev.enabled;
       if (nextState) {
-        toast.success("Artisan gift wrapping added (+ $5.00)");
+        toast.success(t("giftWrapAdded"));
       } else {
-        toast.info("Artisan gift wrapping removed");
+        toast.info(t("giftWrapRemoved"));
       }
       return { ...prev, enabled: nextState };
     });
-  }, []);
+  }, [t]);
 
   const applyPromo = useCallback(
     (codeToApply?: string) => {
       const rawCode = (codeToApply ?? promoInput).trim().toUpperCase();
       if (!rawCode) {
-        setPromoError("Please enter a valid voucher code.");
+        setPromoError(t("invalidVoucher"));
         return;
       }
 
@@ -287,27 +307,32 @@ export function CartProvider({
         setAppliedPromo(foundPromo);
         setPromoError(null);
         setPromoInput(foundPromo.code);
-        toast.success(`Coupon "${foundPromo.code}" applied successfully!`);
+        toast.success(t("promoAppliedToast", { code: foundPromo.code }));
       } else {
-        setPromoError(`Code "${rawCode}" is invalid or expired.`);
-        toast.error(`Code "${rawCode}" is invalid or expired.`);
+        const message = t("invalidOrExpiredVoucher", { code: rawCode });
+        setPromoError(message);
+        toast.error(message);
       }
     },
-    [promoInput],
+    [promoInput, t],
   );
 
   const removePromo = useCallback(() => {
     setAppliedPromo(null);
     setPromoError(null);
     setPromoInput("");
-    toast.info("Voucher code removed.");
-  }, []);
+    toast.info(t("voucherRemoved"));
+  }, [t]);
 
   const handleCheckout = useCallback(() => {
-    toast.success("Proceeding to encrypted secure checkout...", {
-      description: `Order Total: $${summary.total.toFixed(2)} (${summary.itemCount} items)`,
+    toast.success(t("secureCheckoutStarted"), {
+      description: t("checkoutTotal", {
+        total: summary.total.toFixed(2),
+        count: summary.itemCount,
+        itemLabel: summary.itemCount === 1 ? t("item") : t("items"),
+      }),
     });
-  }, [summary.total, summary.itemCount]);
+  }, [summary.total, summary.itemCount, t]);
 
   const value: UseCartReturn = {
     items,
